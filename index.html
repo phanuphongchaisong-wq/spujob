@@ -131,8 +131,8 @@
         .btn-edit:hover { color: #2980b9; }
         .btn-delete { color: var(--danger); }
         .btn-delete:hover { color: #c0392b; }
-        .btn-toggle-show { color: #f39c12; }
-        .btn-toggle-show:hover { color: #e67e22; }
+        .btn-toggle-show { color: #95a5a6; }
+        .btn-toggle-show:hover { color: #7f8c8d; }
         .btn-update-status { background: #e8f8f5; color: #27ae60; font-family: var(--font-main); padding: 6px 12px; border-radius: 4px; border: 1px solid #27ae60; cursor: pointer; font-size: 0.85rem; transition: 0.2s;}
         .btn-update-status:hover { background: #27ae60; color: white; }
 
@@ -221,6 +221,7 @@
         <section class="products-section">
             <div class="container">
                 <h2 class="section-title">สินค้าแนะนำและมาใหม่</h2>
+                <!-- หน้าแรกจะแสดงเฉพาะสินค้าที่ถูกตั้งค่าให้ "แสดงในหน้าแรก (Recommend)" -->
                 <div class="product-grid" id="mainProductGrid">
                     <!-- สินค้า Hardcode เดิม -->
                     <div class="product-card" data-category="กระเป๋าถือ" id="hc-prod-1">
@@ -269,7 +270,7 @@
                             </div>
                         </div>
                     </div>
-                    <!-- สินค้าจาก DB จะถูกเพิ่มต่อท้ายที่นี่ -->
+                    <!-- สินค้าที่เลือกให้โชว์ในหน้าแรก จะถูกเพิ่มต่อท้ายที่นี่ผ่าน JS -->
                 </div>
             </div>
         </section>
@@ -288,8 +289,9 @@
                     <button class="filter-btn" data-filter="กระเป๋าสะพาย">กระเป๋าสะพาย</button>
                     <button class="filter-btn" data-filter="กระเป๋าถือ">กระเป๋าถือ</button>
                 </div>
+                <!-- หน้านี้จะแสดงสินค้าทุกชิ้นที่ไม่ถูกซ่อน -->
                 <div class="product-grid" id="allProductGrid">
-                    <!-- จะใช้ JS Copy จากหน้าแรกมาใส่ที่นี่อัตโนมัติ -->
+                    <!-- จะใช้ JS ใส่ข้อมูลที่นี่อัตโนมัติ -->
                 </div>
             </div>
         </section>
@@ -383,7 +385,6 @@
                 </div>
             </div>
             
-            <!-- โค้ดที่เพิ่มใหม่: ประวัติการติดต่อ (จะแสดงเฉพาะตอนล็อกอิน) -->
             <div id="userMessageHistoryContainer" style="max-width: 900px; margin: 40px auto 0; background: var(--white); padding: 30px; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); display: none;">
                 <h3 style="color: var(--wood-brown); margin-bottom: 20px; border-bottom: 2px solid var(--beige); padding-bottom: 10px;">
                     <i class="fas fa-history"></i> ประวัติการติดต่อของคุณ
@@ -431,7 +432,6 @@
         <main style="background-color: var(--cream); padding: 40px 20px; min-height: 50vh;">
             <div class="account-grid">
                 
-                <!-- ข้อมูลส่วนตัว และแบบฟอร์มแก้ไข -->
                 <div class="auth-container" style="margin: 0; width: 100%; text-align: center; padding: 30px;">
                     <i class="fas fa-user-circle" style="font-size: 5rem; color: var(--light-brown); margin-bottom: 20px;"></i>
                     
@@ -442,7 +442,6 @@
                         <button class="btn-danger btn-full" id="logoutBtn" style="margin-top: 10px;">ออกจากระบบ</button>
                     </div>
 
-                    <!-- ฟอร์มแก้ไขข้อมูล -->
                     <div id="profileEdit" style="display: none; text-align: left;">
                         <form id="editProfileForm">
                             <div class="form-group">
@@ -455,7 +454,6 @@
                     </div>
                 </div>
 
-                <!-- ฝั่งขวา: รายการโปรด & ประวัติการสั่งซื้อ -->
                 <div>
                     <!-- รายการโปรด (Favorites) -->
                     <div style="background: var(--white); padding: 30px; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); margin-bottom: 30px;">
@@ -463,7 +461,6 @@
                             <i class="fas fa-heart" style="color: var(--danger);"></i> สินค้าที่ถูกใจ
                         </h3>
                         <div id="accountFavoritesList" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 15px;">
-                            <!-- สินค้าที่กดหัวใจจะแสดงที่นี่ -->
                         </div>
                     </div>
 
@@ -473,7 +470,6 @@
                             <i class="fas fa-box" style="color: var(--wood-brown);"></i> ประวัติการสั่งซื้อของฉัน
                         </h3>
                         <div id="accountOrdersList" style="display: flex; flex-direction: column; gap: 15px;">
-                            <!-- ประวัติคำสั่งซื้อจะแสดงที่นี่ -->
                         </div>
                     </div>
                 </div>
@@ -491,7 +487,6 @@
         <main style="background-color: var(--cream); padding: 40px 20px;">
             <div class="admin-container">
                 
-                <!-- แท็บเมนูหลังบ้าน -->
                 <div class="admin-tabs">
                     <button class="admin-tab-btn active" onclick="switchAdminTab('manageProducts', this)">จัดการสินค้า</button>
                     <button class="admin-tab-btn" onclick="switchAdminTab('manageOrders', this)">จัดการคำสั่งซื้อ</button>
@@ -529,7 +524,6 @@
                                     <th>ชื่อสินค้า</th>
                                     <th>ราคา</th>
                                     <th>สถานะ</th>
-                                    <th style="text-align: center;">แนะนำหน้าแรก</th> <!-- คอลัมน์แนะนำ -->
                                     <th>จัดการ</th>
                                 </tr>
                             </thead>
@@ -677,8 +671,11 @@
         }
 
         function updateAllHeartIcons() {
+            // ควบคุมไอคอนหัวใจทั้งในหน้าหลักและหน้ารวมสินค้า
             document.querySelectorAll('.product-card').forEach(card => {
-                const title = card.querySelector('.prod-title').innerText;
+                const titleEl = card.querySelector('.prod-title');
+                if(!titleEl) return;
+                const title = titleEl.innerText;
                 const iconBtn = card.querySelector('.fav-btn');
                 const icon = iconBtn.querySelector('i');
                 if (favoriteItems.includes(title)) {
@@ -759,7 +756,7 @@
             favoriteItems.forEach(title => {
                 let imgUrl = 'https://via.placeholder.com/150';
                 let priceHtml = '';
-                const cards = document.querySelectorAll('#allProductGrid .product-card');
+                const cards = document.querySelectorAll('.product-card'); // เปลี่ยนให้ค้นหาจากทั้งหมด
                 for(let card of cards) {
                     if(card.querySelector('.prod-title') && card.querySelector('.prod-title').innerText === title) {
                         imgUrl = card.querySelector('img').src;
@@ -1023,6 +1020,24 @@
             }
         }
 
+        // กรองหมวดหมู่
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                const filterValue = this.getAttribute('data-filter');
+                document.querySelectorAll('#allProductGrid .product-card').forEach(card => {
+                    // หากซ่อนอยู่ให้ข้ามไป
+                    if (card.getAttribute('data-hidden') === 'true') {
+                        card.style.display = 'none';
+                        return;
+                    }
+                    if (filterValue === 'ทั้งหมด' || card.getAttribute('data-category') === filterValue) card.style.display = 'block';
+                    else card.style.display = 'none';
+                });
+            });
+        });
+
         // ---------------------------------------------
         // ระบบ Auth
         // ---------------------------------------------
@@ -1067,7 +1082,7 @@
         });
 
         // ---------------------------------------------
-        // ระบบ Admin - จัดการสินค้าแนะนำ / ลบสินค้า
+        // ระบบ Admin
         // ---------------------------------------------
         window.switchAdminTab = function(tabId, btnElement) {
             document.querySelectorAll('.admin-tab-content').forEach(el => el.style.display = 'none');
@@ -1100,7 +1115,7 @@
                 } else {
                     prodData.createdAt = new Date();
                     prodData.isHidden = false; 
-                    prodData.isRecommended = false; // ค่าเริ่มต้นเวลาเพิ่มใหม่ ให้แอดมินไปกดดาวเอง
+                    prodData.isRecommended = false; // ค่าเริ่มต้นเวลาเพิ่มใหม่คือ 'ไม่แสดงในหน้าแรก'
                     await addDoc(collection(db, "products"), prodData);
                     showToast('เพิ่มสินค้าใหม่สำเร็จ!', 'fas fa-check');
                 }
@@ -1115,27 +1130,28 @@
                 const q = query(collection(db, "products"), orderBy("createdAt", "desc"));
                 const querySnapshot = await getDocs(q);
                 
-                const grid = document.getElementById('mainProductGrid');
+                const grid = document.getElementById('mainProductGrid'); // หน้า Home
+                const allGrid = document.getElementById('allProductGrid'); // หน้า All Products
+                
                 grid.querySelectorAll('.dynamic-product').forEach(el => el.remove());
+                allGrid.innerHTML = ''; 
                 
                 const adminTbody = document.getElementById('adminProductList');
-                adminTbody.innerHTML = ''; allProductsData = [];
+                adminTbody.innerHTML = ''; 
+                allProductsData = [];
 
-                // 1. จัดการสินค้า Hardcode ให้ซ่อน/ลบ/และตั้งเป็นแนะนำได้
+                // 1. จัดการสินค้า Hardcode (สินค้าตั้งต้น 4 ชิ้นแรก)
                 let hiddenHcItems = JSON.parse(localStorage.getItem('woven_hidden_hc')) || [];
                 let deletedHcItems = JSON.parse(localStorage.getItem('woven_deleted_hc')) || [];
-                // ให้สินค้า 4 ตัวแรกเป็นสินค้าแนะนำหน้าแรกโดยเริ่มต้น
-                let recommendedHcItems = JSON.parse(localStorage.getItem('woven_recommended_hc'));
-                if (!recommendedHcItems) {
-                    recommendedHcItems = ['hc-prod-1', 'hc-prod-2', 'hc-prod-3', 'hc-prod-4'];
-                    localStorage.setItem('woven_recommended_hc', JSON.stringify(recommendedHcItems));
-                }
+                // ค่าเริ่มต้นให้โชว์หน้าแรกทั้งหมดเหมือนเดิม
+                let recHcItems = JSON.parse(localStorage.getItem('woven_rec_hc')) || ['hc-prod-1', 'hc-prod-2', 'hc-prod-3', 'hc-prod-4'];
 
                 const hcCards = grid.querySelectorAll('.product-card:not(.dynamic-product)');
                 hcCards.forEach((card, index) => {
                     const hcId = card.id || ('hc-prod-' + (index + 1));
                     if (!card.id) card.id = hcId;
                     
+                    // หากถูกลบไปแล้ว ให้ซ่อนและไม่โชว์ในตารางแอดมิน
                     if (deletedHcItems.includes(hcId)) {
                         card.style.display = 'none';
                         card.setAttribute('data-hidden', 'true');
@@ -1143,19 +1159,31 @@
                     }
 
                     const isHidden = hiddenHcItems.includes(hcId);
-                    const isRec = recommendedHcItems.includes(hcId);
+                    const isRec = recHcItems.includes(hcId);
 
+                    // หน้าแรก (Home) แสดงเฉพาะที่ Recommend(ดาวทอง) และ ไม่ถูกซ่อน
+                    card.style.display = (isHidden || !isRec) ? 'none' : 'block';
                     card.setAttribute('data-hidden', isHidden ? 'true' : 'false');
-                    card.setAttribute('data-recommended', isRec ? 'true' : 'false');
+
+                    // สร้าง Copy นำไปใส่หน้า สินค้าทั้งหมด (Products) โดยยึดแค่สถานะ Hidden
+                    let cloneCard = card.cloneNode(true);
+                    cloneCard.style.display = isHidden ? 'none' : 'block';
+                    allGrid.appendChild(cloneCard);
 
                     const title = card.querySelector('.prod-title').innerText;
                     const img = card.querySelector('img').src;
                     const priceText = card.querySelector('.sale-price').innerText;
                     const category = card.getAttribute('data-category');
 
-                    const statusBadge = isHidden ? `<span class="status-badge" style="background:#95a5a6;">ซ่อนอยู่</span>` : `<span class="status-badge" style="background:#2ecc71;">แสดงผล</span>`;
+                    const statusBadge = isHidden 
+                        ? `<span class="status-badge" style="background:#95a5a6;">ซ่อนอยู่</span>` 
+                        : `<span class="status-badge" style="background:#2ecc71;">แสดงผล</span>`;
+                    
                     const toggleIcon = isHidden ? 'fa-eye' : 'fa-eye-slash';
                     const toggleTitle = isHidden ? 'คลิกเพื่อแสดง' : 'คลิกเพื่อซ่อน';
+
+                    const recColor = isRec ? '#f1c40f' : '#bdc3c7'; // สีทองหากเลือก / สีเทาหากไม่ได้เลือก
+                    const recTitle = isRec ? 'นำออกจากหน้าแรก' : 'แสดงในหน้าแรก';
 
                     adminTbody.insertAdjacentHTML('beforeend', `
                         <tr style="background-color: #fdfdfd;">
@@ -1163,12 +1191,8 @@
                             <td>${title} <br> <small style="color:var(--danger)">สินค้าตั้งต้น (${category})</small></td>
                             <td>${priceText}</td>
                             <td>${statusBadge}</td>
-                            <td style="text-align: center;">
-                                <button class="admin-action-btn" onclick="toggleRecommend('${hcId}', true)" title="${isRec ? 'ยกเลิกสินค้าแนะนำ' : 'ตั้งเป็นสินค้าแนะนำ'}">
-                                    <i class="fas fa-star" style="color: ${isRec ? '#f39c12' : '#bdc3c7'};"></i>
-                                </button>
-                            </td>
                             <td>
+                                <button class="admin-action-btn" style="color: ${recColor};" onclick="toggleProductRecommended('${hcId}', true)" title="${recTitle}"><i class="fas fa-star"></i></button>
                                 <button class="admin-action-btn btn-toggle-show" onclick="toggleProductVisibility('${hcId}', true)" title="${toggleTitle}"><i class="fas ${toggleIcon}"></i></button>
                                 <button class="admin-action-btn btn-delete" onclick="deleteProduct('${hcId}', true)" title="ลบสินค้า"><i class="fas fa-trash-alt"></i></button>
                             </td>
@@ -1181,13 +1205,14 @@
                     const data = docSnap.data(); data.id = docSnap.id; allProductsData.push(data);
 
                     const isHidden = data.isHidden === true;
-                    const isRec = data.isRecommended === true;
-                    
+                    const isRec = data.isRecommended === true; // ตรวจสอบว่าเลือกให้ขึ้นหน้าแรกไหม
+
                     let priceHTML = data.salePrice ? `<span class="sale-price" data-price="${data.salePrice}">฿${data.salePrice}</span> <span class="original-price">฿${data.price}</span>` : `<span class="sale-price" data-price="${data.price}">฿${data.price}</span>`;
                     const prodCat = data.category ? data.category : "กระเป๋าถือ";
                     
-                    grid.insertAdjacentHTML('beforeend', `
-                        <div class="product-card dynamic-product" data-category="${prodCat}" data-hidden="${isHidden ? 'true' : 'false'}" data-recommended="${isRec ? 'true' : 'false'}" id="${data.id}">
+                    // โค้ดสร้าง Card โดยถอดป้ายคำว่า ร้านเติมเอง ออก
+                    const cardHTML = `
+                        <div class="product-card dynamic-product" data-category="${prodCat}" data-hidden="${isHidden ? 'true' : 'false'}" id="${data.id}">
                             <div class="product-img"><img src="${data.image}" onerror="this.src='https://via.placeholder.com/600x600/F5F0E6/8B5A2B?text=No+Image'"></div>
                             <div class="product-info">
                                 <h3 class="prod-title">${data.name}</h3>
@@ -1198,11 +1223,29 @@
                                 </div>
                             </div>
                         </div>
-                    `);
+                    `;
 
-                    const statusBadge = isHidden ? `<span class="status-badge" style="background:#95a5a6;">ซ่อนอยู่</span>` : `<span class="status-badge" style="background:#2ecc71;">แสดงผล</span>`;
+                    // หากติ๊ก Recommended และไม่ได้ซ่อน นำไปใส่หน้าแรก
+                    if (isRec && !isHidden) {
+                        grid.insertAdjacentHTML('beforeend', cardHTML);
+                    }
+
+                    // นำไปใส่หน้า สินค้าทั้งหมด
+                    const allGridCardWrapper = document.createElement('div');
+                    allGridCardWrapper.innerHTML = cardHTML;
+                    const cardElement = allGridCardWrapper.firstElementChild;
+                    cardElement.style.display = isHidden ? 'none' : 'block';
+                    allGrid.appendChild(cardElement);
+
+                    const statusBadge = isHidden 
+                        ? `<span class="status-badge" style="background:#95a5a6;">ซ่อนอยู่</span>` 
+                        : `<span class="status-badge" style="background:#2ecc71;">แสดงผล</span>`;
+                    
                     const toggleIcon = isHidden ? 'fa-eye' : 'fa-eye-slash';
                     const toggleTitle = isHidden ? 'คลิกเพื่อแสดง' : 'คลิกเพื่อซ่อน';
+
+                    const recColor = isRec ? '#f1c40f' : '#bdc3c7'; // สีทองหากเลือก / สีเทาหากไม่ได้เลือก
+                    const recTitle = isRec ? 'นำออกจากหน้าแรก' : 'แสดงในหน้าแรก';
 
                     adminTbody.insertAdjacentHTML('beforeend', `
                         <tr>
@@ -1210,12 +1253,8 @@
                             <td>${data.name} <br> <small style="color:var(--text-light)">หมวด: ${prodCat}</small></td>
                             <td>฿${data.salePrice ? data.salePrice : data.price}</td>
                             <td>${statusBadge}</td>
-                            <td style="text-align: center;">
-                                <button class="admin-action-btn" onclick="toggleRecommend('${data.id}', false)" title="${isRec ? 'ยกเลิกสินค้าแนะนำ' : 'ตั้งเป็นสินค้าแนะนำ'}">
-                                    <i class="fas fa-star" style="color: ${isRec ? '#f39c12' : '#bdc3c7'};"></i>
-                                </button>
-                            </td>
                             <td>
+                                <button class="admin-action-btn" style="color: ${recColor};" onclick="toggleProductRecommended('${data.id}', false)" title="${recTitle}"><i class="fas fa-star"></i></button>
                                 <button class="admin-action-btn btn-toggle-show" onclick="toggleProductVisibility('${data.id}', false)" title="${toggleTitle}"><i class="fas ${toggleIcon}"></i></button>
                                 <button class="admin-action-btn btn-edit" onclick="editProduct('${data.id}')" title="แก้ไข"><i class="fas fa-edit"></i></button>
                                 <button class="admin-action-btn btn-delete" onclick="deleteProduct('${data.id}', false)" title="ลบ"><i class="fas fa-trash-alt"></i></button>
@@ -1227,18 +1266,18 @@
             } catch (error) { console.log("Error loading products:", error); }
         }
 
-        // ระบบเลือกให้แสดงหน้าแรก (ดาว)
-        window.toggleRecommend = async function(id, isHc) {
+        // ระบบเลือกแสดง/ไม่แสดงในหน้าแรก
+        window.toggleProductRecommended = async function(id, isHc) {
             if (isHc) {
-                let recHcItems = JSON.parse(localStorage.getItem('woven_recommended_hc')) || [];
+                let recHcItems = JSON.parse(localStorage.getItem('woven_rec_hc')) || ['hc-prod-1', 'hc-prod-2', 'hc-prod-3', 'hc-prod-4'];
                 if (recHcItems.includes(id)) {
                     recHcItems = recHcItems.filter(itemId => itemId !== id);
-                    showToast('ยกเลิกการแสดงในหน้าแรกแล้ว', 'fas fa-star-half-alt');
+                    showToast('นำสินค้าออกจากหน้าแรกแล้ว', 'fas fa-star');
                 } else {
                     recHcItems.push(id);
-                    showToast('ตั้งให้แสดงในหน้าแรกแล้ว', 'fas fa-star');
+                    showToast('แสดงสินค้าในหน้าแรกแล้ว', 'fas fa-star');
                 }
-                localStorage.setItem('woven_recommended_hc', JSON.stringify(recHcItems));
+                localStorage.setItem('woven_rec_hc', JSON.stringify(recHcItems));
                 loadProductsFromDB();
             } else {
                 try {
@@ -1246,11 +1285,11 @@
                     if (prod) {
                         const newStatus = !prod.isRecommended;
                         await updateDoc(doc(db, "products", id), { isRecommended: newStatus });
-                        showToast(newStatus ? 'ตั้งให้แสดงในหน้าแรกแล้ว' : 'ยกเลิกการแสดงในหน้าแรกแล้ว', 'fas fa-star');
+                        showToast(newStatus ? 'แสดงสินค้าในหน้าแรกแล้ว' : 'นำสินค้าออกจากหน้าแรกแล้ว', 'fas fa-star');
                         loadProductsFromDB();
                     }
                 } catch (error) {
-                    showToast('เกิดข้อผิดพลาด', 'fas fa-times');
+                    showToast('เกิดข้อผิดพลาดในการตั้งค่า', 'fas fa-times');
                 }
             }
         }
@@ -1261,10 +1300,10 @@
                 let hiddenHcItems = JSON.parse(localStorage.getItem('woven_hidden_hc')) || [];
                 if (hiddenHcItems.includes(id)) {
                     hiddenHcItems = hiddenHcItems.filter(itemId => itemId !== id);
-                    showToast('แสดงสินค้าตัวเดิมแล้ว', 'fas fa-eye');
+                    showToast('แสดงสินค้าแล้ว', 'fas fa-eye');
                 } else {
                     hiddenHcItems.push(id);
-                    showToast('ซ่อนสินค้าตัวเดิมแล้ว', 'fas fa-eye-slash');
+                    showToast('ซ่อนสินค้าแล้ว', 'fas fa-eye-slash');
                 }
                 localStorage.setItem('woven_hidden_hc', JSON.stringify(hiddenHcItems));
                 loadProductsFromDB();
@@ -1278,7 +1317,7 @@
                         loadProductsFromDB();
                     }
                 } catch (error) {
-                    showToast('เกิดข้อผิดพลาด', 'fas fa-times');
+                    showToast('เกิดข้อผิดพลาดในการซ่อน/แสดง', 'fas fa-times');
                 }
             }
         }
@@ -1292,7 +1331,7 @@
                         deletedHcItems.push(id);
                         localStorage.setItem('woven_deleted_hc', JSON.stringify(deletedHcItems));
                     }
-                    showToast('ลบสินค้าตัวเดิมสำเร็จ', 'fas fa-check');
+                    showToast('ลบสินค้าตั้งต้นสำเร็จ', 'fas fa-check');
                     loadProductsFromDB();
                 } else {
                     try { 
@@ -1461,31 +1500,8 @@
             }
         }
 
-        // ฟังก์ชันแยกสินค้าหน้าแรก (Home) และ หน้าสินค้าทั้งหมด (Products)
         function syncProductsPage() {
-            // 1. นำข้อมูลทั้งหมดไปใส่ไว้ที่หน้า "สินค้าทั้งหมด" ก่อน
-            const sourceGrid = document.getElementById('mainProductGrid').innerHTML;
-            document.getElementById('allProductGrid').innerHTML = sourceGrid;
-            
-            // 2. จัดการหน้า "สินค้าทั้งหมด" (All Products) -> โชว์ทุกตัวยกเว้นตัวที่แอดมินกด "ซ่อน"
-            document.querySelectorAll('#allProductGrid .product-card').forEach(card => {
-                if (card.getAttribute('data-hidden') === 'true') {
-                    card.style.display = 'none';
-                } else {
-                    card.style.display = 'block';
-                }
-            });
-
-            // 3. จัดการ "หน้าแรก" (Home) -> โชว์เฉพาะตัวที่แอดมินกด "ดาว(แนะนำหน้าแรก)" และ ไม่ถูกซ่อน
-            document.querySelectorAll('#mainProductGrid .product-card').forEach(card => {
-                if (card.getAttribute('data-hidden') === 'true' || card.getAttribute('data-recommended') === 'false') {
-                    card.style.display = 'none';
-                } else {
-                    card.style.display = 'block';
-                }
-            });
-
-            // เปิดใช้งานระบบตัวกรองหมวดหมู่ให้ทำงานต่อ
+            // ดึงค่าการฟิลเตอร์ที่เคยตั้งไว้ล่าสุด กลับมาใช้กับโครงสร้างใหม่
             const activeFilter = document.querySelector('.filter-bar .filter-btn.active');
             if (activeFilter) activeFilter.click();
             setTimeout(updateAllHeartIcons, 100);
