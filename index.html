@@ -131,6 +131,8 @@
         .btn-edit:hover { color: #2980b9; }
         .btn-delete { color: var(--danger); }
         .btn-delete:hover { color: #c0392b; }
+        .btn-toggle-show { color: #f39c12; }
+        .btn-toggle-show:hover { color: #e67e22; }
         .btn-update-status { background: #e8f8f5; color: #27ae60; font-family: var(--font-main); padding: 6px 12px; border-radius: 4px; border: 1px solid #27ae60; cursor: pointer; font-size: 0.85rem; transition: 0.2s;}
         .btn-update-status:hover { background: #27ae60; color: white; }
 
@@ -221,7 +223,7 @@
                 <h2 class="section-title">สินค้าแนะนำและมาใหม่</h2>
                 <div class="product-grid" id="mainProductGrid">
                     <!-- สินค้า Hardcode เดิม -->
-                    <div class="product-card" data-category="กระเป๋าถือ">
+                    <div class="product-card" data-category="กระเป๋าถือ" id="hc-prod-1">
                         <div class="product-badge">ขายดี</div>
                         <div class="product-img"><img src="img/1.jpg" alt="กระเป๋าสานทรงกลม" onerror="this.src='https://images.unsplash.com/photo-1590874103328-eac38a683ce7?auto=format&fit=crop&w=600&q=80'"></div>
                         <div class="product-info">
@@ -233,7 +235,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="product-card" data-category="กระเป๋าถือ">
+                    <div class="product-card" data-category="กระเป๋าถือ" id="hc-prod-2">
                         <div class="product-badge" style="background-color: var(--wood-brown);">ใหม่</div>
                         <div class="product-img"><img src="img/2.jpg" alt="กระเป๋าสานทรงตะกร้า" onerror="this.src='https://images.unsplash.com/photo-1584916201218-f4242ceb4809?auto=format&fit=crop&w=600&q=80'"></div>
                         <div class="product-info">
@@ -245,7 +247,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="product-card" data-category="กระเป๋าสะพาย">
+                    <div class="product-card" data-category="กระเป๋าสะพาย" id="hc-prod-3">
                         <div class="product-img"><img src="img/3.jpg" alt="กระเป๋าสะพายข้าง" onerror="this.src='https://images.unsplash.com/photo-1614179689702-355944cd0918?auto=format&fit=crop&w=600&q=80'"></div>
                         <div class="product-info">
                             <h3 class="prod-title">กระเป๋าสะพายข้าง สานหวาย</h3>
@@ -256,7 +258,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="product-card" data-category="กระเป๋าถือ">
+                    <div class="product-card" data-category="กระเป๋าถือ" id="hc-prod-4">
                         <div class="product-img"><img src="img/4.jpg" alt="กระเป๋าถือทรงกลม" onerror="this.src='https://images.unsplash.com/photo-1591561954557-26941169b49e?auto=format&fit=crop&w=600&q=80'"></div>
                         <div class="product-info">
                             <h3 class="prod-title">กระเป๋าถือทรงกลม สไตล์มินิมอล</h3>
@@ -526,6 +528,8 @@
                                     <th>รูปภาพ</th>
                                     <th>ชื่อสินค้า</th>
                                     <th>ราคา</th>
+                                    <th>สถานะ</th>
+                                    <th style="text-align: center;">แนะนำหน้าแรก</th> <!-- คอลัมน์แนะนำ -->
                                     <th>จัดการ</th>
                                 </tr>
                             </thead>
@@ -643,7 +647,6 @@
                 renderAccountFavorites(); 
                 renderAccountOrders();
             }
-            // เรียกโหลดประวัติตอนเข้าหน้าติดต่อเรา
             if (pageId === 'contact') {
                 if (typeof loadUserMessages === 'function') loadUserMessages();
             }
@@ -944,7 +947,7 @@
 
             try {
                 await addDoc(collection(db, "messages"), {
-                    userId: currentUser ? currentUser.uid : 'guest', // บันทึก ID ผู้ใช้เพื่อดึงประวัติ
+                    userId: currentUser ? currentUser.uid : 'guest',
                     name: name,
                     message: message,
                     createdAt: new Date()
@@ -962,7 +965,6 @@
             }
         });
 
-        // ฟังก์ชันดึงประวัติการติดต่อของลูกค้ามาแสดง
         window.loadUserMessages = async function() {
             const historyContainer = document.getElementById('userMessageHistoryContainer');
             const messageList = document.getElementById('userMessageList');
@@ -1021,19 +1023,6 @@
             }
         }
 
-        // กรองหมวดหมู่
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                const filterValue = this.getAttribute('data-filter');
-                document.querySelectorAll('#allProductGrid .product-card').forEach(card => {
-                    if (filterValue === 'ทั้งหมด' || card.getAttribute('data-category') === filterValue) card.style.display = 'block';
-                    else card.style.display = 'none';
-                });
-            });
-        });
-
         // ---------------------------------------------
         // ระบบ Auth
         // ---------------------------------------------
@@ -1078,7 +1067,7 @@
         });
 
         // ---------------------------------------------
-        // ระบบ Admin
+        // ระบบ Admin - จัดการสินค้าแนะนำ / ลบสินค้า
         // ---------------------------------------------
         window.switchAdminTab = function(tabId, btnElement) {
             document.querySelectorAll('.admin-tab-content').forEach(el => el.style.display = 'none');
@@ -1110,6 +1099,8 @@
                     showToast('อัปเดตข้อมูลสินค้าสำเร็จ!', 'fas fa-check');
                 } else {
                     prodData.createdAt = new Date();
+                    prodData.isHidden = false; 
+                    prodData.isRecommended = false; // ค่าเริ่มต้นเวลาเพิ่มใหม่ ให้แอดมินไปกดดาวเอง
                     await addDoc(collection(db, "products"), prodData);
                     showToast('เพิ่มสินค้าใหม่สำเร็จ!', 'fas fa-check');
                 }
@@ -1130,15 +1121,73 @@
                 const adminTbody = document.getElementById('adminProductList');
                 adminTbody.innerHTML = ''; allProductsData = [];
 
+                // 1. จัดการสินค้า Hardcode ให้ซ่อน/ลบ/และตั้งเป็นแนะนำได้
+                let hiddenHcItems = JSON.parse(localStorage.getItem('woven_hidden_hc')) || [];
+                let deletedHcItems = JSON.parse(localStorage.getItem('woven_deleted_hc')) || [];
+                // ให้สินค้า 4 ตัวแรกเป็นสินค้าแนะนำหน้าแรกโดยเริ่มต้น
+                let recommendedHcItems = JSON.parse(localStorage.getItem('woven_recommended_hc'));
+                if (!recommendedHcItems) {
+                    recommendedHcItems = ['hc-prod-1', 'hc-prod-2', 'hc-prod-3', 'hc-prod-4'];
+                    localStorage.setItem('woven_recommended_hc', JSON.stringify(recommendedHcItems));
+                }
+
+                const hcCards = grid.querySelectorAll('.product-card:not(.dynamic-product)');
+                hcCards.forEach((card, index) => {
+                    const hcId = card.id || ('hc-prod-' + (index + 1));
+                    if (!card.id) card.id = hcId;
+                    
+                    if (deletedHcItems.includes(hcId)) {
+                        card.style.display = 'none';
+                        card.setAttribute('data-hidden', 'true');
+                        return; 
+                    }
+
+                    const isHidden = hiddenHcItems.includes(hcId);
+                    const isRec = recommendedHcItems.includes(hcId);
+
+                    card.setAttribute('data-hidden', isHidden ? 'true' : 'false');
+                    card.setAttribute('data-recommended', isRec ? 'true' : 'false');
+
+                    const title = card.querySelector('.prod-title').innerText;
+                    const img = card.querySelector('img').src;
+                    const priceText = card.querySelector('.sale-price').innerText;
+                    const category = card.getAttribute('data-category');
+
+                    const statusBadge = isHidden ? `<span class="status-badge" style="background:#95a5a6;">ซ่อนอยู่</span>` : `<span class="status-badge" style="background:#2ecc71;">แสดงผล</span>`;
+                    const toggleIcon = isHidden ? 'fa-eye' : 'fa-eye-slash';
+                    const toggleTitle = isHidden ? 'คลิกเพื่อแสดง' : 'คลิกเพื่อซ่อน';
+
+                    adminTbody.insertAdjacentHTML('beforeend', `
+                        <tr style="background-color: #fdfdfd;">
+                            <td><img src="${img}" onerror="this.src='https://via.placeholder.com/60'"></td>
+                            <td>${title} <br> <small style="color:var(--danger)">สินค้าตั้งต้น (${category})</small></td>
+                            <td>${priceText}</td>
+                            <td>${statusBadge}</td>
+                            <td style="text-align: center;">
+                                <button class="admin-action-btn" onclick="toggleRecommend('${hcId}', true)" title="${isRec ? 'ยกเลิกสินค้าแนะนำ' : 'ตั้งเป็นสินค้าแนะนำ'}">
+                                    <i class="fas fa-star" style="color: ${isRec ? '#f39c12' : '#bdc3c7'};"></i>
+                                </button>
+                            </td>
+                            <td>
+                                <button class="admin-action-btn btn-toggle-show" onclick="toggleProductVisibility('${hcId}', true)" title="${toggleTitle}"><i class="fas ${toggleIcon}"></i></button>
+                                <button class="admin-action-btn btn-delete" onclick="deleteProduct('${hcId}', true)" title="ลบสินค้า"><i class="fas fa-trash-alt"></i></button>
+                            </td>
+                        </tr>
+                    `);
+                });
+
+                // 2. จัดการสินค้าจาก Database
                 querySnapshot.forEach((docSnap) => {
                     const data = docSnap.data(); data.id = docSnap.id; allProductsData.push(data);
 
+                    const isHidden = data.isHidden === true;
+                    const isRec = data.isRecommended === true;
+                    
                     let priceHTML = data.salePrice ? `<span class="sale-price" data-price="${data.salePrice}">฿${data.salePrice}</span> <span class="original-price">฿${data.price}</span>` : `<span class="sale-price" data-price="${data.price}">฿${data.price}</span>`;
                     const prodCat = data.category ? data.category : "กระเป๋าถือ";
                     
                     grid.insertAdjacentHTML('beforeend', `
-                        <div class="product-card dynamic-product" data-category="${prodCat}">
-                            <div class="product-badge" style="background-color: var(--wood-brown);">ร้านเติมเอง</div>
+                        <div class="product-card dynamic-product" data-category="${prodCat}" data-hidden="${isHidden ? 'true' : 'false'}" data-recommended="${isRec ? 'true' : 'false'}" id="${data.id}">
                             <div class="product-img"><img src="${data.image}" onerror="this.src='https://via.placeholder.com/600x600/F5F0E6/8B5A2B?text=No+Image'"></div>
                             <div class="product-info">
                                 <h3 class="prod-title">${data.name}</h3>
@@ -1151,20 +1200,110 @@
                         </div>
                     `);
 
+                    const statusBadge = isHidden ? `<span class="status-badge" style="background:#95a5a6;">ซ่อนอยู่</span>` : `<span class="status-badge" style="background:#2ecc71;">แสดงผล</span>`;
+                    const toggleIcon = isHidden ? 'fa-eye' : 'fa-eye-slash';
+                    const toggleTitle = isHidden ? 'คลิกเพื่อแสดง' : 'คลิกเพื่อซ่อน';
+
                     adminTbody.insertAdjacentHTML('beforeend', `
                         <tr>
                             <td><img src="${data.image}" onerror="this.src='https://via.placeholder.com/60'"></td>
                             <td>${data.name} <br> <small style="color:var(--text-light)">หมวด: ${prodCat}</small></td>
                             <td>฿${data.salePrice ? data.salePrice : data.price}</td>
+                            <td>${statusBadge}</td>
+                            <td style="text-align: center;">
+                                <button class="admin-action-btn" onclick="toggleRecommend('${data.id}', false)" title="${isRec ? 'ยกเลิกสินค้าแนะนำ' : 'ตั้งเป็นสินค้าแนะนำ'}">
+                                    <i class="fas fa-star" style="color: ${isRec ? '#f39c12' : '#bdc3c7'};"></i>
+                                </button>
+                            </td>
                             <td>
+                                <button class="admin-action-btn btn-toggle-show" onclick="toggleProductVisibility('${data.id}', false)" title="${toggleTitle}"><i class="fas ${toggleIcon}"></i></button>
                                 <button class="admin-action-btn btn-edit" onclick="editProduct('${data.id}')" title="แก้ไข"><i class="fas fa-edit"></i></button>
-                                <button class="admin-action-btn btn-delete" onclick="deleteProduct('${data.id}')" title="ลบ"><i class="fas fa-trash-alt"></i></button>
+                                <button class="admin-action-btn btn-delete" onclick="deleteProduct('${data.id}', false)" title="ลบ"><i class="fas fa-trash-alt"></i></button>
                             </td>
                         </tr>
                     `);
                 });
                 syncProductsPage(); 
             } catch (error) { console.log("Error loading products:", error); }
+        }
+
+        // ระบบเลือกให้แสดงหน้าแรก (ดาว)
+        window.toggleRecommend = async function(id, isHc) {
+            if (isHc) {
+                let recHcItems = JSON.parse(localStorage.getItem('woven_recommended_hc')) || [];
+                if (recHcItems.includes(id)) {
+                    recHcItems = recHcItems.filter(itemId => itemId !== id);
+                    showToast('ยกเลิกการแสดงในหน้าแรกแล้ว', 'fas fa-star-half-alt');
+                } else {
+                    recHcItems.push(id);
+                    showToast('ตั้งให้แสดงในหน้าแรกแล้ว', 'fas fa-star');
+                }
+                localStorage.setItem('woven_recommended_hc', JSON.stringify(recHcItems));
+                loadProductsFromDB();
+            } else {
+                try {
+                    const prod = allProductsData.find(p => p.id === id);
+                    if (prod) {
+                        const newStatus = !prod.isRecommended;
+                        await updateDoc(doc(db, "products", id), { isRecommended: newStatus });
+                        showToast(newStatus ? 'ตั้งให้แสดงในหน้าแรกแล้ว' : 'ยกเลิกการแสดงในหน้าแรกแล้ว', 'fas fa-star');
+                        loadProductsFromDB();
+                    }
+                } catch (error) {
+                    showToast('เกิดข้อผิดพลาด', 'fas fa-times');
+                }
+            }
+        }
+
+        // ระบบซ่อน/แสดงสินค้า (Visibility Toggle)
+        window.toggleProductVisibility = async function(id, isHc) {
+            if (isHc) {
+                let hiddenHcItems = JSON.parse(localStorage.getItem('woven_hidden_hc')) || [];
+                if (hiddenHcItems.includes(id)) {
+                    hiddenHcItems = hiddenHcItems.filter(itemId => itemId !== id);
+                    showToast('แสดงสินค้าตัวเดิมแล้ว', 'fas fa-eye');
+                } else {
+                    hiddenHcItems.push(id);
+                    showToast('ซ่อนสินค้าตัวเดิมแล้ว', 'fas fa-eye-slash');
+                }
+                localStorage.setItem('woven_hidden_hc', JSON.stringify(hiddenHcItems));
+                loadProductsFromDB();
+            } else {
+                try {
+                    const prod = allProductsData.find(p => p.id === id);
+                    if (prod) {
+                        const newStatus = !prod.isHidden;
+                        await updateDoc(doc(db, "products", id), { isHidden: newStatus });
+                        showToast(newStatus ? 'ซ่อนสินค้าแล้ว' : 'แสดงสินค้าแล้ว', newStatus ? 'fas fa-eye-slash' : 'fas fa-eye');
+                        loadProductsFromDB();
+                    }
+                } catch (error) {
+                    showToast('เกิดข้อผิดพลาด', 'fas fa-times');
+                }
+            }
+        }
+
+        // ระบบลบสินค้า (ลบได้ทั้งตั้งต้นและจาก DB)
+        window.deleteProduct = async function(id, isHc = false) {
+            if(confirm("คุณแน่ใจหรือไม่ว่าต้องการลบสินค้านี้ออกจากระบบ?")) {
+                if (isHc) {
+                    let deletedHcItems = JSON.parse(localStorage.getItem('woven_deleted_hc')) || [];
+                    if (!deletedHcItems.includes(id)) {
+                        deletedHcItems.push(id);
+                        localStorage.setItem('woven_deleted_hc', JSON.stringify(deletedHcItems));
+                    }
+                    showToast('ลบสินค้าตัวเดิมสำเร็จ', 'fas fa-check');
+                    loadProductsFromDB();
+                } else {
+                    try { 
+                        await deleteDoc(doc(db, "products", id)); 
+                        showToast('ลบสินค้าสำเร็จ', 'fas fa-check'); 
+                        loadProductsFromDB(); 
+                    } catch(e) { 
+                        showToast('ไม่สามารถลบได้', 'fas fa-times'); 
+                    }
+                }
+            }
         }
 
         window.editProduct = function(id) {
@@ -1182,17 +1321,12 @@
                 window.scrollTo({ top: document.querySelector('.admin-container').offsetTop, behavior: 'smooth' });
             }
         }
+
         window.cancelEdit = function() {
             document.getElementById('editProdId').value = ''; document.getElementById('addProductForm').reset();
-            document.getElementById('adminFormTitle').innerText = "ฟอร์มเพิ่มสินค้าใหม่";
+            document.getElementById('adminFormTitle').innerText = "ฟอร์มเพิ่ม/แก้ไข สินค้า";
             document.getElementById('btnAddProduct').innerHTML = "บันทึกสินค้าลงฐานข้อมูล";
             document.getElementById('btnCancelEdit').style.display = "none";
-        }
-        window.deleteProduct = async function(id) {
-            if(confirm("คุณแน่ใจหรือไม่ว่าต้องการลบสินค้านี้ออกจากระบบ?")) {
-                try { await deleteDoc(doc(db, "products", id)); showToast('ลบสินค้าสำเร็จ', 'fas fa-check'); loadProductsFromDB(); } 
-                catch(e) { showToast('ไม่สามารถลบได้', 'fas fa-times'); }
-            }
         }
 
         async function loadOrdersFromDB() {
@@ -1265,7 +1399,6 @@
             }
         }
 
-        // โหลดข้อความติดต่อจากลูกค้า มาแสดงให้ Admin
         async function loadMessagesFromDB() {
             try {
                 const q = query(collection(db, "messages"), orderBy("createdAt", "desc"));
@@ -1278,7 +1411,6 @@
                     const dateObj = (data.createdAt && data.createdAt.toDate) ? data.createdAt.toDate() : new Date();
                     const dateStr = dateObj.toLocaleDateString('th-TH') + ' ' + dateObj.toLocaleTimeString('th-TH', {hour: '2-digit', minute:'2-digit'});
                     
-                    // ส่วนแสดงการตอบกลับของแอดมิน
                     let replyHtml = data.reply ? `<div style="margin-top:10px; padding:10px; background:#eaf2f8; border-left:4px solid #3498db; border-radius:4px; font-size:0.9rem;"><strong><i class="fas fa-headset"></i> ตอบแล้ว:</strong> ${data.reply}</div>` : '';
 
                     tbody.innerHTML += `
@@ -1302,7 +1434,6 @@
             }
         }
 
-        // ฟังก์ชันตอบกลับข้อความ (บันทึกลง Database ให้แอดมินดูได้)
         window.replyMessage = async function(id) {
             const replyText = prompt("กรอกข้อความตอบกลับของแอดมิน:");
             if (replyText !== null && replyText.trim() !== "") {
@@ -1312,7 +1443,7 @@
                         repliedAt: new Date()
                     });
                     showToast('บันทึกข้อความตอบกลับแล้ว', 'fas fa-check');
-                    loadMessagesFromDB(); // รีเฟรชตารางข้อความ
+                    loadMessagesFromDB();
                 } catch(e) {
                     showToast('เกิดข้อผิดพลาดในการตอบกลับ', 'fas fa-times');
                 }
@@ -1330,9 +1461,31 @@
             }
         }
 
+        // ฟังก์ชันแยกสินค้าหน้าแรก (Home) และ หน้าสินค้าทั้งหมด (Products)
         function syncProductsPage() {
+            // 1. นำข้อมูลทั้งหมดไปใส่ไว้ที่หน้า "สินค้าทั้งหมด" ก่อน
             const sourceGrid = document.getElementById('mainProductGrid').innerHTML;
             document.getElementById('allProductGrid').innerHTML = sourceGrid;
+            
+            // 2. จัดการหน้า "สินค้าทั้งหมด" (All Products) -> โชว์ทุกตัวยกเว้นตัวที่แอดมินกด "ซ่อน"
+            document.querySelectorAll('#allProductGrid .product-card').forEach(card => {
+                if (card.getAttribute('data-hidden') === 'true') {
+                    card.style.display = 'none';
+                } else {
+                    card.style.display = 'block';
+                }
+            });
+
+            // 3. จัดการ "หน้าแรก" (Home) -> โชว์เฉพาะตัวที่แอดมินกด "ดาว(แนะนำหน้าแรก)" และ ไม่ถูกซ่อน
+            document.querySelectorAll('#mainProductGrid .product-card').forEach(card => {
+                if (card.getAttribute('data-hidden') === 'true' || card.getAttribute('data-recommended') === 'false') {
+                    card.style.display = 'none';
+                } else {
+                    card.style.display = 'block';
+                }
+            });
+
+            // เปิดใช้งานระบบตัวกรองหมวดหมู่ให้ทำงานต่อ
             const activeFilter = document.querySelector('.filter-bar .filter-btn.active');
             if (activeFilter) activeFilter.click();
             setTimeout(updateAllHeartIcons, 100);
