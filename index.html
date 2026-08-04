@@ -74,7 +74,10 @@
         .product-card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
         .product-badge { position: absolute; top: 10px; left: 10px; background-color: var(--danger); color: var(--white); padding: 4px 10px; font-size: 0.8rem; border-radius: 4px; z-index: 2; }
         .product-img { position: relative; overflow: hidden; background-color: var(--beige); cursor: pointer; }
-        .product-img img { width: 100%; height: 250px; object-fit: cover; transition: transform 0.5s; }
+        
+        /* แก้ไขสัดส่วนรูปภาพให้เป็น 1:1 เสมอ */
+        .product-img img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; transition: transform 0.5s; }
+        
         .product-card:hover .product-img img { transform: scale(1.05); }
         .product-info { padding: 15px; }
         .product-info h3 { font-size: 1.1rem; font-weight: 500; margin-bottom: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer; }
@@ -346,12 +349,16 @@
                     <h3 style="margin-bottom: 20px; color: var(--wood-brown);">สรุปคำสั่งซื้อ</h3>
                     <div id="checkoutItemsList" style="margin-bottom: 20px; border-bottom: 1px solid #ccc; padding-bottom: 10px;"></div>
                     <div class="cart-summary-row cart-summary-total"><span>ยอดสุทธิ:</span><span id="checkoutTotalText">฿0</span></div>
+                    
+                    <!-- เพิ่มปุ่มสำหรับกลับไปหน้าตะกร้าสินค้า -->
+                    <button class="btn-outline btn-full" style="margin-top: 15px;" onclick="navigateTo('cartPage')">
+                        <i class="fas fa-arrow-left"></i> กลับไปหน้าตะกร้า
+                    </button>
                 </div>
             </div>
         </main>
     </div>
 
-    <!-- ==================== PAGE: ABOUT (เกี่ยวกับเรา) ==================== -->
     <div id="about" class="page-section">
         <header class="page-header"><h1 class="page-title">เรื่องราวของสานสุข (The Story of Saan Sook)</h1></header>
         <main class="container">
@@ -376,7 +383,7 @@
         </main>
     </div>
 
-    <!-- ==================== PAGE: CONTACT (ติดต่อ) ==================== -->
+
     <div id="contact" class="page-section">
         <header class="page-header"><h1 class="page-title">ติดต่อเรา</h1></header>
         <main style="background-color: var(--cream); padding: 40px 20px;">
@@ -476,7 +483,7 @@
                         </div>
                     </div>
 
-                    <!-- ประวัติการสั่งซื้อ (Order History & Tracking) -->
+     
                     <div style="background: var(--white); padding: 30px; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.05);">
                         <h3 style="color: var(--wood-brown); margin-bottom: 20px; border-bottom: 2px solid var(--beige); padding-bottom: 10px;">
                             <i class="fas fa-box" style="color: var(--wood-brown);"></i> ประวัติการสั่งซื้อของฉัน
@@ -488,9 +495,8 @@
 
             </div>
         </main>
-    </div>
+    </div> <!-- ✅ เพิ่ม </div> เพื่อปิดหน้า account ตรงนี้ ✅ -->
 
-    <!-- ==================== PAGE: ADMIN (จัดการหลังบ้าน แบบ Full System) ==================== -->
     <div id="admin" class="page-section">
         <header class="page-header">
             <h1 class="page-title" style="color: var(--danger);">ระบบจัดการหลังบ้าน</h1>
@@ -519,8 +525,9 @@
                             </select>
                         </div>
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                            <div class="form-group"><label class="form-label">ราคาปกติ (บาท)</label><input type="number" id="addProdPrice" class="form-control" required></div>
-                            <div class="form-group"><label class="form-label">ราคาลด (ปล่อยว่างได้)</label><input type="number" id="addProdSalePrice" class="form-control"></div>
+                            <!-- เพิ่ม min="0" ป้องกันใส่ราคาติดลบ -->
+                            <div class="form-group"><label class="form-label">ราคาปกติ (บาท)</label><input type="number" id="addProdPrice" class="form-control" required min="0"></div>
+                            <div class="form-group"><label class="form-label">ราคาลด (ปล่อยว่างได้)</label><input type="number" id="addProdSalePrice" class="form-control" min="0"></div>
                         </div>
                         <div class="form-group"><label class="form-label">URL รูปภาพสินค้า</label><input type="url" id="addProdImage" class="form-control" required></div>
                         <button type="submit" class="btn-primary btn-full" id="btnAddProduct">บันทึกสินค้าลงฐานข้อมูล</button>
@@ -667,6 +674,19 @@
 
         document.querySelectorAll('[data-target]').forEach(link => {
             link.addEventListener('click', (e) => { e.preventDefault(); navigateTo(link.getAttribute('data-target')); });
+        });
+
+        // ควบคุมการเปิด/ปิด เมนูมือถือ
+        document.getElementById('mobileMenuBtn').addEventListener('click', function() {
+            const navLinks = document.getElementById('navLinks');
+            const icon = this.querySelector('i');
+            navLinks.classList.toggle('active');
+            
+            if(navLinks.classList.contains('active')) {
+                icon.classList.replace('fa-bars', 'fa-times');
+            } else {
+                icon.classList.replace('fa-times', 'fa-bars');
+            }
         });
 
         function updateCartBadge() {
@@ -1070,8 +1090,14 @@
             } catch (error) { showToast('อีเมลหรือรหัสผ่านไม่ถูกต้อง', 'fas fa-exclamation-triangle'); }
         });
 
+        // ยืนยันก่อนออกจากระบบ
         document.getElementById('logoutBtn').addEventListener('click', () => {
-            signOut(auth).then(() => { showToast('ออกจากระบบแล้ว', 'fas fa-sign-out-alt'); navigateTo('home'); });
+            if (confirm("คุณต้องการออกจากระบบใช่หรือไม่?")) {
+                signOut(auth).then(() => { 
+                    showToast('ออกจากระบบแล้ว', 'fas fa-sign-out-alt'); 
+                    navigateTo('home'); 
+                });
+            }
         });
 
         onAuthStateChanged(auth, async (user) => {
