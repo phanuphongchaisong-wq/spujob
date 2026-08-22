@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Automate Dashboard</title>
+    <title>AI Automation Admin Dashboard</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome -->
@@ -11,124 +11,469 @@
     <script>
         tailwind.config = {
             theme: {
-                extend: { colors: { primary: '#2563eb' } }
+                extend: { 
+                    colors: { 
+                        primary: '#3b82f6', // Blue-500
+                        secondary: '#1e293b', // Slate-800
+                        background: '#f8fafc' // Slate-50
+                    } 
+                }
             }
         }
     </script>
+    <style>
+        /* Custom Scrollbar for sleek look */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        /* Toggle Switch CSS */
+        .toggle-checkbox:checked { right: 0; border-color: #68D391; }
+        .toggle-checkbox:checked + .toggle-label { background-color: #68D391; }
+        .toggle-checkbox { right: 0; z-index: 1; border-color: #e2e8f0; transition: all 0.3s; }
+        .toggle-label { width: 3rem; height: 1.5rem; background-color: #e2e8f0; border-radius: 9999px; transition: all 0.3s; }
+    </style>
 </head>
-<body class="bg-gray-50 text-gray-800 font-sans flex h-screen overflow-hidden">
+<body class="bg-background text-gray-800 font-sans flex h-screen overflow-hidden">
 
     <!-- Sidebar -->
-    <aside class="w-64 bg-white shadow-md flex flex-col justify-between hidden md:flex">
+    <aside class="w-64 bg-secondary text-slate-300 flex flex-col justify-between hidden md:flex shrink-0 shadow-xl z-20">
         <div>
-            <div class="h-16 flex items-center justify-center border-b font-bold text-xl text-primary">
-                <i class="fa-solid fa-robot mr-2"></i> AI Assistant
+            <div class="h-16 flex items-center justify-center border-b border-slate-700 font-bold text-xl text-white tracking-wider">
+                <i class="fa-solid fa-robot text-primary mr-2"></i> AI Auto<span class="text-primary">Hub</span>
             </div>
-            <nav class="mt-4">
-                <a href="#" onclick="switchTab('dashboard')" class="flex items-center px-6 py-3 text-gray-700 hover:bg-blue-50 hover:text-primary transition-colors">
-                    <i class="fa-solid fa-chart-pie w-5 mr-3"></i> Dashboard
+            <nav class="mt-6 flex flex-col gap-1 px-3">
+                <a href="#" onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn flex items-center px-4 py-3 rounded-lg text-white bg-primary/20 hover:bg-slate-700 transition-colors">
+                    <i class="fa-solid fa-chart-pie w-6 text-primary"></i> Dashboard
                 </a>
-                <a href="#" onclick="switchTab('chat')" class="flex items-center px-6 py-3 text-gray-700 hover:bg-blue-50 hover:text-primary transition-colors border-l-4 border-primary bg-blue-50">
-                    <i class="fa-solid fa-comments w-5 mr-3"></i> Conversations
+                <a href="#" onclick="switchTab('aichat')" id="nav-aichat" class="nav-btn flex items-center px-4 py-3 rounded-lg hover:bg-slate-700 transition-colors">
+                    <i class="fa-solid fa-flask w-6"></i> AI Chat (Test)
                 </a>
-                <a href="#" onclick="switchTab('knowledge')" class="flex items-center px-6 py-3 text-gray-700 hover:bg-blue-50 hover:text-primary transition-colors">
-                    <i class="fa-solid fa-book w-5 mr-3"></i> Knowledge Base
+                <a href="#" onclick="switchTab('knowledge')" id="nav-knowledge" class="nav-btn flex items-center px-4 py-3 rounded-lg hover:bg-slate-700 transition-colors">
+                    <i class="fa-solid fa-database w-6"></i> Knowledge Base
+                </a>
+                <a href="#" onclick="switchTab('conversations')" id="nav-conversations" class="nav-btn flex items-center px-4 py-3 rounded-lg hover:bg-slate-700 transition-colors">
+                    <i class="fa-solid fa-comments w-6"></i> Conversations
+                    <span class="ml-auto bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">2</span>
+                </a>
+                <a href="#" onclick="switchTab('automation')" id="nav-automation" class="nav-btn flex items-center px-4 py-3 rounded-lg hover:bg-slate-700 transition-colors">
+                    <i class="fa-solid fa-network-wired w-6"></i> Automation
+                </a>
+                <a href="#" onclick="switchTab('settings')" id="nav-settings" class="nav-btn flex items-center px-4 py-3 rounded-lg hover:bg-slate-700 transition-colors">
+                    <i class="fa-solid fa-gear w-6"></i> Settings
                 </a>
             </nav>
         </div>
-        <div class="p-4 border-t text-sm text-gray-500 text-center">
-            Local Dev Mode
+        <div class="p-4 border-t border-slate-700">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-slate-600 flex items-center justify-center text-white font-bold">A</div>
+                <div class="text-sm">
+                    <p class="text-white font-medium">Admin User</p>
+                    <p class="text-xs text-slate-400 cursor-pointer hover:text-white">Sign Out</p>
+                </div>
+            </div>
         </div>
     </aside>
 
     <!-- Main Content -->
-    <main class="flex-1 flex flex-col h-full relative">
+    <main class="flex-1 flex flex-col h-full relative overflow-hidden">
         <!-- Header -->
-        <header class="h-16 bg-white shadow-sm flex items-center justify-between px-6 z-10">
-            <h1 id="page-title" class="text-xl font-semibold">Conversations</h1>
-            <div class="flex items-center gap-3">
-                <span class="bg-green-100 text-green-700 text-xs font-bold px-3 py-1 rounded-full"><i class="fa-solid fa-circle text-[8px] mr-1"></i> System Online</span>
+        <header class="h-16 bg-white shadow-sm flex items-center justify-between px-8 z-10 shrink-0">
+            <h1 id="page-title" class="text-2xl font-bold text-slate-800">Dashboard</h1>
+            <div class="flex items-center gap-4">
+                <div class="flex items-center text-sm font-medium text-slate-500">
+                    <i class="fa-solid fa-server mr-2"></i> Local Node: <span class="text-green-500 ml-1">Online</span>
+                </div>
             </div>
         </header>
 
-        <!-- Container -->
-        <div class="flex-1 overflow-auto p-6">
+        <!-- Content Area -->
+        <div class="flex-1 overflow-auto p-8">
             
-            <!-- Tab: Dashboard -->
-            <div id="tab-dashboard" class="hidden">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-                        <div class="text-gray-500 text-sm mb-1">Total Users</div>
-                        <div class="text-3xl font-bold">0</div>
+            <!-- 1. TAB: DASHBOARD -->
+            <div id="tab-dashboard" class="tab-content">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="text-slate-500 text-sm font-medium">ลูกค้าทั้งหมด</div>
+                            <div class="p-2 bg-blue-50 text-blue-500 rounded-lg"><i class="fa-solid fa-users"></i></div>
+                        </div>
+                        <div class="text-3xl font-bold text-slate-800">1,248</div>
+                        <div class="text-xs text-green-500 mt-2"><i class="fa-solid fa-arrow-up mr-1"></i>+12% เดือนนี้</div>
                     </div>
-                    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-                        <div class="text-gray-500 text-sm mb-1">AI Handled</div>
-                        <div class="text-3xl font-bold text-green-600">0%</div>
+                    
+                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="text-slate-500 text-sm font-medium">จำนวนแชต</div>
+                            <div class="p-2 bg-purple-50 text-purple-500 rounded-lg"><i class="fa-solid fa-messages"></i></div>
+                        </div>
+                        <div class="text-3xl font-bold text-slate-800">5,892</div>
+                        <div class="text-xs text-green-500 mt-2"><i class="fa-solid fa-arrow-up mr-1"></i>+5% สัปดาห์นี้</div>
                     </div>
-                    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-                        <div class="text-gray-500 text-sm mb-1">Staff Escalations</div>
-                        <div class="text-3xl font-bold text-red-500">0</div>
+
+                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="text-slate-500 text-sm font-medium">AI ตอบสำเร็จ</div>
+                            <div class="p-2 bg-green-50 text-green-500 rounded-lg"><i class="fa-solid fa-robot"></i></div>
+                        </div>
+                        <div class="text-3xl font-bold text-slate-800">85%</div>
+                        <div class="text-xs text-slate-500 mt-2">ประหยัดเวลาทีมงาน 120 ชม.</div>
                     </div>
+
+                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="text-slate-500 text-sm font-medium">ส่งต่อพนักงาน</div>
+                            <div class="p-2 bg-orange-50 text-orange-500 rounded-lg"><i class="fa-solid fa-headset"></i></div>
+                        </div>
+                        <div class="text-3xl font-bold text-slate-800">15%</div>
+                        <div class="text-xs text-red-500 mt-2">ต้องการความสนใจ 2 รายการ</div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="text-slate-500 text-sm font-medium">ค่าใช้จ่าย AI (API)</div>
+                            <div class="p-2 bg-slate-50 text-slate-600 rounded-lg"><i class="fa-solid fa-coins"></i></div>
+                        </div>
+                        <div class="text-3xl font-bold text-slate-800">$0.00</div>
+                        <div class="text-xs text-slate-500 mt-2">Local Llama3 (Free)</div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm h-96 flex items-center justify-center text-slate-400">
+                    [ พื้นที่สำหรับใส่กราฟแสดงสถิติการแชตรายวัน (ใช้ Chart.js ได้ในอนาคต) ]
                 </div>
             </div>
 
-            <!-- Tab: Chat (Active by default for testing) -->
-            <div id="tab-chat" class="h-full flex gap-4">
-                <!-- User List -->
-                <div class="w-1/3 bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden flex flex-col">
-                    <div class="p-4 border-b bg-gray-50 font-medium text-sm">Active Chats</div>
-                    <div class="flex-1 overflow-y-auto p-2" id="user-list">
-                        <!-- Mock User -->
-                        <div class="p-3 bg-blue-50 rounded-md cursor-pointer mb-2 flex justify-between items-center border border-blue-100">
+            <!-- 2. TAB: AI CHAT (Test & Debug) -->
+            <div id="tab-aichat" class="tab-content hidden h-full flex flex-col lg:flex-row gap-6">
+                <!-- Chat Interface -->
+                <div class="w-full lg:w-1/2 flex flex-col bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden h-full">
+                    <div class="p-4 border-b bg-slate-50 font-semibold flex items-center gap-2">
+                        <i class="fa-solid fa-flask text-primary"></i> ทดลองคุยกับ AI
+                    </div>
+                    <div class="flex-1 p-4 overflow-y-auto bg-slate-50 flex flex-col gap-4">
+                        <div class="self-end bg-primary text-white p-3 rounded-2xl rounded-tr-none max-w-[80%] shadow-sm">
+                            บริษัทรับประกันสินค้ากี่ปีครับ?
+                        </div>
+                        <div class="self-start bg-white border p-3 rounded-2xl rounded-tl-none max-w-[80%] shadow-sm flex gap-3">
+                            <div class="mt-1"><i class="fa-solid fa-robot text-primary"></i></div>
                             <div>
-                                <div class="font-semibold text-sm">Customer A</div>
-                                <div class="text-xs text-gray-500">รอพนักงานตอบ...</div>
+                                สินค้าของเรามีการรับประกัน 1 ปีเต็มนับจากวันที่ซื้อครับ หากสินค้ามีปัญหาสามารถนำเข้ามาที่ศูนย์บริการได้เลยครับ
+                                <div class="text-[10px] text-slate-400 mt-2 flex items-center gap-1">
+                                    <i class="fa-solid fa-bolt"></i> Local Llama 3 (0.8s)
+                                </div>
                             </div>
-                            <span class="bg-red-500 text-white text-[10px] px-2 py-1 rounded">Pending</span>
                         </div>
+                    </div>
+                    <div class="p-4 bg-white border-t flex gap-2">
+                        <input type="text" placeholder="พิมพ์ข้อความทดสอบ..." class="flex-1 bg-slate-100 border-none rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/50">
+                        <button class="bg-primary hover:bg-blue-600 text-white px-5 py-3 rounded-lg transition-colors"><i class="fa-solid fa-paper-plane"></i></button>
                     </div>
                 </div>
-                
-                <!-- Chat Box -->
-                <div class="flex-1 bg-white rounded-lg shadow-sm border border-gray-100 flex flex-col overflow-hidden">
-                    <div class="p-4 border-b bg-gray-50 font-medium text-sm flex justify-between">
-                        <span>Chat with: <span class="text-primary">Customer A</span></span>
-                        <button class="text-xs bg-gray-200 hover:bg-gray-300 text-gray-800 px-3 py-1 rounded transition">Close Chat</button>
+
+                <!-- Debug/RAG Context Interface -->
+                <div class="w-full lg:w-1/2 flex flex-col bg-slate-900 rounded-xl shadow-sm overflow-hidden h-full text-slate-300 font-mono text-sm">
+                    <div class="p-4 border-b border-slate-700 bg-slate-800 font-semibold flex items-center gap-2 text-white">
+                        <i class="fa-solid fa-microchip text-green-400"></i> AI Debug & RAG Context
                     </div>
-                    <div class="flex-1 overflow-y-auto p-4 flex flex-col gap-3" id="chat-messages">
-                        <!-- Mock Messages -->
-                        <div class="self-start bg-gray-100 px-4 py-2 rounded-lg max-w-[80%] text-sm">
-                            สวัสดีครับ อยากทราบราคาแพ็กเกจ
+                    <div class="flex-1 p-4 overflow-y-auto">
+                        <div class="mb-4">
+                            <h3 class="text-green-400 mb-1">1. User Intent:</h3>
+                            <div class="bg-slate-800 p-3 rounded border border-slate-700">"inquire_warranty" (Confidence: 0.95)</div>
                         </div>
-                        <div class="self-end bg-primary text-white px-4 py-2 rounded-lg max-w-[80%] text-sm">
-                            สวัสดีค่ะ AI กำลังค้นหาข้อมูล... ขออภัยค่ะ ไม่พบข้อมูลส่วนนี้ ต้องการคุยกับพนักงานไหมคะ?
+                        <div class="mb-4">
+                            <h3 class="text-blue-400 mb-1">2. RAG Retrieved Data (Top 2 chunks):</h3>
+                            <div class="bg-slate-800 p-3 rounded border border-slate-700 mb-2">
+                                <span class="text-slate-500 text-xs block mb-1">Source: warranty_policy_2024.pdf (score: 0.89)</span>
+                                "...บริษัทขอสงวนสิทธิ์ในการรับประกันสินค้าเป็นระยะเวลา 1 ปีเต็มนับจากวันที่ระบุในใบเสร็จรับเงิน..."
+                            </div>
+                            <div class="bg-slate-800 p-3 rounded border border-slate-700">
+                                <span class="text-slate-500 text-xs block mb-1">Source: faq_database (score: 0.72)</span>
+                                "...ลูกค้าสามารถนำสินค้าที่มีปัญหาพร้อมใบเสร็จมาเคลมได้ที่ศูนย์บริการทุกสาขา..."
+                            </div>
                         </div>
-                    </div>
-                    <!-- Chat Input -->
-                    <div class="p-3 border-t bg-white flex gap-2">
-                        <input type="text" id="staff-message" placeholder="พิมพ์ข้อความตอบกลับในฐานะพนักงาน..." class="flex-1 border rounded-lg px-4 py-2 text-sm focus:outline-none focus:border-primary">
-                        <button class="bg-primary hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition"><i class="fa-solid fa-paper-plane"></i></button>
+                        <div>
+                            <h3 class="text-purple-400 mb-1">3. Drafted Prompt to LLM:</h3>
+                            <div class="bg-slate-800 p-3 rounded border border-slate-700 whitespace-pre-wrap text-xs">System: You are a helpful support agent. Use only the provided context to answer. 
+Context: [warranty_policy_2024.pdf: 1 year warranty from receipt date], [faq_database: claim at any branch].
+User: บริษัทรับประกันสินค้ากี่ปีครับ?</div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Tab: Knowledge Base -->
-            <div id="tab-knowledge" class="hidden">
-                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-                    <h2 class="text-lg font-semibold mb-4">Upload Documents</h2>
-                    <div class="border-2 border-dashed border-gray-300 rounded-lg p-10 text-center hover:bg-gray-50 transition cursor-pointer">
-                        <i class="fa-solid fa-cloud-arrow-up text-4xl text-gray-400 mb-3"></i>
-                        <p class="text-gray-600">Drag & drop PDF files here, or click to select</p>
-                        <input type="file" id="pdf-upload" class="hidden" accept="application/pdf">
-                    </div>
-                    <div class="mt-6">
-                        <h3 class="font-medium text-sm text-gray-700 mb-2">Indexed Files</h3>
-                        <ul class="text-sm text-gray-600 space-y-2 border-t pt-4">
-                            <!-- Mock Data -->
-                            <li class="flex justify-between items-center"><i class="fa-solid fa-file-pdf text-red-500 mr-2"></i> company_policy.pdf <span class="text-green-500 text-xs"><i class="fa-solid fa-check"></i> Indexed</span></li>
-                        </ul>
+            <!-- 3. TAB: KNOWLEDGE BASE -->
+            <div id="tab-knowledge" class="tab-content hidden">
+                <div class="flex justify-between items-center mb-6">
+                    <div class="flex gap-4 border-b border-slate-200 pb-2 w-full">
+                        <button class="font-semibold text-primary border-b-2 border-primary pb-2 px-2">Documents (PDF/DOC)</button>
+                        <button class="font-medium text-slate-500 hover:text-slate-700 pb-2 px-2 transition">Q&A / FAQ</button>
                     </div>
                 </div>
+
+                <div class="flex flex-col lg:flex-row gap-6">
+                    <!-- Upload Area -->
+                    <div class="w-full lg:w-1/3">
+                        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm text-center">
+                            <div class="w-16 h-16 bg-blue-50 text-primary rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
+                                <i class="fa-solid fa-cloud-arrow-up"></i>
+                            </div>
+                            <h3 class="font-semibold mb-1">อัปโหลดเอกสารใหม่</h3>
+                            <p class="text-sm text-slate-500 mb-6">รองรับ PDF, DOCX, TXT (สูงสุด 50MB)</p>
+                            <input type="file" id="file-upload" class="hidden">
+                            <label for="file-upload" class="bg-primary hover:bg-blue-600 text-white px-4 py-2 rounded-lg cursor-pointer block transition">เลือกไฟล์</label>
+                        </div>
+                    </div>
+                    
+                    <!-- Document List -->
+                    <div class="w-full lg:w-2/3 bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-slate-50 text-slate-500 text-sm border-b">
+                                    <th class="p-4 font-medium">ชื่อเอกสาร</th>
+                                    <th class="p-4 font-medium">ประเภท</th>
+                                    <th class="p-4 font-medium">สถานะ Index (RAG)</th>
+                                    <th class="p-4 font-medium">จัดการ</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-sm">
+                                <tr class="border-b border-slate-100 hover:bg-slate-50">
+                                    <td class="p-4 flex items-center gap-3">
+                                        <i class="fa-solid fa-file-pdf text-red-500 text-lg"></i>
+                                        <div>
+                                            <p class="font-medium text-slate-700">warranty_policy_2024.pdf</p>
+                                            <p class="text-xs text-slate-400">อัปโหลดเมื่อ 2 วันที่แล้ว</p>
+                                        </div>
+                                    </td>
+                                    <td class="p-4 text-slate-500">คู่มือ/นโยบาย</td>
+                                    <td class="p-4"><span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-semibold"><i class="fa-solid fa-check mr-1"></i> Indexed</span></td>
+                                    <td class="p-4">
+                                        <button class="text-slate-400 hover:text-blue-500 mx-1"><i class="fa-solid fa-pen"></i></button>
+                                        <button class="text-slate-400 hover:text-red-500 mx-1"><i class="fa-solid fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                                <tr class="border-b border-slate-100 hover:bg-slate-50">
+                                    <td class="p-4 flex items-center gap-3">
+                                        <i class="fa-solid fa-file-lines text-blue-500 text-lg"></i>
+                                        <div>
+                                            <p class="font-medium text-slate-700">product_catalog_v2.txt</p>
+                                            <p class="text-xs text-slate-400">อัปโหลดเมื่อ 5 นาทีที่แล้ว</p>
+                                        </div>
+                                    </td>
+                                    <td class="p-4 text-slate-500">ข้อมูลสินค้า</td>
+                                    <td class="p-4"><span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-xs font-semibold"><i class="fa-solid fa-spinner fa-spin mr-1"></i> Processing...</span></td>
+                                    <td class="p-4">
+                                        <button class="text-slate-400 hover:text-blue-500 mx-1" disabled><i class="fa-solid fa-pen"></i></button>
+                                        <button class="text-slate-400 hover:text-red-500 mx-1"><i class="fa-solid fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. TAB: CONVERSATIONS -->
+            <div id="tab-conversations" class="tab-content hidden h-full flex gap-6">
+                <!-- User List -->
+                <div class="w-80 bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col shrink-0">
+                    <div class="p-4 border-b flex flex-col gap-3">
+                        <div class="relative">
+                            <i class="fa-solid fa-search absolute left-3 top-3 text-slate-400"></i>
+                            <input type="text" placeholder="ค้นหาลูกค้า, ข้อความ..." class="w-full bg-slate-100 border-none rounded-lg pl-9 pr-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50">
+                        </div>
+                        <div class="flex gap-2 text-xs">
+                            <button class="bg-slate-800 text-white px-3 py-1.5 rounded-full">ทั้งหมด</button>
+                            <button class="bg-slate-100 text-slate-600 hover:bg-slate-200 px-3 py-1.5 rounded-full">รอพนักงาน (2)</button>
+                        </div>
+                    </div>
+                    <div class="flex-1 overflow-y-auto">
+                        <!-- Active User (Need Staff) -->
+                        <div class="p-4 border-b border-slate-100 bg-red-50 cursor-pointer flex gap-3 relative">
+                            <div class="w-2 h-2 bg-red-500 rounded-full absolute top-5 left-2"></div>
+                            <img src="https://ui-avatars.com/api/?name=Somchai&background=random" class="w-10 h-10 rounded-full ml-2">
+                            <div class="flex-1 min-w-0">
+                                <div class="flex justify-between items-baseline mb-1">
+                                    <h4 class="font-semibold text-sm truncate">คุณสมชาย (LINE)</h4>
+                                    <span class="text-[10px] text-slate-500">10:42</span>
+                                </div>
+                                <p class="text-xs text-slate-600 truncate">ต้องการคุยกับพนักงานด่วนครับ</p>
+                            </div>
+                        </div>
+                        <!-- Normal User -->
+                        <div class="p-4 border-b border-slate-100 hover:bg-slate-50 cursor-pointer flex gap-3">
+                            <img src="https://ui-avatars.com/api/?name=Manee&background=random" class="w-10 h-10 rounded-full ml-2">
+                            <div class="flex-1 min-w-0">
+                                <div class="flex justify-between items-baseline mb-1">
+                                    <h4 class="font-medium text-sm text-slate-700 truncate">Manee S. (Messenger)</h4>
+                                    <span class="text-[10px] text-slate-400">เมื่อวาน</span>
+                                </div>
+                                <p class="text-xs text-slate-400 truncate">AI: ขอบคุณที่ใช้บริการค่ะ</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat Box Area -->
+                <div class="flex-1 bg-white rounded-xl border border-slate-200 shadow-sm flex flex-col overflow-hidden">
+                    <!-- Chat Header -->
+                    <div class="h-16 border-b flex items-center justify-between px-6 shrink-0 bg-white">
+                        <div class="flex items-center gap-3">
+                            <img src="https://ui-avatars.com/api/?name=Somchai&background=random" class="w-10 h-10 rounded-full">
+                            <div>
+                                <h3 class="font-bold text-slate-800 text-sm">คุณสมชาย</h3>
+                                <div class="text-xs text-red-500 font-medium"><i class="fa-solid fa-hand text-[10px]"></i> หยุด AI แล้ว - รอพนักงานตอบ</div>
+                            </div>
+                        </div>
+                        <div class="flex gap-2">
+                            <button class="bg-green-100 text-green-700 hover:bg-green-200 px-4 py-2 rounded-lg text-sm font-medium transition"><i class="fa-solid fa-check mr-1"></i> ปิดการสนทนา (เปิด AI)</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Messages -->
+                    <div class="flex-1 overflow-y-auto p-6 bg-slate-50 flex flex-col gap-4">
+                        <div class="self-end bg-blue-100 text-slate-800 p-3 rounded-2xl rounded-tr-none max-w-[70%] shadow-sm text-sm">
+                            สนใจระบบ Automation ราคาเท่าไหร่ครับ
+                        </div>
+                        <div class="self-start bg-white border p-3 rounded-2xl rounded-tl-none max-w-[70%] shadow-sm text-sm flex gap-3">
+                            <div class="mt-1"><i class="fa-solid fa-robot text-primary"></i></div>
+                            <div>แพ็กเกจระบบ Automation เริ่มต้นที่ 5,000 บาท/เดือนครับ ดูรายละเอียดได้ที่ลิ้งค์...</div>
+                        </div>
+                        <div class="self-end bg-blue-100 text-slate-800 p-3 rounded-2xl rounded-tr-none max-w-[70%] shadow-sm text-sm">
+                            ขอรายละเอียดแบบ Custom Plan หน่อยครับ ธุรกิจผมซับซ้อน ต้องการคุยกับเซลล์
+                        </div>
+                        
+                        <div class="flex justify-center my-2">
+                            <span class="bg-red-100 text-red-600 text-[10px] font-bold px-3 py-1 rounded-full border border-red-200">
+                                <i class="fa-solid fa-pause mr-1"></i> AI Handoff - ส่งต่อพนักงานแล้ว
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Staff Input -->
+                    <div class="p-4 bg-white border-t flex flex-col gap-2 shrink-0">
+                        <div class="flex gap-2">
+                            <button class="text-slate-400 hover:text-primary"><i class="fa-solid fa-paperclip"></i></button>
+                            <input type="text" placeholder="พิมพ์ข้อความตอบกลับในฐานะแอดมิน..." class="flex-1 bg-slate-100 border-none rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/50 text-sm">
+                            <button class="bg-primary hover:bg-blue-600 text-white px-6 py-3 rounded-lg transition-colors font-medium">ส่งข้อความ</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. TAB: AUTOMATION (n8n Interface Mock) -->
+            <div id="tab-automation" class="tab-content hidden">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-lg font-bold text-slate-800">ระบบ Automation (n8n Workflows)</h2>
+                    <button class="bg-primary hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm transition"><i class="fa-solid fa-plus mr-1"></i> สร้าง Workflow ใหม่</button>
+                </div>
+
+                <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden mb-8">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-50 text-slate-500 text-sm border-b">
+                                <th class="p-4 font-medium">ชื่อ Workflow</th>
+                                <th class="p-4 font-medium">Trigger</th>
+                                <th class="p-4 font-medium">Status</th>
+                                <th class="p-4 font-medium text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-sm">
+                            <tr class="border-b border-slate-100">
+                                <td class="p-4 font-medium text-slate-700">1. Main RAG Chatbot (LINE)</td>
+                                <td class="p-4"><span class="bg-green-100 text-green-700 px-2 py-1 rounded text-xs"><i class="fa-brands fa-line mr-1"></i> Webhook</span></td>
+                                <td class="p-4">
+                                    <div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+                                        <input type="checkbox" name="toggle" id="toggle1" checked class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
+                                        <label for="toggle1" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+                                    </div>
+                                </td>
+                                <td class="p-4 text-right">
+                                    <button class="text-primary hover:underline text-xs mr-3"><i class="fa-solid fa-pen-to-square"></i> แก้ไขใน n8n</button>
+                                </td>
+                            </tr>
+                            <tr class="border-b border-slate-100">
+                                <td class="p-4 font-medium text-slate-700">2. Document Indexing (Storage to Vector DB)</td>
+                                <td class="p-4"><span class="bg-orange-100 text-orange-700 px-2 py-1 rounded text-xs"><i class="fa-solid fa-database mr-1"></i> Firebase Event</span></td>
+                                <td class="p-4">
+                                    <div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+                                        <input type="checkbox" name="toggle" id="toggle2" checked class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
+                                        <label for="toggle2" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+                                    </div>
+                                </td>
+                                <td class="p-4 text-right">
+                                    <button class="text-primary hover:underline text-xs mr-3"><i class="fa-solid fa-pen-to-square"></i> แก้ไขใน n8n</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3 class="text-md font-bold text-slate-800 mb-3">Execution Logs (ล่าสุด)</h3>
+                <div class="bg-slate-900 rounded-xl p-4 text-green-400 font-mono text-xs overflow-y-auto h-64">
+                    [10:42:01] Webhook received from LINE OA (UserId: U123...)<br>
+                    [10:42:01] Checking Firestore conversation status... [Status: bot_active]<br>
+                    [10:42:02] Embedding generated. Querying Pinecone Vector DB...<br>
+                    [10:42:02] LLM (Llama3) inference started...<br>
+                    [10:42:03] LLM response generated. Sending to LINE Messaging API...<br>
+                    [10:42:03] Success. Firestore updated.<br>
+                    ---------------------------------------------------<br>
+                    [10:45:10] Webhook received from LINE OA (UserId: U999...)<br>
+                    [10:45:11] Intent: Talk to human. Executing Handoff logic.<br>
+                    [10:45:11] Firestore conversation status updated to [pending_staff]. AI Muted.<br>
+                </div>
+            </div>
+
+            <!-- 6. TAB: SETTINGS -->
+            <div id="tab-settings" class="tab-content hidden max-w-4xl">
+                <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden mb-6">
+                    <div class="p-4 border-b bg-slate-50 font-semibold"><i class="fa-solid fa-brain text-primary mr-2"></i> AI Model & RAG Setup</div>
+                    <div class="p-6 flex flex-col gap-5">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Provider หลัก</label>
+                            <select class="w-full bg-slate-50 border border-slate-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary/50 focus:outline-none">
+                                <option value="ollama">Local: Ollama (Llama 3 / Qwen) - ฟรี 100%</option>
+                                <option value="gemini">Google Gemini (API Key)</option>
+                                <option value="openai">OpenAI (API Key)</option>
+                            </select>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1">Local Model Name (ถ้าใช้ Ollama)</label>
+                                <input type="text" value="llama3:8b" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-4 py-2">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1">Ollama API URL</label>
+                                <input type="text" value="http://localhost:11434" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-4 py-2">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">System Prompt (AI Persona)</label>
+                            <textarea rows="4" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-4 py-2 text-sm">คุณคือผู้ช่วย AI ของบริษัท ห้ามตอบคำถามที่ไม่มีข้อมูลใน Context หากไม่มั่นใจให้ตอบว่า "ขออภัยค่ะ ขออนุญาตโอนสายให้พนักงานนะคะ"</textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden mb-6">
+                    <div class="p-4 border-b bg-slate-50 font-semibold"><i class="fa-brands fa-line text-green-500 mr-2"></i> LINE OA Configuration</div>
+                    <div class="p-6 flex flex-col gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Channel Access Token</label>
+                            <input type="password" placeholder="••••••••••••••••" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-4 py-2">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Channel Secret</label>
+                            <input type="password" placeholder="••••••••" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-4 py-2">
+                        </div>
+                        <div class="bg-blue-50 p-3 rounded text-sm text-blue-700 border border-blue-200">
+                            <strong>Webhook URL (สำหรับใส่ใน LINE):</strong> <br>
+                            <span class="font-mono">https://your-ngrok-or-cloudflare-url.com/webhook/line</span>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="bg-primary hover:bg-blue-600 text-white px-8 py-3 rounded-lg font-medium transition shadow">บันทึกการตั้งค่า</button>
             </div>
 
         </div>
@@ -137,43 +482,48 @@
     <!-- UI Logic Script -->
     <script>
         function switchTab(tabId) {
-            // Hide all
-            document.getElementById('tab-dashboard').classList.add('hidden');
-            document.getElementById('tab-chat').classList.add('hidden');
-            document.getElementById('tab-knowledge').classList.add('hidden');
-            
-            // Show selected
+            // 1. Hide all contents
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            // Show selected content
             document.getElementById(`tab-${tabId}`).classList.remove('hidden');
             
-            // Update Title
+            // 2. Reset nav styles
+            document.querySelectorAll('.nav-btn').forEach(el => {
+                el.classList.remove('bg-primary/20', 'text-white');
+                el.classList.add('text-slate-300');
+            });
+            // Highlight active nav
+            const activeNav = document.getElementById(`nav-${tabId}`);
+            activeNav.classList.remove('text-slate-300');
+            activeNav.classList.add('bg-primary/20', 'text-white');
+
+            // 3. Update Header Title
             const titles = {
-                'dashboard': 'Dashboard Overview',
-                'chat': 'Conversations',
-                'knowledge': 'Knowledge Base (RAG)'
+                'dashboard': 'Overview Dashboard',
+                'aichat': 'AI Testing & Debugging',
+                'knowledge': 'Knowledge Base (RAG)',
+                'conversations': 'Customer Conversations',
+                'automation': 'Automation & Workflows',
+                'settings': 'System Settings'
             };
             document.getElementById('page-title').innerText = titles[tabId];
         }
-    </script>
 
-    <!-- Firebase SDK (Modular V10) Placeholder -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
-        
-        // TODO: ใส่ Config จาก Firebase ของคุณในขั้นต่อไป
-        const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_PROJECT.firebaseapp.com",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_PROJECT.appspot.com",
-            messagingSenderId: "YOUR_SENDER_ID",
-            appId: "YOUR_APP_ID"
-        };
-
-        // Initialize Firebase
-        // const app = initializeApp(firebaseConfig);
-        // const db = getFirestore(app);
-        // console.log("Firebase initialized");
+        // Initialize first tab
+        switchTab('dashboard');
     </script>
 </body>
 </html>
+```eof
+
+ไฟล์ด้านบนประกอบด้วยทุกหน้าจอและการทำงาน UI แบบ Single-Page Application เสร็จสมบูรณ์ครับ 
+
+**ความพร้อมในการพัฒนา:**
+*   หน้าต่างรองรับการทำงานตามที่คุณขอมาครบทั้ง 6 ข้อ 
+*   UI ออกแบบสไตล์ Admin Dashboard คลุมโทนสี Dark/Light เพื่อความสบายตา
+*   โค้ดมีการจำลอง (Mock) ข้อมูลในส่วนของการทำงานให้เห็นภาพชัดเจน เช่น หน้า AI Chat มีหน้าต่างแสดง Debug ว่า AI ดึงข้อมูล RAG ส่วนไหนมาตอบ 
+
+**คำแนะนำก้าวต่อไป:**
+เนื่องจากคุณจะรันแบบ Local 100% บนเครื่องตัวเอง (Windows 11) ผมแนะนำให้ติดตั้งโปรแกรม **Ollama** สำหรับรัน AI, และ **Docker Desktop** สำหรับรันฐานข้อมูล Vector และ n8n ครับ
+
+หากต้องการไปต่อใน Phase ถัดไป (ติดตั้ง Backend ให้หน้าเว็บนี้ใช้งานได้จริง) แจ้งให้ผมเตรียมคู่มือพิมพ์คำสั่งรัน Local ได้เลยครับ!
