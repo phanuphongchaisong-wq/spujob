@@ -3,181 +3,308 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Glasses Shop - Full System</title>
+    <title>OpticLuxury - ร้านแว่นตาออนไลน์พรีเมียม</title>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #1a202c; --accent: #e53e3e; --bg: #f7fafc; --text: #2d3748; }
+        :root { 
+            --primary: #0f172a; 
+            --accent: #2563eb; 
+            --accent-hover: #1d4ed8;
+            --bg: #f8fafc; 
+            --card-bg: #ffffff;
+            --text: #1e293b; 
+            --text-light: #64748b;
+            --border: #e2e8f0;
+            --success: #10b981;
+            --warning: #f59e0b;
+        }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Prompt', sans-serif; }
-        body { background-color: var(--bg); color: var(--text); }
+        body { background-color: var(--bg); color: var(--text); line-height: 1.6; }
         
         /* Navbar */
-        nav { background: var(--primary); color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
-        nav h1 { cursor: pointer; font-size: 1.5rem; }
-        .nav-links button { background: none; color: white; border: none; cursor: pointer; margin-left: 1rem; font-size: 1rem; }
-        .nav-links button:hover { color: var(--accent); }
-        .btn-primary { background: var(--accent); color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; }
+        nav { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+        .logo { font-size: 1.3rem; font-weight: 700; color: var(--primary); cursor: pointer; display: flex; align-items: center; gap: 0.5rem; }
+        .nav-links { display: flex; align-items: center; gap: 1.5rem; }
+        .nav-links button, .nav-links a { background: none; border: none; color: var(--text); font-size: 0.95rem; font-weight: 500; cursor: pointer; text-decoration: none; transition: color 0.2s; }
+        .nav-links button:hover, .nav-links a:hover { color: var(--accent); }
+        .badge-btn { background: var(--primary); color: white !important; padding: 0.5rem 1rem; border-radius: 50px; display: flex; align-items: center; gap: 0.4rem; font-size: 0.9rem; }
         
-        /* Layouts */
-        .page { display: none; padding: 2rem; max-width: 1200px; margin: 0 auto; min-height: 80vh; }
+        /* Layouts & Pages */
+        .page { display: none; padding: 2.5rem 5%; max-width: 1300px; margin: 0 auto; min-height: 85vh; animation: fadeIn 0.3s ease-in-out; }
         .page.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
         
-        /* Hero & Grid */
-        .hero { background: #cbd5e0; padding: 4rem 2rem; text-align: center; border-radius: 8px; margin-bottom: 2rem; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.5rem; }
+        /* Hero Section */
+        .hero { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: white; padding: 4rem 3rem; border-radius: 20px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 3rem; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); }
+        .hero-content max-width { max-width: 600px; }
+        .hero h2 { font-size: 2.5rem; font-weight: 700; margin-bottom: 1rem; line-height: 1.2; }
+        .hero p { color: #94a3b8; margin-bottom: 1.5rem; font-size: 1.1rem; }
+        .btn-primary { background: var(--accent); color: white; border: none; padding: 0.75rem 1.75rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.2s, transform 0.1s; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; }
+        .btn-primary:hover { background: var(--accent-hover); transform: translateY(-2px); }
         
-        /* Product Card */
-        .card { background: white; border-radius: 8px; padding: 1rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center; }
-        .card img { width: 100%; height: 150px; object-fit: cover; border-radius: 4px; background: #eee; }
-        .card h3 { margin: 1rem 0 0.5rem; font-size: 1.1rem; }
-        .card .price { color: var(--accent); font-weight: bold; font-size: 1.2rem; margin-bottom: 1rem; }
+        /* Grid & Cards */
+        .section-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 2rem; }
+        .card { background: var(--card-bg); border-radius: 16px; overflow: hidden; border: 1px solid var(--border); transition: all 0.3s ease; display: flex; flex-direction: column; cursor: pointer; position: relative; }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 12px 20px -10px rgba(0,0,0,0.08); border-color: #cbd5e1; }
+        .card-img-wrapper { width: 100%; height: 220px; background: #f1f5f9; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+        .card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+        .card:hover img { transform: scale(1.05); }
+        .card-body { padding: 1.25rem; display: flex; flex-direction: column; flex-grow: 1; }
+        .card h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.4rem; color: var(--primary); }
+        .card .rating { font-size: 0.85rem; color: var(--warning); margin-bottom: 0.5rem; }
+        .card .price-row { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 1rem; }
+        .card .price { color: var(--primary); font-weight: 700; font-size: 1.25rem; }
         
+        /* Modals / Detail View */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 200; justify-content: center; align-items: center; padding: 1rem; }
+        .modal-overlay.active { display: flex; }
+        .modal-card { background: white; border-radius: 20px; width: 100%; max-width: 800px; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); display: grid; grid-template-columns: 1fr 1fr; max-height: 90vh; }
+        @media(max-width: 768px) { .modal-card { grid-template-columns: 1fr; overflow-y: auto; } }
+        .modal-img { background: #f1f5f9; display: flex; align-items: center; justify-content: center; }
+        .modal-img img { width: 100%; height: 100%; object-fit: cover; max-height: 400px; }
+        .modal-content { padding: 2rem; display: flex; flex-direction: column; overflow-y: auto; }
+        .close-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-light); align-self: flex-end; margin-bottom: 1rem; }
+        
+        /* Spec Box */
+        .specs-box { background: var(--bg); padding: 0.75rem 1rem; border-radius: 8px; font-size: 0.85rem; margin: 1rem 0; color: var(--text-light); }
+        
+        /* Toast Notification */
+        #toast { position: fixed; bottom: 20px; right: 20px; background: var(--primary); color: white; padding: 0.75rem 1.5rem; border-radius: 10px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.2); transform: translateY(100px); opacity: 0; transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55); z-index: 1000; font-weight: 500; }
+        #toast.show { transform: translateY(0); opacity: 1; }
+
         /* Forms & Tables */
-        .form-group { margin-bottom: 1rem; }
-        .form-group label { display: block; margin-bottom: 0.5rem; }
-        .form-group input, .form-group select { width: 100%; padding: 0.5rem; border: 1px solid #cbd5e0; border-radius: 4px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 1rem; background: white; }
-        th, td { padding: 1rem; border-bottom: 1px solid #e2e8f0; text-align: left; }
-        th { background: #edf2f7; }
+        .form-card { background: white; padding: 2.5rem; border-radius: 16px; border: 1px solid var(--border); max-width: 600px; margin: 0 auto; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02); }
+        .form-group { margin-bottom: 1.25rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 500; font-size: 0.9rem; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 8px; font-size: 0.95rem; outline: none; transition: border-color 0.2s; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--accent); }
         
-        /* Admin Dashboard */
-        .admin-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 2rem; }
-        .stat-box { background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center; }
-        .stat-box h2 { color: var(--accent); font-size: 2rem; }
+        table { width: 100%; border-collapse: collapse; margin-top: 1rem; background: white; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); }
+        th, td { padding: 1rem 1.25rem; border-bottom: 1px solid var(--border); text-align: left; font-size: 0.95rem; }
+        th { background: #f8fafc; font-weight: 600; color: var(--text-light); }
         
-        /* Cart */
-        .cart-item { display: flex; justify-content: space-between; align-items: center; background: white; padding: 1rem; margin-bottom: 1rem; border-radius: 4px; }
-        .cart-total { text-align: right; font-size: 1.5rem; font-weight: bold; margin: 2rem 0; }
+        /* Cart Layout */
+        .cart-layout { display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; }
+        @media(max-width: 768px) { .cart-layout { grid-template-columns: 1fr; } }
+        .cart-item-card { display: flex; align-items: center; justify-content: space-between; background: white; padding: 1rem 1.5rem; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 1rem; }
+        .cart-summary-card { background: white; padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border); height: fit-content; }
+        
+        /* Admin Dashboard Stats */
+        .admin-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem; }
+        .stat-card { background: white; padding: 1.5rem; border-radius: 16px; border: 1px solid var(--border); box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+        .stat-card span { color: var(--text-light); font-size: 0.9rem; font-weight: 500; }
+        .stat-card h3 { color: var(--primary); font-size: 2rem; font-weight: 700; margin-top: 0.5rem; }
     </style>
 </head>
 <body>
 
+    <!-- Toast Notification -->
+    <div id="toast">ข้อความแจ้งเตือน</div>
+
     <!-- Navbar -->
     <nav>
-        <h1 onclick="navigate('home')">🕶️ GlassesShop</h1>
+        <div class="logo" onclick="navigate('home')">🕶️ OpticLuxury</div>
         <div class="nav-links">
             <button onclick="navigate('home')">หน้าหลัก</button>
             <button onclick="navigate('shop')">แว่นตาทั้งหมด</button>
-            <button onclick="navigate('cart')">🛒 ตะกร้า (<span id="cart-count">0</span>)</button>
+            <button class="badge-btn" onclick="navigate('cart')">🛒 ตะกร้า <span id="cart-count">0</span></button>
             <button id="nav-login" onclick="navigate('auth')">เข้าสู่ระบบ</button>
-            <button id="nav-admin" onclick="navigate('admin')" style="display:none; color: #f6e05e;">Admin</button>
-            <button id="nav-logout" onclick="logout()" style="display:none;">ออกจากระบบ</button>
+            <button id="nav-admin" onclick="navigate('admin')" style="display:none; color: var(--accent); font-weight: 700;">⚙️ Admin</button>
+            <button id="nav-logout" onclick="logout()" style="display:none; color: #ef4444;">ออกจากระบบ</button>
         </div>
     </nav>
 
     <!-- 1. หน้าหลัก (Home) -->
     <div id="page-home" class="page active">
         <div class="hero">
-            <h2>ยินดีต้อนรับสู่ GlassesShop</h2>
-            <p>พบกับแว่นตาคุณภาพระดับพรีเมียม พร้อมโปรโมชั่นพิเศษวันนี้</p>
-            <br>
-            <button class="btn-primary" onclick="navigate('shop')">ช้อปเลย</button>
+            <div class="hero-content">
+                <h2>ยกระดับการมองเห็นด้วยแว่นตาดีไซน์พรีเมียม</h2>
+                <p>คอลเลกชันแบรนด์ดังระดับโลก กรอบเบาสบาย เลนส์กรองแสงคุณภาพสูง</p>
+                <button class="btn-primary" onclick="navigate('shop')">เลือกชมแว่นตา →</button>
+            </div>
         </div>
-        <h2>🔥 สินค้าขายดี</h2><br>
+        <div class="section-title">
+            <span>🔥 สินค้าขายดีประจำสัปดาห์</span>
+        </div>
         <div class="grid" id="featured-products"></div>
     </div>
 
     <!-- 2. หน้าร้านค้า (Shop) -->
     <div id="page-shop" class="page">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-            <h2>แว่นตาทั้งหมด</h2>
-            <select id="filter-category" onchange="renderShop()">
+        <div class="section-title">
+            <span>แว่นตาทั้งหมด</span>
+            <select id="filter-category" onchange="renderShop()" style="padding: 0.5rem 1rem; border-radius: 8px; border: 1px solid var(--border);">
                 <option value="all">ทุกหมวดหมู่</option>
-                <option value="sunglasses">แว่นกันแดด</option>
-                <option value="eyeglasses">แว่นสายตา</option>
+                <option value="sunglasses">แว่นกันแดด (Sunglasses)</option>
+                <option value="eyeglasses">แว่นสายตา (Eyeglasses)</option>
             </select>
         </div>
         <div class="grid" id="shop-products"></div>
     </div>
 
+    <!-- Product Detail Modal -->
+    <div class="modal-overlay" id="productModal">
+        <div class="modal-card">
+            <div class="modal-img">
+                <img id="modal-img" src="" alt="">
+            </div>
+            <div class="modal-content">
+                <button class="close-btn" onclick="closeProductModal()">&times;</button>
+                <span id="modal-category" style="color: var(--accent); font-size: 0.85rem; font-weight: 600; text-transform: uppercase;"></span>
+                <h2 id="modal-title" style="margin: 0.5rem 0; font-size: 1.5rem;"></h2>
+                <div id="modal-rating" class="rating"></div>
+                <div id="modal-price" style="font-size: 1.5rem; font-weight: 700; color: var(--primary); margin: 0.5rem 0;"></div>
+                <div class="specs-box">
+                    <b>ขนาดแว่น (Frame Size):</b> <span id="modal-size">52 □ 18 - 140</span><br>
+                    <b>วัสดุกรอบ:</b> โลหะผสมพรีเมียม น้ำหนักเบา
+                </div>
+                <p id="modal-desc" style="color: var(--text-light); font-size: 0.95rem; margin-bottom: 1.5rem;"></p>
+                <button class="btn-primary" id="modal-add-btn" style="margin-top: auto; width: 100%;">เพิ่มลงตะกร้าสินค้า</button>
+            </div>
+        </div>
+    </div>
+
     <!-- 3. หน้าตะกร้าสินค้า (Cart) -->
     <div id="page-cart" class="page">
-        <h2>🛒 ตะกร้าสินค้าของคุณ</h2><br>
-        <div id="cart-items"></div>
-        <div class="cart-total">ยอดรวม: ฿<span id="cart-total-price">0</span></div>
-        <button class="btn-primary" style="width: 100%; padding: 1rem; font-size: 1.2rem;" onclick="navigate('checkout')">ดำเนินการชำระเงิน</button>
+        <div class="section-title">🛒 ตะกร้าสินค้าของคุณ</div>
+        <div class="cart-layout">
+            <div id="cart-items-container">
+                <!-- รายการสินค้าในตะกร้า -->
+            </div>
+            <div class="cart-summary-card">
+                <h3 style="margin-bottom: 1rem; font-size: 1.2rem;">สรุปคำสั่งซื้อ</h3>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem; color: var(--text-light);">
+                    <span>ยอดรวมสินค้า</span>
+                    <span>฿<span id="cart-subtotal">0</span></span>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 1.25rem; color: var(--text-light);">
+                    <span>ค่าจัดส่ง (Flash Express)</span>
+                    <span>฿50</span>
+                </div>
+                <hr style="border: none; border-top: 1px solid var(--border); margin-bottom: 1.25rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 1.5rem; font-size: 1.2rem; font-weight: 700;">
+                    <span>ยอดสุทธิ</span>
+                    <span style="color: var(--accent);">฿<span id="cart-total">0</span></span>
+                </div>
+                <button class="btn-primary" style="width: 100%; padding: 1rem;" onclick="navigate('checkout')">ดำเนินการชำระเงิน →</button>
+            </div>
+        </div>
     </div>
 
     <!-- 4. หน้าชำระเงิน (Checkout) -->
     <div id="page-checkout" class="page">
-        <h2>📦 ข้อมูลจัดส่งและชำระเงิน</h2><br>
-        <form onsubmit="processCheckout(event)" style="background: white; padding: 2rem; border-radius: 8px;">
-            <div class="form-group">
-                <label>ชื่อ-นามสกุล</label>
-                <input type="text" id="order-name" required>
-            </div>
-            <div class="form-group">
-                <label>ที่อยู่จัดส่ง</label>
-                <textarea id="order-address" rows="3" style="width: 100%; padding: 0.5rem; border: 1px solid #cbd5e0; border-radius: 4px;" required></textarea>
-            </div>
-            <div style="background: #edf2f7; padding: 1rem; text-align: center; border-radius: 8px; margin-bottom: 1rem;">
-                <p>สแกน QR Code เพื่อชำระเงิน: <b>฿<span id="checkout-amount">0</span></b></p>
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=PromptPay000" alt="QR" style="margin: 1rem 0;">
+        <div class="section-title">📦 ยืนยันคำสั่งซื้อ & ชำระเงิน</div>
+        <div class="form-card">
+            <form onsubmit="processCheckout(event)">
                 <div class="form-group">
-                    <label>แนบสลิปโอนเงิน</label>
-                    <input type="file" required accept="image/*">
+                    <label>ชื่อ-นามสกุล ผู้รับ</label>
+                    <input type="text" id="order-name" required placeholder="กรอกชื่อและนามสกุลจริง">
                 </div>
-            </div>
-            <button type="submit" class="btn-primary" style="width: 100%;">ยืนยันคำสั่งซื้อ</button>
-        </form>
+                <div class="form-group">
+                    <label>เบอร์โทรศัพท์</label>
+                    <input type="tel" id="order-phone" required placeholder="0891234567">
+                </div>
+                <div class="form-group">
+                    <label>ที่อยู่จัดส่งสินค้า</label>
+                    <textarea id="order-address" rows="3" required placeholder="บ้านเลขที่, ถนน, ตำบล, อำเภอ, จังหวัด, รหัสไปรษณีย์"></textarea>
+                </div>
+                <div style="background: var(--bg); padding: 1.5rem; border-radius: 12px; text-align: center; border: 1px solid var(--border); margin-bottom: 1.5rem;">
+                    <p style="font-weight: 600; margin-bottom: 0.5rem;">สแกน QR PromptPay เพื่อชำระเงิน</p>
+                    <p style="color: var(--accent); font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem;">฿<span id="checkout-amount">0</span></p>
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=PromptPayMock" alt="QR PromptPay" style="border-radius: 8px; margin-bottom: 1rem;">
+                    <div class="form-group" style="text-align: left; margin-bottom: 0;">
+                        <label>แนบหลักฐานการโอนเงิน (สลิป)</label>
+                        <input type="file" required accept="image/*" style="background: white;">
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary" style="width: 100%; padding: 1rem;">ยืนยันการสั่งซื้อ</button>
+            </form>
+        </div>
     </div>
 
     <!-- 5. หน้าเข้าสู่ระบบ (Auth) -->
     <div id="page-auth" class="page">
-        <div style="max-width: 400px; margin: 0 auto; background: white; padding: 2rem; border-radius: 8px;">
-            <h2>เข้าสู่ระบบ</h2><br>
-            <p style="font-size: 0.9rem; color: #718096; margin-bottom: 1rem;">(Hint: ใช้ Email: admin@shop.com เพื่อเข้าสู่ระบบ Admin)</p>
+        <div class="form-card" style="max-width: 420px; margin-top: 2rem;">
+            <h2 style="margin-bottom: 0.5rem; text-align: center;">ยินดีต้อนรับกลับมา</h2>
+            <p style="text-align: center; color: var(--text-light); font-size: 0.9rem; margin-bottom: 2rem;">เข้าสู่ระบบเพื่อจัดการบัญชีและติดตามสินค้า</p>
+            <div style="background: #eff6ff; color: #1e40af; padding: 0.75rem 1rem; border-radius: 8px; font-size: 0.85rem; margin-bottom: 1.5rem;">
+                💡 <b>Demo Admin Account:</b> ใช้อีเมล <code>admin@shop.com</code> (รหัสอะไรก็ได้) เพื่อเข้าสู่โหมดผู้ดูแลระบบ
+            </div>
             <form onsubmit="handleLogin(event)">
                 <div class="form-group">
                     <label>อีเมล</label>
-                    <input type="email" id="login-email" required>
+                    <input type="email" id="login-email" required placeholder="name@example.com">
                 </div>
                 <div class="form-group">
                     <label>รหัสผ่าน</label>
-                    <input type="password" required>
+                    <input type="password" required placeholder="••••••••">
                 </div>
-                <button type="submit" class="btn-primary" style="width: 100%;">Login</button>
+                <button type="submit" class="btn-primary" style="width: 100%; margin-top: 1rem;">เข้าสู่ระบบ</button>
             </form>
         </div>
     </div>
 
     <!-- 6. หน้า Admin Dashboard -->
     <div id="page-admin" class="page">
-        <h2>📊 Admin Dashboard</h2><br>
+        <div class="section-title">⚙️ ระบบจัดการร้านค้า (Admin Dashboard)</div>
         <div class="admin-stats">
-            <div class="stat-box"><h3>ยอดขายรวม</h3><h2 id="admin-revenue">฿0</h2></div>
-            <div class="stat-box"><h3>คำสั่งซื้อทั้งหมด</h3><h2 id="admin-orders-count">0</h2></div>
-            <div class="stat-box"><h3>รอตรวจสอบ</h3><h2 id="admin-pending-count">0</h2></div>
+            <div class="stat-card">
+                <span>ยอดขายรวมที่อนุมัติแล้ว</span>
+                <h3 id="admin-revenue">฿0</h3>
+            </div>
+            <div class="stat-card">
+                <span>คำสั่งซื้อทั้งหมด</span>
+                <h3 id="admin-orders-count">0</h3>
+            </div>
+            <div class="stat-card">
+                <span>รอตรวจสอบสลิป</span>
+                <h3 id="admin-pending-count" style="color: var(--warning);">0</h3>
+            </div>
         </div>
-        <h3>รายการคำสั่งซื้อล่าสุด</h3>
+        <div class="section-title" style="font-size: 1.2rem; margin-top: 2rem;">📦 รายการคำสั่งซื้อของลูกค้า</div>
         <table>
             <thead>
                 <tr>
                     <th>Order ID</th>
-                    <th>ลูกค้า</th>
-                    <th>ยอดเงิน</th>
+                    <th>ชื่อลูกค้า</th>
+                    <th>ยอดชำระ</th>
                     <th>สถานะ</th>
-                    <th>จัดการ</th>
+                    <th>การจัดการ</th>
                 </tr>
             </thead>
-            <tbody id="admin-orders-table"></tbody>
+            <tbody id="admin-orders-table">
+                <!-- ข้อมูล Orders แอดมิน -->
+            </tbody>
         </table>
     </div>
 
-    <!-- Logic System -->
+    <!-- JavaScript ระบบทำงาน -->
     <script>
         // --- 1. Database (Mock Data) ---
         const db = {
             products: [
-                { id: 'p1', name: 'Ray-Ban RB2140', price: 4990, category: 'sunglasses', img: 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=300' },
-                { id: 'p2', name: 'Oakley Holbrook', price: 3500, category: 'sunglasses', img: 'https://images.unsplash.com/photo-1577803645773-f96470509666?w=300' },
-                { id: 'p3', name: 'Minimalist Clear', price: 1290, category: 'eyeglasses', img: 'https://images.unsplash.com/photo-1509695507497-903c140c43b0?w=300' },
-                { id: 'p4', name: 'Blue Light Block', price: 890, category: 'eyeglasses', img: 'https://images.unsplash.com/photo-1591076482161-42ce6da69f67?w=300' }
+                { id: 'p1', name: 'Ray-Ban RB2140 Wayfarer', price: 4990, category: 'sunglasses', rating: 4.8, size: '50 □ 22 - 150', desc: 'แว่นกันแดดสุดคลาสสิก ดีไซน์อมตะ เลนส์ตัดแสงสะท้อนยอดเยี่ยม', img: 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=500' },
+                { id: 'p2', name: 'Oakley Holbrook Sport', price: 3500, category: 'sunglasses', rating: 4.6, size: '55 □ 18 - 137', desc: 'แว่นตาสายสปอร์ต ทนทาน น้ำหนักเบา เหมาะกับกิจกรรมกลางแจ้ง', img: 'https://images.unsplash.com/photo-1577803645773-f96470509666?w=500' },
+                { id: 'p3', name: 'Minimalist Titanium Clear', price: 1290, category: 'eyeglasses', rating: 4.9, size: '48 □ 20 - 142', desc: 'กรอบแว่นสายตาไทเทเนียมสไตล์มินิมอล น้ำหนักเบาใส่สบายทั้งวัน', img: 'https://images.unsplash.com/photo-1509695507497-903c140c43b0?w=500' },
+                { id: 'p4', name: 'Blue Light Protector Pro', price: 890, category: 'eyeglasses', rating: 4.7, size: '52 □ 17 - 140', desc: 'แว่นกรองแสงสีฟ้าสำหรับคนทำงานหน้าจอคอมพิวเตอร์และมือถือโดยเฉพาะ', img: 'https://images.unsplash.com/photo-1591076482161-42ce6da69f67?w=500' }
             ],
             cart: [],
             orders: [],
             currentUser: null
         };
 
-        // --- 2. Core Functions (Routing & Auth) ---
+        // --- Toast Notification System ---
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.innerText = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // --- Navigation Router ---
         function navigate(pageId) {
             document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
             document.getElementById(`page-${pageId}`).classList.add('active');
@@ -185,20 +312,23 @@
             if (pageId === 'shop') renderShop();
             if (pageId === 'cart') renderCart();
             if (pageId === 'admin') renderAdmin();
-            window.scrollTo(0, 0);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
+        // --- Auth System ---
         function handleLogin(e) {
             e.preventDefault();
             const email = document.getElementById('login-email').value;
             db.currentUser = { email: email, role: email === 'admin@shop.com' ? 'admin' : 'customer' };
             updateNav();
-            navigate('home');
+            showToast('เข้าสู่ระบบสำเร็จ!');
+            navigate(db.currentUser.role === 'admin' ? 'admin' : 'home');
         }
 
         function logout() {
             db.currentUser = null;
             updateNav();
+            showToast('ออกจากระบบเรียบร้อย');
             navigate('home');
         }
 
@@ -211,10 +341,9 @@
             document.getElementById('nav-admin').style.display = isAdmin ? 'inline-block' : 'none';
         }
 
-        // --- 3. Shop & Cart Logic ---
+        // --- Product Display & Modals ---
         function renderFeatured() {
-            const container = document.getElementById('featured-products');
-            container.innerHTML = db.products.slice(0, 4).map(p => productCardTemplate(p)).join('');
+            document.getElementById('featured-products').innerHTML = db.products.slice(0, 4).map(p => productCardTemplate(p)).join('');
         }
 
         function renderShop() {
@@ -225,96 +354,140 @@
 
         function productCardTemplate(p) {
             return `
-                <div class="card">
-                    <img src="${p.img}" alt="${p.name}">
-                    <h3>${p.name}</h3>
-                    <div class="price">฿${p.price.toLocaleString()}</div>
-                    <button class="btn-primary" onclick="addToCart('${p.id}')">เพิ่มลงตะกร้า</button>
+                <div class="card" onclick="openProductModal('${p.id}')">
+                    <div class="card-img-wrapper">
+                        <img src="${p.img}" alt="${p.name}">
+                    </div>
+                    <div class="card-body">
+                        <h3>${p.name}</h3>
+                        <div class="rating">⭐ ${p.rating}</div>
+                        <div class="price-row">
+                            <span class="price">฿${p.price.toLocaleString()}</span>
+                            <button class="btn-primary" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;" onclick="event.stopPropagation(); addToCart('${p.id}')">ใส่ตะกร้า</button>
+                        </div>
+                    </div>
                 </div>
             `;
         }
 
+        function openProductModal(id) {
+            const p = db.products.find(item => item.id === id);
+            if (!p) return;
+            
+            document.getElementById('modal-img').src = p.img;
+            document.getElementById('modal-category').innerText = p.category === 'sunglasses' ? 'แว่นกันแดด' : 'แว่นสายตา';
+            document.getElementById('modal-title').innerText = p.name;
+            document.getElementById('modal-rating').innerText = `⭐ ${p.rating} คะแนนรีวิว`;
+            document.getElementById('modal-price').innerText = `฿${p.price.toLocaleString()}`;
+            document.getElementById('modal-size').innerText = p.size;
+            document.getElementById('modal-desc').innerText = p.desc;
+            
+            const addBtn = document.getElementById('modal-add-btn');
+            addBtn.onclick = () => {
+                addToCart(p.id);
+                closeProductModal();
+            };
+
+            document.getElementById('productModal').classList.add('active');
+        }
+
+        function closeProductModal() {
+            document.getElementById('productModal').classList.remove('active');
+        }
+
+        // --- Cart System ---
         function addToCart(id) {
             const product = db.products.find(p => p.id === id);
             const item = db.cart.find(c => c.id === id);
             if (item) item.qty++;
             else db.cart.push({ ...product, qty: 1 });
+            
             updateCartCount();
-            alert('เพิ่มสินค้าลงตะกร้าแล้ว');
+            showToast(`เพิ่ม "${product.name}" ลงตะกร้าแล้ว`);
         }
 
         function updateCartCount() {
-            document.getElementById('cart-count').innerText = db.cart.reduce((sum, item) => sum + item.qty, 0);
+            const totalCount = db.cart.reduce((sum, item) => sum + item.qty, 0);
+            document.getElementById('cart-count').innerText = totalCount;
         }
 
         function renderCart() {
-            const container = document.getElementById('cart-items');
+            const container = document.getElementById('cart-items-container');
             if (db.cart.length === 0) {
-                container.innerHTML = '<p>ไม่มีสินค้าในตะกร้า</p>';
-                document.getElementById('cart-total-price').innerText = '0';
-                document.getElementById('checkout-amount').innerText = '0';
+                container.innerHTML = '<p style="color: var(--text-light); text-align: center; padding: 3rem; background: white; border-radius: 12px; border: 1px solid var(--border);">ไม่มีสินค้าในตะกร้าของคุณ</p>';
+                document.getElementById('cart-subtotal').innerText = '0';
+                document.getElementById('cart-total').innerText = '50';
                 return;
             }
             
-            let total = 0;
+            let subtotal = 0;
             container.innerHTML = db.cart.map(item => {
-                total += item.price * item.qty;
+                subtotal += item.price * item.qty;
                 return `
-                    <div class="cart-item">
-                        <div><b>${item.name}</b> <br> ฿${item.price.toLocaleString()} x ${item.qty}</div>
-                        <div>฿${(item.price * item.qty).toLocaleString()}</div>
+                    <div class="cart-item-card">
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <img src="${item.img}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;">
+                            <div>
+                                <h4 style="font-size: 1rem; color: var(--primary);">${item.name}</h4>
+                                <span style="color: var(--text-light); font-size: 0.9rem;">฿${item.price.toLocaleString()} x ${item.qty}</span>
+                            </div>
+                        </div>
+                        <div style="font-weight: 700; color: var(--primary);">฿${(item.price * item.qty).toLocaleString()}</div>
                     </div>
                 `;
             }).join('');
             
-            document.getElementById('cart-total-price').innerText = total.toLocaleString();
-            document.getElementById('checkout-amount').innerText = total.toLocaleString();
+            document.getElementById('cart-subtotal').innerText = subtotal.toLocaleString();
+            document.getElementById('cart-total').innerText = (subtotal + 50).toLocaleString();
+            document.getElementById('checkout-amount').innerText = (subtotal + 50).toLocaleString();
         }
 
-        // --- 4. Checkout Logic ---
+        // --- Checkout System ---
         function processCheckout(e) {
             e.preventDefault();
-            if (db.cart.length === 0) return alert('ตะกร้าว่างเปล่า!');
+            if (db.cart.length === 0) return showToast('ตะกร้าว่างเปล่า!');
 
-            const total = db.cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            const subtotal = db.cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            const total = subtotal + 50;
+            
             const order = {
-                id: 'ORD-' + Date.now().toString().slice(-6),
+                id: 'ORD-' + Math.floor(100000 + Math.random() * 900000),
                 name: document.getElementById('order-name').value,
                 total: total,
-                status: 'รอตรวจสอบชำระเงิน',
-                date: new Date().toLocaleDateString()
+                status: 'รอตรวจสอบชำระเงิน'
             };
             
             db.orders.push(order);
             db.cart = [];
             updateCartCount();
-            alert(`สั่งซื้อสำเร็จ! รหัสคำสั่งซื้อ: ${order.id}`);
+            
+            showToast(`สั่งซื้อสำเร็จ! รหัสคำสั่งซื้อ: ${order.id}`);
             navigate('home');
         }
 
-        // --- 5. Admin Logic ---
+        // --- Admin Dashboard System ---
         function renderAdmin() {
-            const totalRevenue = db.orders.filter(o => o.status === 'ชำระเงินแล้ว').reduce((sum, o) => sum + o.total, 0);
-            document.getElementById('admin-revenue').innerText = '฿' + totalRevenue.toLocaleString();
+            const approvedRevenue = db.orders.filter(o => o.status === 'ชำระเงินแล้ว').reduce((sum, o) => sum + o.total, 0);
+            document.getElementById('admin-revenue').innerText = '฿' + approvedRevenue.toLocaleString();
             document.getElementById('admin-orders-count').innerText = db.orders.length;
             document.getElementById('admin-pending-count').innerText = db.orders.filter(o => o.status === 'รอตรวจสอบชำระเงิน').length;
 
             const tbody = document.getElementById('admin-orders-table');
             if (db.orders.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">ยังไม่มีคำสั่งซื้อ</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color: var(--text-light);">ยังไม่มีรายการคำสั่งซื้อในระบบ</td></tr>';
                 return;
             }
 
             tbody.innerHTML = db.orders.map(o => `
                 <tr>
-                    <td>${o.id}</td>
+                    <td><b>${o.id}</b></td>
                     <td>${o.name}</td>
                     <td>฿${o.total.toLocaleString()}</td>
-                    <td><span style="color: ${o.status === 'ชำระเงินแล้ว' ? 'green' : 'orange'}">${o.status}</span></td>
+                    <td><span style="color: ${o.status === 'ชำระเงินแล้ว' ? 'var(--success)' : 'var(--warning)'}; font-weight: 600;">● ${o.status}</span></td>
                     <td>
                         ${o.status === 'รอตรวจสอบชำระเงิน' 
-                            ? `<button class="btn-primary" style="padding: 0.2rem 0.5rem;" onclick="approveOrder('${o.id}')">อนุมัติ</button>` 
-                            : 'เรียบร้อย'}
+                            ? `<button class="btn-primary" style="padding: 0.3rem 0.75rem; font-size: 0.85rem;" onclick="approveOrder('${o.id}')">อนุมัติสลิป</button>` 
+                            : '<span style="color: var(--text-light); font-size: 0.9rem;">ตรวจสอบแล้ว</span>'}
                     </td>
                 </tr>
             `).join('');
@@ -325,10 +498,11 @@
             if (order) {
                 order.status = 'ชำระเงินแล้ว';
                 renderAdmin();
+                showToast(`อนุมัติคำสั่งซื้อ ${id} เรียบร้อย`);
             }
         }
 
-        // Initialize Application
+        // --- Initialize App ---
         renderFeatured();
         updateCartCount();
     </script>
