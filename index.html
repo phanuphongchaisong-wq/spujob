@@ -3,144 +3,2237 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Executive Decision Dashboard: ยอดโตกำไรตก</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <title>Digital HR 4.0 Operating System — ระบบบริหารจัดการและกลยุทธ์ทรัพยากรบุคคลยุคดิจิทัล</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
   <style>
-    body { font-family: 'Sarabun', sans-serif; }
-  </style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Prompt:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --font-sans: 'Prompt', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: #f8fafc;
+  color: #0f172a;
+  overflow-x: hidden;
+}
+
+.tab-btn-active {
+  background: linear-gradient(135deg, #4f46e5 0%, #3730a3 100%);
+  color: #ffffff !important;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+}
+
+.card-hover {
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 9999px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: #ffffff;
+  }
+}
+
+</style>
 </head>
-<body class="bg-slate-50 text-slate-800 p-6">
-  <div class="max-w-6xl mx-auto space-y-6">
-    
-    <!-- Header -->
-    <header class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-      <div>
-        <div class="inline-block px-3 py-1 bg-amber-100 text-amber-800 rounded-full text-xs font-semibold mb-2">
-          ภารกิจเร่งด่วน: ตัดสินใจภายใน 48 ชม.
-        </div>
-        <h1 class="text-2xl font-bold text-slate-900">Executive Decision Dashboard (กรณี: ยอดโตกำไรตก)</h1>
-        <p class="text-slate-500 text-sm mt-1">เปรียบเทียบข้อมูลเชิงลึกระหว่าง ฝ่ายขาย VS ฝ่ายการเงิน เพื่อประกอบการอนุมัติงบการตลาด</p>
-      </div>
-      <div class="bg-rose-50 border border-rose-200 px-4 py-3 rounded-xl text-right">
-        <span class="text-xs text-rose-600 font-medium block">ผลประกอบการสุทธิไตรมาส</span>
-        <span class="text-2xl font-bold text-rose-700">-1.2 ล้านบาท</span>
-      </div>
-    </header>
+<body class="min-h-screen flex flex-col bg-slate-50 text-slate-900">
 
-    <!-- Key Metrics Comparison -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
-        <p class="text-sm font-medium text-slate-500">การเติบโตยอดขาย (ฝ่ายขาย)</p>
-        <p class="text-3xl font-bold text-emerald-600 mt-2">+30%</p>
-        <p class="text-xs text-slate-400 mt-1">*นับจากยอดสั่งซื้อทั้งหมดก่อนหักสินค้าคืน</p>
-      </div>
-      <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
-        <p class="text-sm font-medium text-slate-500">ต้นทุนหาลูกค้า (CAC Comparison)</p>
-        <div class="flex items-baseline gap-2 mt-2">
-          <span class="text-2xl font-bold text-slate-700">180฿</span>
-          <span class="text-xs text-slate-400">vs</span>
-          <span class="text-2xl font-bold text-rose-600">310฿</span>
+  <!-- Top Header -->
+  <header class="sticky top-0 z-30 bg-white/95 backdrop-blur border-b border-slate-200 shadow-sm no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white font-bold shadow-md">
+          <i data-lucide="layers" class="w-5 h-5"></i>
         </div>
-        <p class="text-xs text-slate-400 mt-1">ฝ่ายขาย (180฿) / ฝ่ายการเงินรวมคูปอง+Influencer (310฿)</p>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-base sm:text-lg font-bold text-slate-900 tracking-tight">Digital HR 4.0 Platform</h1>
+            <span class="px-2 py-0.5 text-xs font-semibold rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200">End-to-End HR OS</span>
+          </div>
+          <p class="text-xs text-slate-500">Business Acumen • Human Capital • Data • Technology</p>
+        </div>
       </div>
-      <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
-        <p class="text-sm font-medium text-slate-500">คำของบประมาณเพิ่มเติม</p>
-        <p class="text-3xl font-bold text-blue-600 mt-2">2.0 ล้านบาท</p>
-        <p class="text-xs text-slate-400 mt-1">ฝ่ายขายขอเพิ่มเพื่อจองสิทธิ์ราคาพิเศษ</p>
+
+      <!-- Quick Action Toolbar -->
+      <div class="flex items-center gap-2 flex-wrap">
+        <div class="relative">
+          <input id="globalSearchInput" type="text" oninput="handleGlobalSearch(this.value)" placeholder="ค้นหาพนักงาน, ผู้สมัคร, ทักษะ..." class="pl-8 pr-3 py-1.5 text-xs sm:text-sm rounded-lg border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 w-44 sm:w-56">
+          <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-2.5 top-2"></i>
+        </div>
+        <button type="button" onclick="exportAllDataJson()" class="px-3 py-1.5 text-xs font-medium rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 flex items-center gap-1.5 shadow-sm">
+          <i data-lucide="download" class="w-3.5 h-3.5 text-indigo-600"></i>
+          <span>Export JSON</span>
+        </button>
+        <button type="button" onclick="window.print()" class="px-3 py-1.5 text-xs font-medium rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 flex items-center gap-1.5 shadow-sm">
+          <i data-lucide="printer" class="w-3.5 h-3.5 text-emerald-600"></i>
+          <span>พิมพ์รายงาน</span>
+        </button>
+        <button type="button" onclick="openResetModal()" class="px-3 py-1.5 text-xs font-medium rounded-lg border border-rose-200 bg-rose-50 hover:bg-rose-100 text-rose-700 flex items-center gap-1.5">
+          <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+          <span>รีเซ็ตค่าเริ่มต้น</span>
+        </button>
       </div>
     </div>
 
-    <!-- Charts Section -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      <!-- CAC Breakdown Chart -->
-      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-        <h2 class="text-lg font-bold text-slate-800 mb-1">เปรียบเทียบโครงสร้างต้นทุนหาลูกค้า (CAC)</h2>
-        <p class="text-xs text-slate-500 mb-4">แสดงส่วนต่าง 130 บาท ที่ฝ่ายขายไม่ได้รวมในการคำนวณ</p>
-        <div class="h-64">
-          <canvas id="cacChart"></canvas>
-        </div>
-      </div>
-
-      <!-- Revenue Recognition Flow -->
-      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-        <h2 class="text-lg font-bold text-slate-800 mb-1">การรับรู้ยอดขายและจุดรั่วไหลของกำไร</h2>
-        <p class="text-xs text-slate-500 mb-4">สัดส่วนยอดสั่งซื้อที่ถูกหักคืนและค่าใช้จ่ายแฝง</p>
-        <div class="h-64">
-          <canvas id="revenueLeakChart"></canvas>
-        </div>
-      </div>
+    <!-- Navigation Tabs -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 border-t border-slate-100 bg-slate-50/70">
+      <nav class="flex items-center gap-1.5 py-2 overflow-x-auto custom-scrollbar" aria-label="Main Navigation">
+        <button type="button" id="tabBtn-dashboard" onclick="switchTab('dashboard')" class="tab-btn tab-btn-active px-3.5 py-2 rounded-lg text-xs sm:text-sm font-medium whitespace-nowrap flex items-center gap-2 text-slate-600 hover:bg-slate-200/60 transition">
+          <i data-lucide="compass" class="w-4 h-4"></i>
+          <span>1. ภาพรวม & 5 บทบาท HR</span>
+        </button>
+        <button type="button" id="tabBtn-workforce" onclick="switchTab('workforce')" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-medium whitespace-nowrap flex items-center gap-2 text-slate-600 hover:bg-slate-200/60 transition">
+          <i data-lucide="calculator" class="w-4 h-4"></i>
+          <span>2. กำลังคน, FTE & 4Bs</span>
+        </button>
+        <button type="button" id="tabBtn-ta" onclick="switchTab('ta')" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-medium whitespace-nowrap flex items-center gap-2 text-slate-600 hover:bg-slate-200/60 transition">
+          <i data-lucide="user-check" class="w-4 h-4"></i>
+          <span>3. สรรหา 4.0 (Decision System)</span>
+        </button>
+        <button type="button" id="tabBtn-learning" onclick="switchTab('learning')" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-medium whitespace-nowrap flex items-center gap-2 text-slate-600 hover:bg-slate-200/60 transition">
+          <i data-lucide="graduation-cap" class="w-4 h-4"></i>
+          <span>4. Learning & Reskilling</span>
+        </button>
+        <button type="button" id="tabBtn-ex" onclick="switchTab('ex')" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-medium whitespace-nowrap flex items-center gap-2 text-slate-600 hover:bg-slate-200/60 transition">
+          <i data-lucide="heart-handshake" class="w-4 h-4"></i>
+          <span>5. Performance & EX</span>
+        </button>
+        <button type="button" id="tabBtn-governance" onclick="switchTab('governance')" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-medium whitespace-nowrap flex items-center gap-2 text-slate-600 hover:bg-slate-200/60 transition">
+          <i data-lucide="shield-check" class="w-4 h-4"></i>
+          <span>6. AI Governance & Risk Matrix</span>
+        </button>
+        <button type="button" id="tabBtn-workshop" onclick="switchTab('workshop')" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-medium whitespace-nowrap flex items-center gap-2 text-slate-600 hover:bg-slate-200/60 transition">
+          <i data-lucide="map" class="w-4 h-4"></i>
+          <span>7. MBA Canvas & Roadmap 365 วัน</span>
+        </button>
+      </nav>
     </div>
+  </header>
 
-    <!-- Recommendations & Action Plan -->
-    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-      <h2 class="text-lg font-bold text-slate-800">ข้อเสนอแนะเชิงกลยุทธ์ต่อ CEO (Action Plan)</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-        <div class="p-4 bg-emerald-50 border border-emerald-100 rounded-xl">
-          <h3 class="font-semibold text-emerald-900 mb-1">1. แนวทางประนีประนอมงบโฆษณา</h3>
-          <p class="text-emerald-800 text-xs leading-relaxed">
-            ไม่อนุมัติ 2 ล้านเต็มจำนวน แต่พิจารณาอนุมัติงบขั้นต่ำเฉพาะแคมเปญที่มี ROAS ชัดเจน และมีเงื่อนไขแบ่งจ่ายตามผลลัพธ์ Net Sales จริง เพื่อไม่ให้เสียสิทธิ์ส่วนลดสื่อ
-          </p>
-        </div>
-        <div class="p-4 bg-blue-50 border border-blue-100 rounded-xl">
-          <h3 class="font-semibold text-blue-900 mb-1">2. ปรับเกณฑ์มาตรฐาน (Unified KPI)</h3>
-          <p class="text-blue-800 text-xs leading-relaxed">
-            เปลี่ยน KPI ฝ่ายขายจากการนับ Gross Orders เป็น <strong>Net Revenue</strong> (หลังหักคืน) และคำนวณ CAC รวมต้นทุนโปรโมชันทั้งหมดเพื่อสะท้อนความจริง
-          </p>
-        </div>
+  <!-- Global Search Results Banner (Hidden unless searching) -->
+  <div id="globalSearchPanel" class="hidden max-w-7xl mx-auto px-4 sm:px-6 pt-4 no-print">
+    <div class="bg-white border border-indigo-200 rounded-xl p-4 shadow-md">
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="text-sm font-semibold text-indigo-900 flex items-center gap-2">
+          <i data-lucide="search" class="w-4 h-4 text-indigo-600"></i>
+          <span>ผลการค้นหาในระบบ HR (<span id="searchCountText">0</span> รายการ)</span>
+        </h3>
+        <button type="button" onclick="clearGlobalSearch()" class="text-xs text-slate-500 hover:text-slate-800 px-2 py-1 rounded bg-slate-100">ปิดการค้นหา</button>
       </div>
+      <div id="globalSearchResultsList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2.5 max-h-60 overflow-y-auto custom-scrollbar"></div>
     </div>
-
   </div>
 
+  <!-- Main Content Container -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 space-y-6">
+
+    <!-- ==================== TAB 1: DASHBOARD & 5 STRATEGIC ROLES ==================== -->
+    <section id="view-dashboard" class="tab-view space-y-6">
+      <!-- Core Proposition Banner (Slide 4) -->
+      <div class="rounded-2xl bg-gradient-to-r from-indigo-900 via-indigo-800 to-slate-900 text-white p-5 sm:p-6 shadow-lg">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          <div class="space-y-2 max-w-3xl">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/20 border border-indigo-400/30 text-indigo-200 text-xs font-medium">
+              <span>Strategic Digital HR Proposition</span>
+              <span>•</span>
+              <span>Bondarouk & Brewster (2016); Strohmeier (2020); Tambe et al. (2019)</span>
+            </div>
+            <h2 class="text-lg sm:text-2xl font-bold leading-snug">
+              "HR creates value when technology improves the quality of organizational decisions—not merely the speed of HR transactions."
+            </h2>
+            <p class="text-xs sm:text-sm text-indigo-100/90">
+              นักจัดการ HR ยุคดิจิทัลผสาน 4 มิติหลัก: <strong class="text-white">BUSINESS ACUMEN • HUMAN CAPITAL • DATA • TECHNOLOGY</strong> เพื่อยกระดับคุณภาพการตัดสินใจขององค์กร
+            </p>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <button type="button" onclick="switchTab('workforce')" class="px-3.5 py-2 rounded-xl bg-white text-indigo-900 text-xs font-semibold hover:bg-indigo-50 transition shadow">
+              คำนวณ FTE & ช่องว่างกำลังคน
+            </button>
+            <button type="button" onclick="switchTab('workshop')" class="px-3.5 py-2 rounded-xl bg-indigo-600/80 border border-indigo-400/40 text-white text-xs font-semibold hover:bg-indigo-600 transition">
+              เปิด MBA Innovation Canvas
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Executive KPI Cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-white rounded-xl p-4 border border-slate-200 shadow-sm card-hover">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-medium text-slate-500">อัตรากำลังรวม (Available / Demand FTE)</span>
+            <span class="p-2 rounded-lg bg-indigo-50 text-indigo-600"><i data-lucide="users" class="w-4 h-4"></i></span>
+          </div>
+          <div class="mt-3 flex items-baseline gap-2">
+            <span id="kpiTotalFte" class="text-2xl font-bold text-slate-900">0.0</span>
+            <span id="kpiFteGapBadge" class="text-xs font-semibold px-2 py-0.5 rounded-full bg-amber-50 text-amber-700">Gap: 0.0</span>
+          </div>
+          <p class="mt-1 text-xs text-slate-500">วิเคราะห์ Quantity Gap ตามสูตร FTE (Ries, 2011)</p>
+        </div>
+
+        <div class="bg-white rounded-xl p-4 border border-slate-200 shadow-sm card-hover">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-medium text-slate-500">ความพร้อมทักษะ (Skill Readiness)</span>
+            <span class="p-2 rounded-lg bg-emerald-50 text-emerald-600"><i data-lucide="award" class="w-4 h-4"></i></span>
+          </div>
+          <div class="mt-3 flex items-baseline gap-2">
+            <span id="kpiSkillReadiness" class="text-2xl font-bold text-slate-900">0%</span>
+            <span id="kpiActivePathways" class="text-xs font-medium text-emerald-600">0 Pathways</span>
+          </div>
+          <p class="mt-1 text-xs text-slate-500">จาก Job-Based สู่ Skills-Based Workforce</p>
+        </div>
+
+        <div class="bg-white rounded-xl p-4 border border-slate-200 shadow-sm card-hover">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-medium text-slate-500">ระบบตัดสินใจสรรหา (TA 4.0 Pipeline)</span>
+            <span class="p-2 rounded-lg bg-sky-50 text-sky-600"><i data-lucide="git-branch" class="w-4 h-4"></i></span>
+          </div>
+          <div class="mt-3 flex items-baseline gap-2">
+            <span id="kpiCandidateCount" class="text-2xl font-bold text-slate-900">0</span>
+            <span id="kpiAvgAiMatch" class="text-xs font-medium text-sky-700">AI Match เฉลี่ย 0%</span>
+          </div>
+          <p class="mt-1 text-xs text-slate-500">Attract • Screen • Assess • Select • Onboard</p>
+        </div>
+
+        <div class="bg-white rounded-xl p-4 border border-slate-200 shadow-sm card-hover">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-medium text-slate-500">AI Governance & Roadmap Progress</span>
+            <span class="p-2 rounded-lg bg-purple-50 text-purple-600"><i data-lucide="shield" class="w-4 h-4"></i></span>
+          </div>
+          <div class="mt-3 flex items-baseline gap-2">
+            <span id="kpiGovernanceScore" class="text-2xl font-bold text-slate-900">0%</span>
+            <span id="kpiRoadmapPct" class="text-xs font-medium text-purple-700">Roadmap 0%</span>
+          </div>
+          <p class="mt-1 text-xs text-slate-500">Govern • Map • Measure • Manage (NIST)</p>
+        </div>
+      </div>
+
+      <!-- 5 Strategic Digital HR Roles (Slide 4) -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div class="lg:col-span-7 bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+            <div>
+              <span class="text-xs font-semibold uppercase tracking-wider text-indigo-600">Slide 04 Framework</span>
+              <h3 class="text-base sm:text-lg font-bold text-slate-900">นักจัดการ HR ยุคดิจิทัล: 5 บทบาทเชิงกลยุทธ์</h3>
+              <p class="text-xs text-slate-500">ปรับระดับความพร้อม (1–5) ของทีม HR ในองค์กรเพื่อประเมินสมรรถนะเชิงกลยุทธ์</p>
+            </div>
+            <span id="avgRoleScoreBadge" class="px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 font-bold text-xs">คะแนนเฉลี่ย: 3.8 / 5.0</span>
+          </div>
+
+          <div id="rolesListContainer" class="space-y-3"></div>
+        </div>
+
+        <!-- Radar Chart & Strategic Synthesis -->
+        <div class="lg:col-span-5 flex flex-col gap-6">
+          <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex-1 flex flex-col justify-between">
+            <div>
+              <h3 class="text-base font-bold text-slate-900">แผนภูมิสมรรถนะ 5 บทบาท HR ยุคดิจิทัล</h3>
+              <p class="text-xs text-slate-500 mb-3">เปรียบเทียบระดับปัจจุบัน (Current) กับเป้าหมายองค์กร (Target 5.0)</p>
+            </div>
+            <div class="relative h-64 w-full">
+              <canvas id="rolesRadarChart"></canvas>
+            </div>
+            <div id="roleDiagnosticBox" class="mt-4 p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-700 space-y-1"></div>
+          </div>
+
+          <!-- Quick Process Flow Cards -->
+          <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-3">
+            <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2">
+              <i data-lucide="workflow" class="w-4 h-4 text-indigo-600"></i>
+              <span>ทางลัดกระบวนการทำงาน HR ครบวงจร (End-to-End HR Workflow)</span>
+            </h3>
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+              <button type="button" onclick="switchTab('workforce')" class="p-2.5 rounded-xl border border-slate-200 hover:border-indigo-400 hover:bg-indigo-50/40 text-left transition">
+                <div class="text-xs font-bold text-indigo-700">01 Workforce & FTE</div>
+                <div class="text-[11px] text-slate-500">Quantity/Capability Gap</div>
+              </button>
+              <button type="button" onclick="switchTab('ta')" class="p-2.5 rounded-xl border border-slate-200 hover:border-indigo-400 hover:bg-indigo-50/40 text-left transition">
+                <div class="text-xs font-bold text-indigo-700">02 Talent Acquisition</div>
+                <div class="text-[11px] text-slate-500">5-Stage Decision System</div>
+              </button>
+              <button type="button" onclick="switchTab('learning')" class="p-2.5 rounded-xl border border-slate-200 hover:border-indigo-400 hover:bg-indigo-50/40 text-left transition">
+                <div class="text-xs font-bold text-indigo-700">03 Reskilling & L&D</div>
+                <div class="text-[11px] text-slate-500">Kolb & Business Impact</div>
+              </button>
+              <button type="button" onclick="switchTab('ex')" class="p-2.5 rounded-xl border border-slate-200 hover:border-indigo-400 hover:bg-indigo-50/40 text-left transition">
+                <div class="text-xs font-bold text-indigo-700">04 Performance & EX</div>
+                <div class="text-[11px] text-slate-500">5-Stage Journey & Friction</div>
+              </button>
+              <button type="button" onclick="switchTab('governance')" class="p-2.5 rounded-xl border border-slate-200 hover:border-indigo-400 hover:bg-indigo-50/40 text-left transition">
+                <div class="text-xs font-bold text-indigo-700">05 AI Governance</div>
+                <div class="text-[11px] text-slate-500">4 Pillars & Risk Matrix</div>
+              </button>
+              <button type="button" onclick="switchTab('workshop')" class="p-2.5 rounded-xl border border-slate-200 hover:border-indigo-400 hover:bg-indigo-50/40 text-left transition">
+                <div class="text-xs font-bold text-indigo-700">06 MBA Canvas & 365d</div>
+                <div class="text-[11px] text-slate-500">Deliverable & Roadmap</div>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 2: WORKFORCE PLANNING, FTE & SKILLS-BASED (SLIDE 5 & 6) ==================== -->
+    <section id="view-workforce" class="tab-view hidden space-y-6">
+      <!-- 3 Gaps Header Cards (Slide 5) -->
+      <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+          <div>
+            <span class="text-xs font-semibold uppercase tracking-wider text-indigo-600">Slide 05 & 06 • Workforce Planning & FTE Model</span>
+            <h2 class="text-lg font-bold text-slate-900">การพิจารณา Skill, Capacity, Location และ Employment Model</h2>
+          </div>
+          <span class="text-xs text-slate-500">อ้างอิง: Ries (2011) & World Economic Forum (2025)</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="p-4 rounded-xl bg-indigo-50/60 border border-indigo-200">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-bold uppercase text-indigo-900 px-2 py-0.5 rounded bg-indigo-200/70">1. Quantity Gap</span>
+              <i data-lucide="users" class="w-4 h-4 text-indigo-700"></i>
+            </div>
+            <p class="text-sm font-semibold text-slate-900 mt-1">Demand FTE – Available FTE</p>
+            <p class="text-xs text-slate-600 mt-1">วิเคราะห์ว่าแต่ละหน่วยงานขาดแคลนคน (Understaffed) หรือใช้กำลังคนเกิน (Overstaffed) เท่าใด</p>
+          </div>
+
+          <div class="p-4 rounded-xl bg-emerald-50/60 border border-emerald-200">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-bold uppercase text-emerald-900 px-2 py-0.5 rounded bg-emerald-200/70">2. Capability Gap</span>
+              <i data-lucide="cpu" class="w-4 h-4 text-emerald-700"></i>
+            </div>
+            <p class="text-sm font-semibold text-slate-900 mt-1">Required Skills – Current Skills</p>
+            <p class="text-xs text-slate-600 mt-1">วิเคราะห์ว่าบุคลากรขาดทักษะใด อยู่ในระดับใด และมีความสำคัญเชิงกลยุทธ์ (Critical) แค่ไหน</p>
+          </div>
+
+          <div class="p-4 rounded-xl bg-amber-50/60 border border-amber-200">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-bold uppercase text-amber-900 px-2 py-0.5 rounded bg-amber-200/70">3. Deployment Gap</span>
+              <i data-lucide="map-pin" class="w-4 h-4 text-amber-700"></i>
+            </div>
+            <p class="text-sm font-semibold text-slate-900 mt-1">Right Skill • Time • Location • Model</p>
+            <p class="text-xs text-slate-600 mt-1">คนหรือทักษะอยู่ผิดหน่วยงาน เวลา หรือสถานที่หรือไม่ และควรใช้รูปแบบการจ้างงาน (Employment Model) ใด</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Interactive FTE Calculator -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div class="lg:col-span-8 bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <h3 class="text-base font-bold text-slate-900">เครื่องคำนวณอัตรากำลัง FTE (Full-Time Equivalent Calculator)</h3>
+              <p class="text-xs text-slate-500">สูตรพื้นฐาน: <code class="bg-slate-100 px-1.5 py-0.5 rounded text-indigo-700">FTE = ชั่วโมงทำงานจริงรวมของพนักงานทุกคน ÷ ชั่วโมงมาตรฐานของพนักงานเต็มเวลา</code></p>
+            </div>
+            <div class="flex items-center gap-2">
+              <label for="standardHoursInput" class="text-xs font-medium text-slate-600">ชม. มาตรฐาน/เดือน:</label>
+              <input id="standardHoursInput" type="number" min="80" max="240" value="160" onchange="updateStandardHours(this.value)" class="w-20 px-2.5 py-1 text-xs font-semibold rounded-lg border border-slate-300 text-center">
+            </div>
+          </div>
+
+          <!-- Add Department FTE Form -->
+          <form id="fteForm" onsubmit="handleAddFteDept(event)" class="grid grid-cols-2 sm:grid-cols-6 gap-2.5 bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+            <div class="col-span-2 sm:col-span-2">
+              <label class="block text-[11px] font-medium text-slate-600 mb-1">ชื่อหน่วยงาน / แผนก</label>
+              <input id="fteDeptName" type="text" required placeholder="เช่น Data & AI Team" class="w-full px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 bg-white">
+            </div>
+            <div>
+              <label class="block text-[11px] font-medium text-slate-600 mb-1">Full-time (คน)</label>
+              <input id="fteFullTimeCount" type="number" min="0" required value="5" class="w-full px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 bg-white">
+            </div>
+            <div>
+              <label class="block text-[11px] font-medium text-slate-600 mb-1">ชม. Part-time/เดือน</label>
+              <input id="ftePartTimeHours" type="number" min="0" required value="160" class="w-full px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 bg-white">
+            </div>
+            <div>
+              <label class="block text-[11px] font-medium text-slate-600 mb-1">Demand FTE (เป้า)</label>
+              <input id="fteDemandTarget" type="number" step="0.5" min="0.5" required value="7.5" class="w-full px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 bg-white">
+            </div>
+            <div>
+              <label class="block text-[11px] font-medium text-slate-600 mb-1">ผลผลิต/รายได้ (บาท)</label>
+              <div class="flex gap-1">
+                <input id="fteRevenueOutput" type="number" min="0" step="10000" required value="1800000" class="w-full px-2 py-1.5 text-xs rounded-lg border border-slate-300 bg-white">
+                <button type="submit" class="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold shrink-0">+ เพิ่ม</button>
+              </div>
+            </div>
+          </form>
+
+          <!-- FTE Table -->
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse text-xs">
+              <thead>
+                <tr class="border-b border-slate-200 text-slate-500 bg-slate-50/80">
+                  <th class="py-2.5 px-3 font-semibold">แผนก / หน่วยงาน</th>
+                  <th class="py-2.5 px-2 font-semibold text-center">Full-time</th>
+                  <th class="py-2.5 px-2 font-semibold text-center">ชม. Part-time</th>
+                  <th class="py-2.5 px-2 font-semibold text-center">Available FTE</th>
+                  <th class="py-2.5 px-2 font-semibold text-center">Demand FTE</th>
+                  <th class="py-2.5 px-2 font-semibold text-center">Quantity Gap</th>
+                  <th class="py-2.5 px-2 font-semibold text-right">Productivity / FTE</th>
+                  <th class="py-2.5 px-2 font-semibold text-center">จัดการ</th>
+                </tr>
+              </thead>
+              <tbody id="fteTableBody" class="divide-y divide-slate-100"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- FTE Chart & Insights -->
+        <div class="lg:col-span-4 bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex flex-col justify-between space-y-4">
+          <div>
+            <h3 class="text-base font-bold text-slate-900">กราฟเปรียบเทียบ Available vs. Demand FTE</h3>
+            <p class="text-xs text-slate-500">ตรวจสอบหน่วยงานที่ขาดแคลนคน (Understaffed) หรือคนล้น (Overstaffed)</p>
+          </div>
+          <div class="relative h-64 w-full">
+            <canvas id="fteBarChart"></canvas>
+          </div>
+          <div id="fteSummaryCard" class="p-3.5 rounded-xl bg-indigo-50/70 border border-indigo-100 text-xs text-slate-700 space-y-1.5"></div>
+        </div>
+      </div>
+
+      <!-- Slide 6: From Job-Based to Skills-Based Workforce & Build-Buy-Borrow-Bot -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Comparison Table -->
+        <div class="lg:col-span-5 bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-3">
+          <span class="text-xs font-semibold uppercase tracking-wider text-indigo-600">Slide 06 • Paradigm Shift</span>
+          <h3 class="text-base font-bold text-slate-900">6. จาก Job-Based สู่ Skills-Based Workforce</h3>
+          <p class="text-xs text-slate-500">หน่วยวิเคราะห์ของ HR เปลี่ยนจาก "ตำแหน่งงาน" สู่ "ทักษะที่สร้างคุณค่า" (WEF, 2025)</p>
+          <div class="overflow-x-auto">
+            <table class="w-full text-xs border-collapse">
+              <thead>
+                <tr class="bg-slate-100 text-slate-700">
+                  <th class="p-2.5 text-left rounded-tl-lg">Legacy Model (Job-Based)</th>
+                  <th class="p-2.5 text-left rounded-tr-lg text-indigo-700">Skills-Based Workforce</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-200">
+                <tr>
+                  <td class="p-2.5 text-slate-600">Job description เป็นแกนกลาง</td>
+                  <td class="p-2.5 font-medium text-slate-900">Skills taxonomy เป็นแกนกลาง</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 text-slate-600">Career ladder คงที่ตามลำดับขั้น</td>
+                  <td class="p-2.5 font-medium text-slate-900">วิเคราะห์ Skill gap ระดับบุคคล–ทีม–องค์กร</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 text-slate-600">Training ตามหลักสูตรมาตรฐานเดียวกัน</td>
+                  <td class="p-2.5 font-medium text-slate-900">Learning pathways เฉพาะบุคคล</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 text-slate-600">Workforce planning จาก Headcount</td>
+                  <td class="p-2.5 font-medium text-slate-900">Talent management & internal mobility</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 text-slate-600">Internal mobility จำกัดในสายงานเดิม</td>
+                  <td class="p-2.5 font-medium text-slate-900">Workforce scenario planning ยืดหยุ่น</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 4Bs Strategy Planner: Build - Buy - Borrow - Bot -->
+        <div class="lg:col-span-7 bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h3 class="text-base font-bold text-slate-900">พอร์ตโฟลิโอการจัดการทักษะ: Build • Buy • Borrow • Bot</h3>
+              <p class="text-xs text-slate-500">"ทักษะใดคือ Strategic Capabilities? จะใช้ Build-Buy-Borrow-ROBot อย่างไร?" (WEF, 2025)</p>
+            </div>
+          </div>
+
+          <form id="fourBForm" onsubmit="handleAddFourBItem(event)" class="grid grid-cols-1 sm:grid-cols-5 gap-2.5 bg-slate-50 p-3 rounded-xl border border-slate-200">
+            <input id="fourBSkillName" type="text" required placeholder="ชื่อทักษะ (เช่น AI Prompt Engineering)" class="sm:col-span-2 px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 bg-white">
+            <select id="fourBType" class="px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 bg-white">
+              <option value="Build">Build (พัฒนาคนใน / Reskill)</option>
+              <option value="Buy">Buy (สรรหาคนเก่งจากภายนอก)</option>
+              <option value="Borrow">Borrow (Freelance / Outsource / Partner)</option>
+              <option value="Bot">Bot (AI Agent / RPA Automation)</option>
+            </select>
+            <select id="fourBCriticality" class="px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 bg-white">
+              <option value="Critical">ระดับ: Critical (สำคัญสูงมาก)</option>
+              <option value="High">ระดับ: High (สำคัญสูง)</option>
+              <option value="Core">ระดับ: Core (พื้นฐานองค์กร)</option>
+            </select>
+            <button type="submit" class="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold">+ เพิ่มกลยุทธ์</button>
+          </form>
+
+          <div id="fourBListContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 max-h-64 overflow-y-auto custom-scrollbar"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 3: TALENT ACQUISITION 4.0 (SLIDE 7) ==================== -->
+    <section id="view-ta" class="tab-view hidden space-y-6">
+      <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+          <div>
+            <span class="text-xs font-semibold uppercase tracking-wider text-indigo-600">Slide 07 • Talent Acquisition 4.0</span>
+            <h2 class="text-lg font-bold text-slate-900">7. Talent Acquisition 4.0: จาก Funnel สู่ Decision System</h2>
+            <p class="text-xs text-slate-500">เทคโนโลยีเพิ่มการเข้าถึง — HR มีหน้าที่รับผิดชอบคุณภาพการตัดสินใจ (Tambe et al., 2019; Vrontis et al., 2022)</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <select id="taStageFilter" onchange="renderTaPipeline()" class="px-3 py-1.5 text-xs rounded-lg border border-slate-300 bg-white">
+              <option value="ALL">แสดงทุกขั้นตอน (All 5 Stages)</option>
+              <option value="ATTRACT">1. ATTRACT (ดึงดูดผู้สมัคร)</option>
+              <option value="SCREEN">2. SCREEN (คัดกรองด้วย ATS/AI)</option>
+              <option value="ASSESS">3. ASSESS (สัมภาษณ์แบบมีโครงสร้าง/ทดสอบ)</option>
+              <option value="SELECT">4. SELECT (ตัดสินใจ + Calibration)</option>
+              <option value="ONBOARD">5. ONBOARD (Digital Onboarding)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- 5 Stages Architecture Overview -->
+        <div class="grid grid-cols-2 sm:grid-cols-5 gap-2.5">
+          <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+            <div class="text-xs font-bold text-indigo-700">1. ATTRACT</div>
+            <div class="text-[11px] text-slate-600 mt-0.5">Employer brand • Programmatic sourcing</div>
+          </div>
+          <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+            <div class="text-xs font-bold text-indigo-700">2. SCREEN</div>
+            <div class="text-[11px] text-slate-600 mt-0.5">ATS / skill matching • AI-assisted review</div>
+          </div>
+          <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+            <div class="text-xs font-bold text-indigo-700">3. ASSESS</div>
+            <div class="text-[11px] text-slate-600 mt-0.5">Structured interview • Work sample / tests</div>
+          </div>
+          <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+            <div class="text-xs font-bold text-indigo-700">4. SELECT</div>
+            <div class="text-[11px] text-slate-600 mt-0.5">Decision + calibration • Human accountability</div>
+          </div>
+          <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 col-span-2 sm:col-span-1">
+            <div class="text-xs font-bold text-indigo-700">5. ONBOARD</div>
+            <div class="text-[11px] text-slate-600 mt-0.5">Digital onboarding • Time-to-productivity</div>
+          </div>
+        </div>
+
+        <!-- Add Candidate Form -->
+        <form id="addCandidateForm" onsubmit="handleAddCandidate(event)" class="grid grid-cols-1 sm:grid-cols-6 gap-2.5 bg-indigo-50/50 p-3.5 rounded-xl border border-indigo-100">
+          <input id="candName" type="text" required placeholder="ชื่อ-นามสกุลผู้สมัคร" class="px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 bg-white">
+          <input id="candRole" type="text" required placeholder="ตำแหน่ง/ทักษะหลัก (เช่น People Data Scientist)" class="px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 bg-white">
+          <select id="candStage" class="px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 bg-white">
+            <option value="ATTRACT">1. ATTRACT</option>
+            <option value="SCREEN">2. SCREEN</option>
+            <option value="ASSESS">3. ASSESS</option>
+            <option value="SELECT">4. SELECT</option>
+            <option value="ONBOARD">5. ONBOARD</option>
+          </select>
+          <input id="candAiScore" type="number" min="40" max="100" required placeholder="AI Skill Match % (เช่น 88)" value="85" class="px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 bg-white">
+          <input id="candWorkSample" type="number" min="40" max="100" required placeholder="Work Sample % (เช่น 90)" value="88" class="px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 bg-white">
+          <button type="submit" class="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold">+ เพิ่มผู้สมัครในระบบ</button>
+        </form>
+
+        <!-- Candidate Pipeline Board -->
+        <div id="taCandidatesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5"></div>
+      </div>
+
+      <!-- What AI Can Improve vs What HR Must Govern -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="bg-white rounded-2xl p-5 border border-emerald-200 shadow-sm space-y-3">
+          <div class="flex items-center gap-2 text-emerald-700 font-bold text-sm">
+            <i data-lucide="zap" class="w-4 h-4"></i>
+            <span>WHAT AI CAN IMPROVE (สิ่งที่ AI ช่วยยกระดับได้)</span>
+          </div>
+          <ul class="space-y-2 text-xs text-slate-700">
+            <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-emerald-500"></span><strong>ความเร็ว (Speed):</strong> ลดเวลาคัดกรองเรซูเม่และนัดหมายสัมภาษณ์อัตโนมัติ</li>
+            <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-emerald-500"></span><strong>การจับคู่ทักษะ (Skill Matching):</strong> วิเคราะห์ทักษะเชิงลึกจาก Portfolio และประสบการณ์</li>
+            <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-emerald-500"></span><strong>ความสม่ำเสมอ (Consistency):</strong> ใช้เกณฑ์มาตรฐานเดียวกันในการคัดกรองเบื้องต้น</li>
+            <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-emerald-500"></span><strong>การดูแลผู้สมัคร (Candidate Support):</strong> ตอบคำถามและแจ้งสถานะแบบ Real-time</li>
+            <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-emerald-500"></span><strong>งานธุรการอัตโนมัติ (Admin Automation):</strong> เตรียมเอกสารสัญญาและระบบ Onboarding</li>
+          </ul>
+        </div>
+
+        <div class="bg-white rounded-2xl p-5 border border-amber-200 shadow-sm space-y-3">
+          <div class="flex items-center gap-2 text-amber-800 font-bold text-sm">
+            <i data-lucide="scale" class="w-4 h-4"></i>
+            <span>WHAT HR MUST GOVERN (สิ่งที่ HR ต้องกำกับดูแลอย่างเข้มงวด)</span>
+          </div>
+          <ul class="space-y-2 text-xs text-slate-700">
+            <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-amber-500"></span><strong>อคติอัลกอริทึม (Bias):</strong> ตรวจสอบไม่ให้ AI กีดกันเพศ อายุ หรือสถาบันการศึกษา</li>
+            <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-amber-500"></span><strong>ความเที่ยงตรง (Validity):</strong> เครื่องมือวัดผลต้องพยากรณ์ผลงานจริงได้ ไม่ใช่แค่คำศัพท์สวยหรู</li>
+            <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-amber-500"></span><strong>ความเป็นส่วนตัว (Privacy / PDPA):</strong> เก็บและใช้ข้อมูลผู้สมัครเท่าที่จำเป็นและได้รับความยินยอม</li>
+            <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-amber-500"></span><strong>ความสามารถในการอธิบาย (Explainability):</strong> ชี้แจงเหตุผลประกอบคะแนนของ AI ได้</li>
+            <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-amber-500"></span><strong>ความรับผิดชอบของมนุษย์ (Human Accountability):</strong> การตัดสินใจขั้นสุดท้ายต้องมีผู้รับผิดชอบชัดเจน</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 4: LEARNING & RESKILLING ARCHITECTURE (SLIDE 8) ==================== -->
+    <section id="view-learning" class="tab-view hidden space-y-6">
+      <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-4">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b border-slate-100 pb-3">
+          <div>
+            <span class="text-xs font-semibold uppercase tracking-wider text-indigo-600">Slide 08 • Learning & Reskilling Architecture</span>
+            <h2 class="text-lg font-bold text-slate-900">8. จาก "จัดอบรม" → สร้าง CAPABILITY ที่วัดผลได้จริง</h2>
+            <p class="text-xs text-slate-500">Master's-Level Lens: อย่าวัดเพียงชั่วโมงการอบรม แต่ต้องวัด <strong class="text-indigo-700">Learning → Behavior → Performance → Business Outcome</strong> (Kolb, 1984; WEF, 2025; Marler & Boudreau, 2017)</p>
+          </div>
+        </div>
+
+        <!-- 5 Steps Visual Architecture -->
+        <div class="grid grid-cols-1 sm:grid-cols-5 gap-3">
+          <div class="p-3.5 rounded-xl bg-indigo-50/70 border border-indigo-200">
+            <div class="text-xs font-bold text-indigo-800">1. Strategic Capability</div>
+            <p class="text-[11px] text-slate-600 mt-1">องค์กรสร้างเอกลักษณ์ด้าน Talent อะไรบ้างเพื่อชนะในแต่ละปี</p>
+          </div>
+          <div class="p-3.5 rounded-xl bg-indigo-50/70 border border-indigo-200">
+            <div class="text-xs font-bold text-indigo-800">2. Skill Gap</div>
+            <p class="text-[11px] text-slate-600 mt-1">บุคลากรใด ขาดทักษะอะไร และอยู่ในระดับไหน</p>
+          </div>
+          <div class="p-3.5 rounded-xl bg-indigo-50/70 border border-indigo-200">
+            <div class="text-xs font-bold text-indigo-800">3. Learning Pathway</div>
+            <p class="text-[11px] text-slate-600 mt-1">Microlearning • Project • Coaching • Academy</p>
+          </div>
+          <div class="p-3.5 rounded-xl bg-indigo-50/70 border border-indigo-200">
+            <div class="text-xs font-bold text-indigo-800">4. Practice & Evidence</div>
+            <p class="text-[11px] text-slate-600 mt-1">นำความรู้ไปใช้ในงานจริง + สร้าง Portfolio ชิ้นงาน</p>
+          </div>
+          <div class="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200">
+            <div class="text-xs font-bold text-emerald-800">5. Business Impact</div>
+            <p class="text-[11px] text-slate-600 mt-1">วัดผล Performance, Internal Mobility และ Productivity</p>
+          </div>
+        </div>
+
+        <!-- Add Learning Pathway Form -->
+        <form id="addLearningForm" onsubmit="handleAddLearningPathway(event)" class="grid grid-cols-1 sm:grid-cols-6 gap-2.5 bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+          <input id="learnCapName" type="text" required placeholder="ทักษะ/Capability (เช่น People Analytics)" class="px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 bg-white">
+          <input id="learnTargetGroup" type="text" required placeholder="กลุ่มเป้าหมาย (เช่น HRBP & Line Manager)" class="px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 bg-white">
+          <select id="learnFormat" class="px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 bg-white">
+            <option value="Microlearning + Project">Microlearning + Action Project</option>
+            <option value="Coaching + Portfolio">1-on-1 Coaching + Portfolio</option>
+            <option value="Digital Academy">Digital Capability Academy</option>
+            <option value="Internal Mobility Rotation">Job Rotation / Stretch Project</option>
+          </select>
+          <input id="learnCurrentLv" type="number" min="1" max="5" step="0.5" required value="2.0" placeholder="ทักษะปัจจุบัน (1-5)" class="px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 bg-white">
+          <input id="learnTargetLv" type="number" min="1" max="5" step="0.5" required value="4.5" placeholder="เป้าหมาย (1-5)" class="px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 bg-white">
+          <button type="submit" class="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold">+ เพิ่ม Pathway</button>
+        </form>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          <div id="learningCardsContainer" class="lg:col-span-7 space-y-3"></div>
+          <div class="lg:col-span-5 bg-slate-50 rounded-xl p-4 border border-slate-200 space-y-3">
+            <h3 class="text-sm font-bold text-slate-900">กราฟวิเคราะห์ช่องว่างทักษะ (Skill Gap: Current vs. Target)</h3>
+            <div class="relative h-64 w-full">
+              <canvas id="skillGapChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 5: PERFORMANCE + EMPLOYEE EXPERIENCE (SLIDE 9) ==================== -->
+    <section id="view-ex" class="tab-view hidden space-y-6">
+      <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-4">
+        <div class="border-b border-slate-100 pb-3">
+          <span class="text-xs font-semibold uppercase tracking-wider text-indigo-600">Slide 09 • Performance + Employee Experience (EX)</span>
+          <h2 class="text-lg font-bold text-slate-900">9. ออกแบบ "ระบบงาน" ไม่ใช่แค่ระบบ HR</h2>
+          <p class="text-xs text-slate-500">Digital Experience ที่ดีต้องช่วยให้คนทำงานดีขึ้น ลด Friction เพิ่มความชัดเจน และเสริมสร้างปฏิสัมพันธ์ที่มีคุณค่าระหว่างมนุษย์ (Bondarouk & Brewster, 2016; Strohmeier, 2020)</p>
+        </div>
+
+        <!-- 5 Stages of Employee Journey Selector -->
+        <div class="grid grid-cols-2 sm:grid-cols-5 gap-2.5" id="exJourneyTabs">
+          <button type="button" onclick="selectExStage('JOIN')" id="exStageBtn-JOIN" class="ex-stage-btn p-3 rounded-xl border border-indigo-500 bg-indigo-50 text-left transition">
+            <div class="text-xs font-bold text-indigo-800">01 JOIN</div>
+            <div class="text-[11px] text-slate-600">Candidate / Onboarding</div>
+          </button>
+          <button type="button" onclick="selectExStage('PERFORM')" id="exStageBtn-PERFORM" class="ex-stage-btn p-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-left transition">
+            <div class="text-xs font-bold text-slate-800">02 PERFORM</div>
+            <div class="text-[11px] text-slate-600">Goals / Feedback</div>
+          </button>
+          <button type="button" onclick="selectExStage('GROW')" id="exStageBtn-GROW" class="ex-stage-btn p-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-left transition">
+            <div class="text-xs font-bold text-slate-800">03 GROW</div>
+            <div class="text-[11px] text-slate-600">Learning / Mobility</div>
+          </button>
+          <button type="button" onclick="selectExStage('ENGAGE')" id="exStageBtn-ENGAGE" class="ex-stage-btn p-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-left transition">
+            <div class="text-xs font-bold text-slate-800">04 ENGAGE</div>
+            <div class="text-[11px] text-slate-600">Well-being / Pulse</div>
+          </button>
+          <button type="button" onclick="selectExStage('MOVE')" id="exStageBtn-MOVE" class="ex-stage-btn p-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-left transition col-span-2 sm:col-span-1">
+            <div class="text-xs font-bold text-slate-800">05 MOVE / EXIT</div>
+            <div class="text-[11px] text-slate-600">Internal Move / Alumni</div>
+          </button>
+        </div>
+
+        <!-- Selected EX Stage Detail & 4 Design Questions -->
+        <div id="exStageDetailBox" class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-4"></div>
+
+        <!-- Add New EX Design / Friction Resolution Item -->
+        <form id="exForm" onsubmit="handleAddExItem(event)" class="grid grid-cols-1 sm:grid-cols-6 gap-2.5 bg-white p-3.5 rounded-xl border border-slate-200">
+          <select id="exInputStage" class="px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 bg-white">
+            <option value="JOIN">01 JOIN</option>
+            <option value="PERFORM">02 PERFORM</option>
+            <option value="GROW">03 GROW</option>
+            <option value="ENGAGE">04 ENGAGE</option>
+            <option value="MOVE">05 MOVE / EXIT</option>
+          </select>
+          <input id="exInputFriction" type="text" required placeholder="Where is the friction? (ปัญหาคอขวด)" class="px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 bg-white">
+          <input id="exInputDecision" type="text" required placeholder="What decision faster/better?" class="px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 bg-white">
+          <input id="exInputPersonalize" type="text" required placeholder="What should be personalized?" class="px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 bg-white">
+          <input id="exInputHuman" type="text" required placeholder="What must remain human?" class="px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 bg-white">
+          <button type="submit" class="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold">+ บันทึกการออกแบบ EX</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 6: AI GOVERNANCE & RISK MATRIX (SLIDE 10 & 12) ==================== -->
+    <section id="view-governance" class="tab-view hidden space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Slide 12: AI Governance for HR (4 Pillars Checklist) -->
+        <div class="lg:col-span-7 bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+            <div>
+              <span class="text-xs font-semibold uppercase tracking-wider text-indigo-600">Slide 12 • AI Governance Framework</span>
+              <h2 class="text-lg font-bold text-slate-900">12. AI Governance for HR: ออกแบบอย่างถูกต้องตั้งแต่เริ่มต้น</h2>
+              <p class="text-xs text-slate-500">มิใช่ปรับแก้ไขหลังเกิดปัญหา — ครอบคลุม 4 เสาหลัก: GOVERN • MAP • MEASURE • MANAGE</p>
+            </div>
+            <div class="text-right">
+              <div id="govChecklistBadge" class="text-lg font-bold text-indigo-700">100%</div>
+              <div class="text-[11px] text-slate-500">Compliance Readiness</div>
+            </div>
+          </div>
+
+          <div id="govPillarsContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-3.5"></div>
+        </div>
+
+        <!-- Slide 10: Interactive Risk Matrix (2x2) -->
+        <div class="lg:col-span-5 bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-4">
+          <div class="border-b border-slate-100 pb-3">
+            <span class="text-xs font-semibold uppercase tracking-wider text-indigo-600">Slide 10 • Project Management Institute (2017)</span>
+            <h3 class="text-base font-bold text-slate-900">Risk Matrix (ตารางบริหารความเสี่ยง 2×2)</h3>
+            <p class="text-xs text-slate-500">ประเมินโอกาสเกิด × ผลกระทบ พร้อมแนวทางรับมือมาตรฐาน</p>
+          </div>
+
+          <!-- Add Risk Form -->
+          <form id="riskForm" onsubmit="handleAddRiskItem(event)" class="grid grid-cols-1 sm:grid-cols-2 gap-2 bg-slate-50 p-3 rounded-xl border border-slate-200">
+            <input id="riskTitleInput" type="text" required placeholder="ระบุความเสี่ยง (เช่น AI คัดกรองเกิด Bias)" class="sm:col-span-2 px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 bg-white">
+            <select id="riskLikelihoodInput" class="px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 bg-white">
+              <option value="HIGH">โอกาสเกิด: สูง (High)</option>
+              <option value="LOW">โอกาสเกิด: ต่ำ (Low)</option>
+            </select>
+            <select id="riskImpactInput" class="px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 bg-white">
+              <option value="HIGH">ผลกระทบ: สูง (High)</option>
+              <option value="LOW">ผลกระทบ: ต่ำ (Low)</option>
+            </select>
+            <input id="riskPlanInput" type="text" required placeholder="มาตรการรับมือ / แผนสำรอง" class="sm:col-span-2 px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 bg-white">
+            <button type="submit" class="sm:col-span-2 px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold">+ เพิ่มรายการใน Risk Matrix</button>
+          </form>
+
+          <!-- 2x2 Matrix Grid -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="riskMatrixGrid"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 7: MBA WORKSHOP CANVAS & 90-180-365 ROADMAP (SLIDE 13 & 14) ==================== -->
+    <section id="view-workshop" class="tab-view hidden space-y-6">
+      <!-- Slide 13: MBA Workshop Human Capital Innovation Canvas -->
+      <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3">
+          <div>
+            <span class="text-xs font-semibold uppercase tracking-wider text-indigo-600">Slide 13 • Workshop: Human Capital Innovation</span>
+            <h2 class="text-lg font-bold text-slate-900">13. กรณีระดับ MBA — ออกแบบ Digital HR Solution โดยเริ่มจาก "ปัญหาธุรกิจ"</h2>
+            <p class="text-xs text-slate-500">Deliverable: 1 หน้า Canvas • 3 เหตุผลเชิงกลยุทธ์ • 3 KPIs • 1 ความเสี่ยงสำคัญ • วิธีพิสูจน์ว่าการแทรกแซง "ได้ผลจริง"</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button type="button" onclick="saveCanvasFromInputs()" class="px-3.5 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold flex items-center gap-1.5">
+              <i data-lucide="save" class="w-3.5 h-3.5"></i>
+              <span>บันทึก Canvas</span>
+            </button>
+            <button type="button" onclick="copyCanvasSummary()" class="px-3.5 py-1.5 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold flex items-center gap-1.5">
+              <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+              <span>คัดลอกสรุป Deliverable</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 5 Canvas Blocks -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div class="p-4 rounded-xl bg-rose-50/50 border border-rose-200 space-y-2">
+            <label for="canvasChallenge" class="block text-xs font-bold text-rose-900">01 Business Challenge (โจทย์ปัญหาธุรกิจ)</label>
+            <textarea id="canvasChallenge" rows="3" class="w-full p-2.5 text-xs rounded-lg border border-rose-200 bg-white focus:ring-2 focus:ring-rose-500 focus:outline-none"></textarea>
+          </div>
+
+          <div class="p-4 rounded-xl bg-amber-50/50 border border-amber-200 space-y-2">
+            <label for="canvasDiagnosis" class="block text-xs font-bold text-amber-900">02 Human Capital Diagnosis (ข้อมูล/Skill Gap/Root Causes)</label>
+            <textarea id="canvasDiagnosis" rows="3" class="w-full p-2.5 text-xs rounded-lg border border-amber-200 bg-white focus:ring-2 focus:ring-amber-500 focus:outline-none"></textarea>
+          </div>
+
+          <div class="p-4 rounded-xl bg-indigo-50/50 border border-indigo-200 space-y-2">
+            <label for="canvasIntervention" class="block text-xs font-bold text-indigo-900">03 Intervention Portfolio (Build•Buy•Borrow•Bot / AI)</label>
+            <textarea id="canvasIntervention" rows="3" class="w-full p-2.5 text-xs rounded-lg border border-indigo-200 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none"></textarea>
+          </div>
+
+          <div class="p-4 rounded-xl bg-purple-50/50 border border-purple-200 space-y-2">
+            <label for="canvasGovRisk" class="block text-xs font-bold text-purple-900">04 Governance & Risk (Bias•Privacy•Adoption•Accountability)</label>
+            <textarea id="canvasGovRisk" rows="3" class="w-full p-2.5 text-xs rounded-lg border border-purple-200 bg-white focus:ring-2 focus:ring-purple-500 focus:outline-none"></textarea>
+          </div>
+
+          <div class="p-4 rounded-xl bg-emerald-50/50 border border-emerald-200 space-y-2">
+            <label for="canvasValueEvidence" class="block text-xs font-bold text-emerald-900">05 Value & Evidence (3 KPIs / Leading Indicator / Evaluation)</label>
+            <textarea id="canvasValueEvidence" rows="3" class="w-full p-2.5 text-xs rounded-lg border border-emerald-200 bg-white focus:ring-2 focus:ring-emerald-500 focus:outline-none"></textarea>
+          </div>
+
+          <div class="p-4 rounded-xl bg-slate-100 border border-slate-300 space-y-2">
+            <label for="canvasReasons" class="block text-xs font-bold text-slate-900">06 สรุป 3 เหตุผลเชิงกลยุทธ์ & วิธีพิสูจน์ว่า "ได้ผลจริง"</label>
+            <textarea id="canvasReasons" rows="3" class="w-full p-2.5 text-xs rounded-lg border border-slate-300 bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 14: Strategic Roadmap 90-180-365 Days -->
+      <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
+          <div>
+            <span class="text-xs font-semibold uppercase tracking-wider text-indigo-600">Slide 14 • Implementation Roadmap</span>
+            <h2 class="text-lg font-bold text-slate-900">14. Strategic Roadmap: 90–180–365 Days (เริ่ม Digital HR แบบสร้างคุณค่าและลดความเสี่ยง)</h2>
+          </div>
+          <span id="roadmapOverallBadge" class="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 font-bold text-xs">ความคืบหน้ารวม: 0%</span>
+        </div>
+
+        <div id="roadmapPhasesGrid" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
+
+        <!-- 5 Reflection Principles from Slide 14 -->
+        <div class="p-4 rounded-xl bg-slate-900 text-white space-y-2">
+          <div class="text-xs font-bold uppercase tracking-wider text-indigo-300">5 Strategic Reflections (Synthesis based on Strohmeier, 2020; Tambe et al., 2019; NIST, 2023; WEF, 2025)</div>
+          <div class="grid grid-cols-1 sm:grid-cols-5 gap-2 text-xs">
+            <div class="p-2.5 rounded-lg bg-white/10"><strong>1) Start with value:</strong> เริ่มจากคุณค่าทางธุรกิจ</div>
+            <div class="p-2.5 rounded-lg bg-white/10"><strong>2) Think in skills:</strong> คิดในมิติทักษะไม่ใช่แค่ตำแหน่ง</div>
+            <div class="p-2.5 rounded-lg bg-white/10"><strong>3) Use evidence:</strong> ใช้ข้อมูลและหลักฐานเชิงประจักษ์</div>
+            <div class="p-2.5 rounded-lg bg-white/10"><strong>4) Human–AI collab:</strong> ออกแบบการทำงานร่วมกันระหว่างคนและ AI</div>
+            <div class="p-2.5 rounded-lg bg-white/10"><strong>5) Govern trust:</strong> กำกับดูแลความโปร่งใสและความไว้วางใจ</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Candidate Calibration & Governance Modal -->
+  <div id="calibrationModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-5 shadow-xl border border-slate-200 space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <h3 id="calModalTitle" class="text-base font-bold text-slate-900">ตรวจสอบธรรมาภิบาลและ Calibration ผู้สมัคร</h3>
+        <button type="button" onclick="closeCalibrationModal()" class="text-slate-400 hover:text-slate-600 p-1">✕</button>
+      </div>
+      <div id="calModalBody" class="space-y-3 text-xs text-slate-700"></div>
+      <div class="flex justify-end gap-2 pt-2 border-t border-slate-100">
+        <button type="button" onclick="closeCalibrationModal()" class="px-4 py-1.5 rounded-lg border border-slate-300 text-xs font-medium text-slate-700 hover:bg-slate-50">ปิดหน้าต่าง</button>
+        <button type="button" onclick="approveCandidateCalibration()" class="px-4 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-xs font-semibold text-white">ยืนยันผล Calibration (Human Sign-off)</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reset Confirmation Modal -->
+  <div id="resetConfirmModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-5 shadow-xl border border-slate-200 space-y-4">
+      <h3 class="text-base font-bold text-slate-900">ยืนยันการรีเซ็ตข้อมูลเริ่มต้น?</h3>
+      <p class="text-xs text-slate-600">ข้อมูลจำลองทั้งหมดในระบบ (FTE, ทักษะ 4Bs, ผู้สมัคร, Learning Pathways, AI Governance และ MBA Canvas) จะกลับเป็นค่าเริ่มต้นตามกรณีศึกษา</p>
+      <div class="flex justify-end gap-2 pt-2">
+        <button type="button" onclick="closeResetModal()" class="px-4 py-1.5 rounded-lg border border-slate-300 text-xs font-medium text-slate-700 hover:bg-slate-50">ยกเลิก</button>
+        <button type="button" onclick="confirmResetAllData()" class="px-4 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-700 text-xs font-semibold text-white">ยืนยันรีเซ็ตข้อมูล</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toastContainer" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
   <script>
-    // CAC Chart
-    new Chart(document.getElementById('cacChart'), {
-      type: 'bar',
-      data: {
-        labels: ['มุมมองฝ่ายขาย', 'มุมมองฝ่ายการเงิน'],
-        datasets: [
-          {
-            label: 'ค่าโฆษณาโดยตรง (Ad Spend)',
-            data: [180, 180],
-            backgroundColor: '#3b82f6'
-          },
-          {
-            label: 'คูปองส่วนลด & Influencer',
-            data: [0, 130],
-            backgroundColor: '#ef4444'
-          }
+// Digital HR 4.0 Operating System — Main Application Logic
+const STORAGE_KEY = 'digital_hr_os_state_v1';
+
+let rolesRadarChartInstance = null;
+let fteBarChartInstance = null;
+let skillGapChartInstance = null;
+let activeCalibrationCandId = null;
+let activeExStage = 'JOIN';
+
+function getDefaultState() {
+  return {
+    standardHours: 160,
+    roles: [
+      {
+        id: 'role1',
+        code: 'ROLE 01',
+        title: 'Strategic Architect',
+        subtitle: 'เชื่อมกลยุทธ์ธุรกิจกับ Workforce, Skills และ Organization Design',
+        dimension: 'Business Acumen + Human Capital',
+        score: 4.2
+      },
+      {
+        id: 'role2',
+        code: 'ROLE 02',
+        title: 'Evidence-Based Decision Maker',
+        subtitle: 'ตั้งคำถามเชิงสาเหตุ อ่านข้อมูล และใช้หลักฐานอย่างมีวิจารณญาณ',
+        dimension: 'Data + Business Acumen',
+        score: 3.8
+      },
+      {
+        id: 'role3',
+        code: 'ROLE 03',
+        title: 'Experience Designer',
+        subtitle: 'ออกแบบ Employee Journey ให้ลด Friction และเพิ่ม Engagement',
+        dimension: 'Human Capital + Technology',
+        score: 4.0
+      },
+      {
+        id: 'role4',
+        code: 'ROLE 04',
+        title: 'Digital Change Leader',
+        subtitle: 'ขับเคลื่อน Adoption, Capability และวัฒนธรรมการเรียนรู้',
+        dimension: 'Technology + Human Capital',
+        score: 3.6
+      },
+      {
+        id: 'role5',
+        code: 'ROLE 05',
+        title: 'AI & Ethics Steward',
+        subtitle: 'กำกับ Fairness, Privacy, Explainability และ Human Oversight',
+        dimension: 'Data + Technology Governance',
+        score: 3.9
+      }
+    ],
+    fteDepartments: [
+      { id: 'dept1', name: 'Digital Product & AI Engineering', fullTime: 18, partTimeHours: 320, demandFte: 24.0, revenueOutput: 14500000 },
+      { id: 'dept2', name: 'Commercial & Growth Marketing', fullTime: 14, partTimeHours: 160, demandFte: 15.0, revenueOutput: 11200000 },
+      { id: 'dept3', name: 'Customer Success & Operations', fullTime: 22, partTimeHours: 480, demandFte: 22.0, revenueOutput: 9800000 },
+      { id: 'dept4', name: 'People, Culture & Shared Services', fullTime: 9, partTimeHours: 80, demandFte: 8.5, revenueOutput: 3600000 }
+    ],
+    fourBPortfolio: [
+      { id: 'fb1', skill: 'Generative AI & Prompt Workflow', strategy: 'Build', criticality: 'Critical', note: 'อบรมพนักงานภายในผ่าน Microlearning + Action Project' },
+      { id: 'fb2', skill: 'People Data Scientist / ML Engineer', strategy: 'Buy', criticality: 'Critical', note: 'สรรหาผู้เชี่ยวชาญเฉพาะทางเข้าทีมแกนหลัก' },
+      { id: 'fb3', skill: 'PDPA & AI Ethics Legal Auditor', strategy: 'Borrow', criticality: 'High', note: 'ใช้ที่ปรึกษาภายนอกตรวจสอบความโปร่งใสรายไตรมาส' },
+      { id: 'fb4', skill: 'Resume Screening & Interview Scheduling', strategy: 'Bot', criticality: 'Core', note: 'ใช้ AI ATS คัดกรองเบื้องต้นและนัดหมายอัตโนมัติ (ลดงานธุรการ 65%)' }
+    ],
+    candidates: [
+      { id: 'c1', name: 'ณัฐกานต์ วงศ์สุวรรณ', role: 'Lead People Analytics', stage: 'SELECT', aiScore: 92, workSample: 94, calibrated: true },
+      { id: 'c2', name: 'กิตติภพ เจริญสุข', role: 'Digital Learning Architect', stage: 'ASSESS', aiScore: 87, workSample: 89, calibrated: false },
+      { id: 'c3', name: 'พิมพ์ชนก อัศวเมธี', role: 'HRIS & Automation Specialist', stage: 'SCREEN', aiScore: 84, workSample: 82, calibrated: false },
+      { id: 'c4', name: 'ธนภัทร ศรีวิไล', role: 'AI Governance & ER Manager', stage: 'ONBOARD', aiScore: 95, workSample: 91, calibrated: true },
+      { id: 'c5', name: 'อารียา รัตนโชติ', role: 'Employer Branding Strategist', stage: 'ATTRACT', aiScore: 81, workSample: 85, calibrated: false }
+    ],
+    learningPathways: [
+      {
+        id: 'lp1',
+        capability: 'Data-Driven HR & Causal People Analytics',
+        targetGroup: 'HRBP & Talent Managers (24 คน)',
+        format: 'Microlearning + Project',
+        currentLv: 2.2,
+        targetLv: 4.5,
+        kolbStage: 'Business Outcome: ลด Turnover กลุ่ม Critical Talent ได้ 18%',
+        portfolioReady: true
+      },
+      {
+        id: 'lp2',
+        capability: 'AI-Assisted Workflow & Prompt Design',
+        targetGroup: 'All Commercial & Ops Staff (120 คน)',
+        format: 'Digital Academy',
+        currentLv: 2.0,
+        targetLv: 4.2,
+        kolbStage: 'Performance: ลดเวลาทำงานเอกสารซ้ำซ้อนลง 3.5 ชม./สัปดาห์',
+        portfolioReady: true
+      },
+      {
+        id: 'lp3',
+        capability: 'Coaching for Agile Performance & OKRs',
+        targetGroup: 'First-Line Leaders (35 คน)',
+        format: 'Coaching + Portfolio',
+        currentLv: 2.8,
+        targetLv: 4.4,
+        kolbStage: 'Behavior: หัวหน้างานทำ 1-on-1 Feedback คุณภาพสูงครบ 90%',
+        portfolioReady: false
+      }
+    ],
+    exItems: [
+      {
+        id: 'ex1',
+        stage: 'JOIN',
+        friction: 'เอกสารเริ่มงานซ้ำซ้อน รอสิทธิ์ระบบ IT นาน 5 วัน',
+        decision: 'อนุมัติอุปกรณ์และสิทธิ์ระบบอัตโนมัติตั้งแต่วันเซ็นสัญญา',
+        personalize: 'จัด Buddy และแผนเรียนรู้ 30 วันแรกตามทักษะรายบุคคล',
+        human: 'หัวหน้างานและทีมต้อนรับพูดคุยสร้างความสัมพันธ์วันแรก (Warm Welcome)'
+      },
+      {
+        id: 'ex2',
+        stage: 'PERFORM',
+        friction: 'ประเมินผลงานปีละครั้ง ล่าช้าและไม่สะท้อนงานจริง',
+        decision: 'แจ้งเตือนการปรับเป้าหมาย OKRs รายไตรมาสจากข้อมูลผลงานจริง',
+        personalize: 'แดชบอร์ดเป้าหมายและคำแนะนำทักษะเฉพาะบทบาท',
+        human: 'การโค้ชชิ่ง 1-on-1 เชิงลึกด้วยความเข้าใจและเห็นอกเห็นใจ'
+      },
+      {
+        id: 'ex3',
+        stage: 'GROW',
+        friction: 'พนักงานไม่เห็นโอกาสเติบโตในสายงานและไม่รู้ต้องฝึกทักษะใด',
+        decision: 'AI แนะนำโปรเจกต์ภายใน (Internal Gig) ที่ตรงกับทักษะและเป้าหมาย',
+        personalize: 'Learning Pathway เฉพาะบุคคลตามช่องว่างทักษะ (Skill Gap)',
+        human: 'Career Conversation ร่วมกับ Mentor เพื่อวางแผนชีวิตและการทำงาน'
+      },
+      {
+        id: 'ex4',
+        stage: 'ENGAGE',
+        friction: 'ภาวะหมดไฟ (Burnout) ในทีมที่เติบโตเร็วแต่ตรวจพบช้า',
+        decision: 'วิเคราะห์สัญญาณความเสี่ยงจากชั่วโมงงานและ Pulse Survey รายเดือน',
+        personalize: 'สวัสดิการยืดหยุ่น (Flexible Benefits) และรูปแบบงาน Hybrid',
+        human: 'การรับฟังอย่างปลอดภัยทางจิตวิทยา (Psychological Safety) โดยผู้นำทีม'
+      },
+      {
+        id: 'ex5',
+        stage: 'MOVE',
+        friction: 'คนเก่งลาออกเพราะย้ายสายงานภายในยาก (Internal Mobility ต่ำ)',
+        decision: 'เปิดระบบ Internal Talent Marketplace โปร่งใส ไม่ต้องรอหัวหน้าเดิมกั๊กตัว',
+        personalize: 'แผนส่งมอบงานและ Upskill ก่อนย้ายบทบาทใหม่ หรือเครือข่าย Alumni',
+        human: 'Exit / Stay Interview เชิงสร้างสรรค์เพื่อรักษาความสัมพันธ์ระยะยาว'
+      }
+    ],
+    governanceChecks: [
+      { id: 'g1', pillar: 'PILLAR 01: GOVERN', item: 'กำหนดนโยบายการใช้ AI ในงาน HR (AI Policy) และขอบเขตที่ชัดเจน', checked: true },
+      { id: 'g2', pillar: 'PILLAR 01: GOVERN', item: 'ระบุบทบาทและผู้รับผิดชอบหลัก (Human Accountability) ในทุกการตัดสินใจ', checked: true },
+      { id: 'g3', pillar: 'PILLAR 01: GOVERN', item: 'ตั้งคณะกรรมการกำกับดูแลจริยธรรมข้อมูลและ AI (Governance Board)', checked: true },
+      { id: 'g4', pillar: 'PILLAR 02: MAP', item: 'วิเคราะห์บริบทการใช้งาน (Use-case Context) และผลกระทบต่อพนักงาน', checked: true },
+      { id: 'g5', pillar: 'PILLAR 02: MAP', item: 'รับฟังความคิดเห็นของผู้มีส่วนได้ส่วนเสีย (Stakeholders & Employee Voice)', checked: true },
+      { id: 'g6', pillar: 'PILLAR 02: MAP', item: 'ประเมินผลกระทบด้านแรงงานสัมพันธ์และกฎหมายแรงงานล่วงหน้า', checked: false },
+      { id: 'g7', pillar: 'PILLAR 03: MEASURE', item: 'ทดสอบอคติของอัลกอริทึม (Algorithmic Bias Audit) ในระบบคัดกรองและประเมิน', checked: true },
+      { id: 'g8', pillar: 'PILLAR 03: MEASURE', item: 'ตรวจสอบความเที่ยงตรง (Validity & Reliability) ของโมเดลเทียบกับผลงานจริง', checked: true },
+      { id: 'g9', pillar: 'PILLAR 03: MEASURE', item: 'ตรวจสอบการคุ้มครองข้อมูลส่วนบุคคล (PDPA / Privacy Impact Assessment)', checked: true },
+      { id: 'g10', pillar: 'PILLAR 04: MANAGE', item: 'วางระบบ Human-in-the-Loop ให้มนุษย์ทบทวนและยับยั้งผลลัพธ์ของ AI ได้', checked: true },
+      { id: 'g11', pillar: 'PILLAR 04: MANAGE', item: 'ติดตามประเมินผลโมเดลอย่างต่อเนื่อง (Continuous Monitoring & Drift Check)', checked: false },
+      { id: 'g12', pillar: 'PILLAR 04: MANAGE', item: 'มีช่องทางอุทธรณ์และแผนยกระดับการแก้ไขปัญหาฉุกเฉิน (Escalation Protocol)', checked: true }
+    ],
+    risks: [
+      { id: 'r1', title: 'Talent Turnover สูงในสายงาน Critical Digital Roles', likelihood: 'HIGH', impact: 'HIGH', plan: 'เร่งทำ Stay Interview, ปรับ Career Pathway และเปิด Internal Mobility ทันที' },
+      { id: 'r2', title: 'พนักงานต่อต้านการใช้ระบบ Digital HR / AI ใหม่ (Low Adoption)', likelihood: 'HIGH', impact: 'LOW', plan: 'ตั้ง Digital Champions ประจำแผนก สื่อสารประโยชน์ที่ช่วยลดงานซ้ำซ้อน' },
+      { id: 'r3', title: 'ความเสี่ยงข้อมูลส่วนบุคคลรั่วไหลหรือละเมิด PDPA จากการใช้ AI', likelihood: 'LOW', impact: 'HIGH', plan: 'กำหนดสิทธิ์การเข้าถึงข้อมูล (RBAC), ปิดบังข้อมูลระบุตัวตน (Anonymization) และทำแผน Contingency' },
+      { id: 'r4', title: 'ข้อมูลทักษะบางแผนกยังไม่อัปเดตเป็นปัจจุบัน', likelihood: 'LOW', impact: 'LOW', plan: 'เฝ้าระวังและให้พนักงานอัปเดต Skill Profile ทุกสิ้นไตรมาส' }
+    ],
+    canvas: {
+      challenge: 'องค์กรเติบโตรวดเร็ว (Scale-up 35% ต่อปี) แต่พนักงานขาดทักษะดิจิทัลเชิงลึก และอัตราการลาออก (Turnover) ของกลุ่ม Critical Talent สูงถึง 22%',
+      diagnosis: 'ข้อมูลที่ต้องใช้: Skills Inventory, Exit/Stay Interview, FTE Utilization | Skill Gap: Data Analytics, AI Workflow, Agile Leadership | Root Causes: งานล้นมือ (Overworked), ขาด Career Visibility และระบบงานเดิมมี Friction สูง',
+      intervention: 'Build: ตั้ง Digital Academy + Action Project | Buy: จ้าง Lead People Analytics & AI Specialist | Borrow: ผู้เชี่ยวชาญภายนอกช่วยโค้ชช่วงเปลี่ยนผ่าน | Bot: ใช้ AI ลดงานธุรการ HR และคัดกรองเบื้องต้น',
+      govRisk: 'ความเสี่ยงสำคัญ: อคติจาก AI (Bias) และการรั่วไหลของข้อมูลพนักงาน (Privacy) รวมถึงการต่อต้านการเปลี่ยนแปลง | การกำกับดูแล: ใช้หลัก Human-in-the-Loop และเปิดเผยเกณฑ์การประเมินอย่างโปร่งใส',
+      valueEvidence: '3 KPIs หลัก: (1) ลด Voluntary Turnover ของกลุ่ม Talent จาก 22% เหลือ <12% (2) เพิ่ม Internal Mobility & Skill Readiness เป็น 85% (3) ลด Time-to-Productivity ของพนักงานใหม่ลง 30%',
+      reasons: '3 เหตุผลเชิงกลยุทธ์: (1) ปิดช่องว่างทักษะได้เร็วกว่าการรอจ้างใหม่ทั้งหมด (2) รักษาความรู้หลักในองค์กรผ่าน Internal Mobility (3) ยกระดับการตัดสินใจด้วยข้อมูลจริง | วิธีพิสูจน์ผลลัพธ์: เปรียบเทียบ Pre/Post Pilot 90 วัน ระหว่างกลุ่มที่เข้าโปรแกรมกับ Baseline'
+    },
+    roadmap: [
+      {
+        phase: 'PHASE 1: 0–90 DAYS',
+        title: 'DIAGNOSE (วินิจฉัยและวางรากฐาน)',
+        color: 'indigo',
+        tasks: [
+          { id: 'rm1', text: 'วิเคราะห์ Business Pain Points และจุดคอขวดขององค์กร', done: true },
+          { id: 'rm2', text: 'ตรวจสอบความพร้อมของข้อมูล (Data Readiness & Skills Taxonomy)', done: true },
+          { id: 'rm3', text: 'ประเมินสมรรถนะทีม HR (5 Strategic Digital HR Roles)', done: true },
+          { id: 'rm4', text: 'จัดทำทะเบียนความเสี่ยง (Risk Inventory & PDPA/AI Baseline)', done: true }
         ]
       },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-          x: { stacked: true },
-          y: { stacked: true, title: { display: true, text: 'บาท / ลูกค้า' } }
-        }
-      }
-    });
-
-    // Revenue Breakdown Chart
-    new Chart(document.getElementById('revenueLeakChart'), {
-      type: 'doughnut',
-      data: {
-        labels: ['ยอดส่งมอบสำเร็จ (Net Sales)', 'สินค้าถูกส่งคืน/ยกเลิก', 'ต้นทุนส่วนลด/แคมเปญ'],
-        datasets: [{
-          data: [65, 20, 15],
-          backgroundColor: ['#10b981', '#f59e0b', '#ef4444']
-        }]
+      {
+        phase: 'PHASE 2: 91–180 DAYS',
+        title: 'PILOT (ทดลองนำร่องสร้างคุณค่าสูง)',
+        color: 'emerald',
+        tasks: [
+          { id: 'rm5', text: 'คัดเลือก 1–2 High-Value Use Cases (เช่น TA 4.0 & Reskilling Pathway)', done: true },
+          { id: 'rm6', text: 'ออกแบบกระบวนการ Human-in-the-Loop ร่วมกับผู้จัดการสายงาน', done: true },
+          { id: 'rm7', text: 'ดำเนินแผนขับเคลื่อนการยอมรับระบบ (Adoption & Change Plan)', done: false },
+          { id: 'rm8', text: 'เก็บข้อมูล Outcome Baseline เทียบก่อน–หลังการทดลองใช้', done: false }
+        ]
       },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: { position: 'bottom' }
-        }
+      {
+        phase: 'PHASE 3: 181–365 DAYS',
+        title: 'SCALE & GOVERN (ขยายผลและกำกับดูแลยั่งยืน)',
+        color: 'purple',
+        tasks: [
+          { id: 'rm9', text: 'เชื่อมโยงระบบข้อมูล HRIS, ATS, LMS และ Performance เข้าด้วยกัน', done: false },
+          { id: 'rm10', text: 'ปรับ Operating Model สู่ Skills-Based Organization เต็มรูปแบบ', done: false },
+          { id: 'rm11', text: 'แต่งตั้งคณะกรรมการ AI & Data Governance Board ประจำองค์กร', done: false },
+          { id: 'rm12', text: 'ประเมินผลลัพธ์ทางธุรกิจอย่างต่อเนื่อง (Continuous Evaluation)', done: false }
+        ]
       }
-    });
-  </script>
+    ]
+  };
+}
+
+let appState = loadState();
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      return Object.assign(getDefaultState(), parsed);
+    }
+  } catch (err) {
+    // Ignore storage errors in sandboxed iframe
+  }
+  return getDefaultState();
+}
+
+function saveState() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+  } catch (err) {
+    // Ignore storage errors in sandboxed iframe
+  }
+}
+
+function showToast(message, type) {
+  const container = document.getElementById('toastContainer');
+  if (!container) return;
+  const toast = document.createElement('div');
+  const bgClass = type === 'error' ? 'bg-rose-600' : type === 'warning' ? 'bg-amber-600' : 'bg-slate-900';
+  toast.className = `${bgClass} text-white text-xs font-medium px-4 py-2.5 rounded-xl shadow-lg flex items-center gap-2 transition-all duration-300`;
+  toast.innerHTML = `<span>✦</span><span>${escapeHtml(message)}</span>`;
+  container.appendChild(toast);
+  setTimeout(() => {
+    toast.style.opacity = '0';
+    setTimeout(() => toast.remove(), 300);
+  }, 2800);
+}
+
+function escapeHtml(str) {
+  return String(str || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+// ==================== NAVIGATION ====================
+function switchTab(tabId) {
+  const tabs = ['dashboard', 'workforce', 'ta', 'learning', 'ex', 'governance', 'workshop'];
+  tabs.forEach(t => {
+    const view = document.getElementById(`view-${t}`);
+    const btn = document.getElementById(`tabBtn-${t}`);
+    if (view) {
+      if (t === tabId) {
+        view.classList.remove('hidden');
+      } else {
+        view.classList.add('hidden');
+      }
+    }
+    if (btn) {
+      if (t === tabId) {
+        btn.classList.add('tab-btn-active');
+      } else {
+        btn.classList.remove('tab-btn-active');
+      }
+    }
+  });
+
+  // Resize or re-render charts when switching tabs
+  if (tabId === 'dashboard') {
+    renderDashboard();
+  } else if (tabId === 'workforce') {
+    renderWorkforceTab();
+  } else if (tabId === 'ta') {
+    renderTaPipeline();
+  } else if (tabId === 'learning') {
+    renderLearningTab();
+  } else if (tabId === 'ex') {
+    renderExTab();
+  } else if (tabId === 'governance') {
+    renderGovernanceTab();
+  } else if (tabId === 'workshop') {
+    renderWorkshopTab();
+  }
+}
+
+// ==================== GLOBAL SEARCH ====================
+function handleGlobalSearch(query) {
+  const panel = document.getElementById('globalSearchPanel');
+  const list = document.getElementById('globalSearchResultsList');
+  const countEl = document.getElementById('searchCountText');
+  const q = String(query || '').trim().toLowerCase();
+
+  if (!q) {
+    panel.classList.add('hidden');
+    return;
+  }
+
+  const results = [];
+
+  appState.fteDepartments.forEach(d => {
+    if (d.name.toLowerCase().includes(q)) {
+      results.push({ category: 'แผนก / FTE', title: d.name, detail: `Full-time ${d.fullTime} คน | เป้า Demand ${d.demandFte} FTE`, tab: 'workforce' });
+    }
+  });
+
+  appState.fourBPortfolio.forEach(item => {
+    if (item.skill.toLowerCase().includes(q) || item.strategy.toLowerCase().includes(q) || item.note.toLowerCase().includes(q)) {
+      results.push({ category: `กลยุทธ์ 4Bs (${item.strategy})`, title: item.skill, detail: item.note, tab: 'workforce' });
+    }
+  });
+
+  appState.candidates.forEach(c => {
+    if (c.name.toLowerCase().includes(q) || c.role.toLowerCase().includes(q) || c.stage.toLowerCase().includes(q)) {
+      results.push({ category: `ผู้สมัคร (${c.stage})`, title: `${c.name} — ${c.role}`, detail: `AI Match ${c.aiScore}% | Work Sample ${c.workSample}%`, tab: 'ta' });
+    }
+  });
+
+  appState.learningPathways.forEach(lp => {
+    if (lp.capability.toLowerCase().includes(q) || lp.targetGroup.toLowerCase().includes(q)) {
+      results.push({ category: 'Learning Pathway', title: lp.capability, detail: `${lp.targetGroup} (${lp.format})`, tab: 'learning' });
+    }
+  });
+
+  appState.risks.forEach(r => {
+    if (r.title.toLowerCase().includes(q) || r.plan.toLowerCase().includes(q)) {
+      results.push({ category: 'Risk Matrix', title: r.title, detail: r.plan, tab: 'governance' });
+    }
+  });
+
+  panel.classList.remove('hidden');
+  countEl.textContent = String(results.length);
+
+  if (results.length === 0) {
+    list.innerHTML = `<div class="col-span-full text-xs text-slate-500 py-2">ไม่พบข้อมูลที่ตรงกับ "${escapeHtml(query)}"</div>`;
+    return;
+  }
+
+  list.innerHTML = results.map(r => `
+    <div class="p-2.5 rounded-lg border border-slate-200 bg-slate-50 hover:bg-indigo-50/50 flex flex-col justify-between gap-1">
+      <div>
+        <span class="text-[10px] font-bold uppercase text-indigo-600">${escapeHtml(r.category)}</span>
+        <div class="text-xs font-semibold text-slate-900">${escapeHtml(r.title)}</div>
+        <div class="text-[11px] text-slate-600">${escapeHtml(r.detail)}</div>
+      </div>
+      <button type="button" onclick="jumpFromSearch('${r.tab}')" class="mt-1 self-start text-[11px] font-semibold text-indigo-700 hover:underline">เปิดดูในโมดูล →</button>
+    </div>
+  `).join('');
+}
+
+function jumpFromSearch(tabId) {
+  clearGlobalSearch();
+  switchTab(tabId);
+}
+
+function clearGlobalSearch() {
+  const input = document.getElementById('globalSearchInput');
+  const panel = document.getElementById('globalSearchPanel');
+  if (input) input.value = '';
+  if (panel) panel.classList.add('hidden');
+}
+
+// ==================== TAB 1: DASHBOARD & 5 ROLES ====================
+function computeFteTotals() {
+  const std = Number(appState.standardHours) || 160;
+  let totalAvail = 0;
+  let totalDemand = 0;
+  appState.fteDepartments.forEach(d => {
+    const avail = d.fullTime + (Number(d.partTimeHours) / std);
+    totalAvail += avail;
+    totalDemand += Number(d.demandFte);
+  });
+  return { totalAvail, totalDemand, gap: totalDemand - totalAvail };
+}
+
+function renderDashboard() {
+  // Update top KPIs
+  const fteTotals = computeFteTotals();
+  const kpiTotalFte = document.getElementById('kpiTotalFte');
+  const kpiFteGapBadge = document.getElementById('kpiFteGapBadge');
+  if (kpiTotalFte) {
+    kpiTotalFte.textContent = `${fteTotals.totalAvail.toFixed(1)} / ${fteTotals.totalDemand.toFixed(1)}`;
+  }
+  if (kpiFteGapBadge) {
+    const gapVal = fteTotals.gap;
+    kpiFteGapBadge.textContent = gapVal > 0 ? `ขาด ${gapVal.toFixed(1)} FTE` : gapVal < 0 ? `เกิน ${Math.abs(gapVal).toFixed(1)} FTE` : 'สมดุลพอดี';
+    kpiFteGapBadge.className = `text-xs font-semibold px-2 py-0.5 rounded-full ${gapVal > 0 ? 'bg-amber-50 text-amber-700' : gapVal < 0 ? 'bg-sky-50 text-sky-700' : 'bg-emerald-50 text-emerald-700'}`;
+  }
+
+  // Skill readiness KPI
+  const totalCur = appState.learningPathways.reduce((acc, p) => acc + Number(p.currentLv), 0);
+  const totalTgt = appState.learningPathways.reduce((acc, p) => acc + Number(p.targetLv), 0);
+  const readinessPct = totalTgt > 0 ? Math.round((totalCur / totalTgt) * 100) : 0;
+  const kpiSkillReadiness = document.getElementById('kpiSkillReadiness');
+  const kpiActivePathways = document.getElementById('kpiActivePathways');
+  if (kpiSkillReadiness) kpiSkillReadiness.textContent = `${readinessPct}%`;
+  if (kpiActivePathways) kpiActivePathways.textContent = `${appState.learningPathways.length} Pathways`;
+
+  // TA 4.0 KPI
+  const candCount = appState.candidates.length;
+  const avgAi = candCount > 0 ? Math.round(appState.candidates.reduce((a, c) => a + Number(c.aiScore), 0) / candCount) : 0;
+  const kpiCandidateCount = document.getElementById('kpiCandidateCount');
+  const kpiAvgAiMatch = document.getElementById('kpiAvgAiMatch');
+  if (kpiCandidateCount) kpiCandidateCount.textContent = `${candCount} คน`;
+  if (kpiAvgAiMatch) kpiAvgAiMatch.textContent = `AI Match เฉลี่ย ${avgAi}%`;
+
+  // Governance & Roadmap KPI
+  const govDone = appState.governanceChecks.filter(g => g.checked).length;
+  const govPct = Math.round((govDone / appState.governanceChecks.length) * 100);
+  const allTasks = appState.roadmap.flatMap(p => p.tasks);
+  const rmDone = allTasks.filter(t => t.done).length;
+  const rmPct = Math.round((rmDone / allTasks.length) * 100);
+  const kpiGovernanceScore = document.getElementById('kpiGovernanceScore');
+  const kpiRoadmapPct = document.getElementById('kpiRoadmapPct');
+  if (kpiGovernanceScore) kpiGovernanceScore.textContent = `${govPct}%`;
+  if (kpiRoadmapPct) kpiRoadmapPct.textContent = `Roadmap ${rmPct}%`;
+
+  // Render 5 Strategic Roles
+  const rolesContainer = document.getElementById('rolesListContainer');
+  if (rolesContainer) {
+    rolesContainer.innerHTML = appState.roles.map((r, idx) => `
+      <div class="p-3.5 rounded-xl border border-slate-200 bg-slate-50/70 hover:bg-white transition">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-1.5">
+          <div>
+            <span class="text-[11px] font-bold px-2 py-0.5 rounded bg-indigo-100 text-indigo-800 mr-1.5">${escapeHtml(r.code)}</span>
+            <span class="text-sm font-bold text-slate-900">${escapeHtml(r.title)}</span>
+          </div>
+          <span class="text-xs font-semibold text-indigo-700 bg-indigo-50 px-2.5 py-0.5 rounded-full border border-indigo-200">
+            ระดับ: ${Number(r.score).toFixed(1)} / 5.0
+          </span>
+        </div>
+        <p class="text-xs text-slate-600 mb-2">${escapeHtml(r.subtitle)} <span class="text-slate-400">(${escapeHtml(r.dimension)})</span></p>
+        <div class="flex items-center gap-3">
+          <input type="range" min="1" max="5" step="0.1" value="${r.score}" oninput="updateRoleScore(${idx}, this.value)" class="w-full accent-indigo-600 cursor-pointer">
+        </div>
+      </div>
+    `).join('');
+  }
+
+  updateRolesRadarAndDiagnostic();
+}
+
+function updateRoleScore(index, newVal) {
+  if (!appState.roles[index]) return;
+  appState.roles[index].score = Number(newVal);
+  saveState();
+  renderDashboard();
+}
+
+function updateRolesRadarAndDiagnostic() {
+  const avg = appState.roles.reduce((a, r) => a + Number(r.score), 0) / appState.roles.length;
+  const badge = document.getElementById('avgRoleScoreBadge');
+  if (badge) {
+    badge.textContent = `คะแนนเฉลี่ย: ${avg.toFixed(2)} / 5.0`;
+  }
+
+  const lowestRole = [...appState.roles].sort((a, b) => a.score - b.score)[0];
+  const diagBox = document.getElementById('roleDiagnosticBox');
+  if (diagBox && lowestRole) {
+    diagBox.innerHTML = `
+      <div class="font-bold text-indigo-900">ข้อเสนอแนะเชิงกลยุทธ์ (Role Maturity Insights):</div>
+      <div>• บทบาทที่ควรเร่งพัฒนาเป็นลำดับแรกคือ <strong>${escapeHtml(lowestRole.code)} ${escapeHtml(lowestRole.title)}</strong> (ปัจจุบัน ${lowestRole.score.toFixed(1)}/5.0)</div>
+      <div>• แนวทาง: ${escapeHtml(lowestRole.subtitle)} เพื่อยกระดับคุณภาพการตัดสินใจขององค์กร</div>
+    `;
+  }
+
+  const canvas = document.getElementById('rolesRadarChart');
+  if (!canvas || typeof Chart === 'undefined') return;
+
+  const labels = appState.roles.map(r => r.title);
+  const dataScores = appState.roles.map(r => Number(r.score));
+
+  if (rolesRadarChartInstance) {
+    rolesRadarChartInstance.data.labels = labels;
+    rolesRadarChartInstance.data.datasets[0].data = dataScores;
+    rolesRadarChartInstance.update();
+    return;
+  }
+
+  rolesRadarChartInstance = new Chart(canvas.getContext('2d'), {
+    type: 'radar',
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: 'ระดับสมรรถนะปัจจุบัน (Current)',
+          data: dataScores,
+          backgroundColor: 'rgba(79, 70, 229, 0.2)',
+          borderColor: '#4f46e5',
+          pointBackgroundColor: '#4f46e5',
+          borderWidth: 2
+        },
+        {
+          label: 'เป้าหมายมาตรฐาน (Target 5.0)',
+          data: [5, 5, 5, 5, 5],
+          backgroundColor: 'rgba(148, 163, 184, 0.08)',
+          borderColor: '#94a3b8',
+          borderDash: [4, 4],
+          pointRadius: 0,
+          borderWidth: 1.5
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        r: {
+          min: 0,
+          max: 5,
+          ticks: { stepSize: 1, font: { size: 10 } },
+          pointLabels: { font: { size: 11, family: 'Prompt, sans-serif' } }
+        }
+      },
+      plugins: {
+        legend: { position: 'bottom', labels: { font: { size: 11 } } }
+      }
+    }
+  });
+}
+
+// ==================== TAB 2: WORKFORCE PLANNING, FTE & 4Bs ====================
+function updateStandardHours(val) {
+  const num = Number(val);
+  if (num >= 80 && num <= 240) {
+    appState.standardHours = num;
+    saveState();
+    renderWorkforceTab();
+    renderDashboard();
+    showToast(`อัปเดตชั่วโมงมาตรฐานเป็น ${num} ชม./เดือนเรียบร้อยแล้ว`);
+  }
+}
+
+function handleAddFteDept(e) {
+  e.preventDefault();
+  const name = document.getElementById('fteDeptName').value.trim();
+  const fullTime = Number(document.getElementById('fteFullTimeCount').value) || 0;
+  const partTimeHours = Number(document.getElementById('ftePartTimeHours').value) || 0;
+  const demandFte = Number(document.getElementById('fteDemandTarget').value) || 1;
+  const revenueOutput = Number(document.getElementById('fteRevenueOutput').value) || 0;
+
+  if (!name) return;
+
+  appState.fteDepartments.push({
+    id: 'dept_' + Date.now(),
+    name,
+    fullTime,
+    partTimeHours,
+    demandFte,
+    revenueOutput
+  });
+
+  document.getElementById('fteDeptName').value = '';
+  saveState();
+  renderWorkforceTab();
+  renderDashboard();
+  showToast(`เพิ่มข้อมูลแผนก "${name}" ในตาราง FTE แล้ว`);
+}
+
+function deleteFteDept(id) {
+  appState.fteDepartments = appState.fteDepartments.filter(d => d.id !== id);
+  saveState();
+  renderWorkforceTab();
+  renderDashboard();
+  showToast('ลบรายการแผนกเรียบร้อยแล้ว');
+}
+
+function handleAddFourBItem(e) {
+  e.preventDefault();
+  const skill = document.getElementById('fourBSkillName').value.trim();
+  const strategy = document.getElementById('fourBType').value;
+  const criticality = document.getElementById('fourBCriticality').value;
+  if (!skill) return;
+
+  const strategyNotes = {
+    Build: 'พัฒนาบุคลากรภายในผ่าน Personalized Learning Pathway และ Action Project',
+    Buy: 'สรรหาบุคลากรที่มีทักษะพร้อมใช้งานผ่านระบบ Talent Acquisition 4.0',
+    Borrow: 'ดึงผู้เชี่ยวชาญภายนอก / Freelance / Partner ร่วมทำโปรเจกต์เฉพาะกิจ',
+    Bot: 'ประยุกต์ใช้ AI Agent / Automation เพื่อลดภาระงานซ้ำซ้อนและเพิ่มความแม่นยำ'
+  };
+
+  appState.fourBPortfolio.unshift({
+    id: 'fb_' + Date.now(),
+    skill,
+    strategy,
+    criticality,
+    note: strategyNotes[strategy] || ''
+  });
+
+  document.getElementById('fourBSkillName').value = '';
+  saveState();
+  renderWorkforceTab();
+  showToast(`เพิ่มกลยุทธ์ ${strategy} สำหรับทักษะ "${skill}" แล้ว`);
+}
+
+function deleteFourBItem(id) {
+  appState.fourBPortfolio = appState.fourBPortfolio.filter(i => i.id !== id);
+  saveState();
+  renderWorkforceTab();
+}
+
+function renderWorkforceTab() {
+  const stdInput = document.getElementById('standardHoursInput');
+  if (stdInput) stdInput.value = appState.standardHours;
+
+  const std = Number(appState.standardHours) || 160;
+  const tbody = document.getElementById('fteTableBody');
+  let totalAvail = 0;
+  let totalDemand = 0;
+  let totalRev = 0;
+
+  if (tbody) {
+    tbody.innerHTML = appState.fteDepartments.map(d => {
+      const availFte = d.fullTime + (Number(d.partTimeHours) / std);
+      const gap = Number(d.demandFte) - availFte;
+      const prodPerFte = availFte > 0 ? Math.round(Number(d.revenueOutput) / availFte) : 0;
+
+      totalAvail += availFte;
+      totalDemand += Number(d.demandFte);
+      totalRev += Number(d.revenueOutput);
+
+      let gapBadge = '';
+      if (gap > 0.2) {
+        gapBadge = `<span class="px-2 py-0.5 rounded-full bg-rose-50 text-rose-700 font-semibold">ขาด ${gap.toFixed(2)} FTE (Understaffed)</span>`;
+      } else if (gap < -0.2) {
+        gapBadge = `<span class="px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 font-semibold">เกิน ${Math.abs(gap).toFixed(2)} FTE (Overstaffed)</span>`;
+      } else {
+        gapBadge = `<span class="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-semibold">สมดุล (Optimal)</span>`;
+      }
+
+      return `
+        <tr class="hover:bg-slate-50">
+          <td class="py-2.5 px-3 font-medium text-slate-900">${escapeHtml(d.name)}</td>
+          <td class="py-2.5 px-2 text-center">${d.fullTime} คน</td>
+          <td class="py-2.5 px-2 text-center">${d.partTimeHours} ชม. (${(d.partTimeHours / std).toFixed(2)} FTE)</td>
+          <td class="py-2.5 px-2 text-center font-bold text-indigo-700">${availFte.toFixed(2)}</td>
+          <td class="py-2.5 px-2 text-center font-semibold">${Number(d.demandFte).toFixed(2)}</td>
+          <td class="py-2.5 px-2 text-center">${gapBadge}</td>
+          <td class="py-2.5 px-2 text-right font-medium text-slate-800">฿${prodPerFte.toLocaleString()}</td>
+          <td class="py-2.5 px-2 text-center">
+            <button type="button" onclick="deleteFteDept('${d.id}')" class="text-rose-600 hover:text-rose-800 font-medium px-2 py-0.5 rounded hover:bg-rose-50">ลบ</button>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  const summaryCard = document.getElementById('fteSummaryCard');
+  if (summaryCard) {
+    const netGap = totalDemand - totalAvail;
+    const avgProd = totalAvail > 0 ? Math.round(totalRev / totalAvail) : 0;
+    summaryCard.innerHTML = `
+      <div class="font-bold text-indigo-950">สรุปผลการวิเคราะห์ FTE ทั้งองค์กร (Ries, 2011):</div>
+      <div>• กำลังคนจริงรวม (Available FTE): <strong>${totalAvail.toFixed(2)} FTE</strong> | ความต้องการ (Demand FTE): <strong>${totalDemand.toFixed(2)} FTE</strong></div>
+      <div>• ช่องว่างเชิงปริมาณ (Quantity Gap): <strong>${netGap > 0 ? 'ขาดแคลน ' + netGap.toFixed(2) + ' FTE' : netGap < 0 ? 'กำลังคนเกิน ' + Math.abs(netGap).toFixed(2) + ' FTE' : 'สมดุลพอดี'}</strong></div>
+      <div>• ประสิทธิภาพผลผลิตเฉลี่ยต่อหัว (Productivity / FTE): <strong>฿${avgProd.toLocaleString()} / FTE</strong></div>
+    `;
+  }
+
+  // Render FTE Chart
+  const canvas = document.getElementById('fteBarChart');
+  if (canvas && typeof Chart !== 'undefined') {
+    const labels = appState.fteDepartments.map(d => d.name.length > 18 ? d.name.slice(0, 18) + '…' : d.name);
+    const availData = appState.fteDepartments.map(d => Number((d.fullTime + (d.partTimeHours / std)).toFixed(2)));
+    const demandData = appState.fteDepartments.map(d => Number(d.demandFte));
+
+    if (fteBarChartInstance) {
+      fteBarChartInstance.data.labels = labels;
+      fteBarChartInstance.data.datasets[0].data = availData;
+      fteBarChartInstance.data.datasets[1].data = demandData;
+      fteBarChartInstance.update();
+    } else {
+      fteBarChartInstance = new Chart(canvas.getContext('2d'), {
+        type: 'bar',
+        data: {
+          labels,
+          datasets: [
+            { label: 'Available FTE (มีอยู่จริง)', data: availData, backgroundColor: '#4f46e5', borderRadius: 6 },
+            { label: 'Demand FTE (เป้าหมาย)', data: demandData, backgroundColor: '#f59e0b', borderRadius: 6 }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { position: 'bottom', labels: { font: { size: 11 } } } },
+          scales: { y: { beginAtZero: true } }
+        }
+      });
+    }
+  }
+
+  // Render 4Bs Portfolio
+  const fourBContainer = document.getElementById('fourBListContainer');
+  if (fourBContainer) {
+    const badgeColors = {
+      Build: 'bg-indigo-100 text-indigo-800 border-indigo-200',
+      Buy: 'bg-emerald-100 text-emerald-800 border-emerald-200',
+      Borrow: 'bg-amber-100 text-amber-800 border-amber-200',
+      Bot: 'bg-purple-100 text-purple-800 border-purple-200'
+    };
+    fourBContainer.innerHTML = appState.fourBPortfolio.map(item => `
+      <div class="p-3 rounded-xl border border-slate-200 bg-white flex flex-col justify-between gap-2 shadow-sm">
+        <div>
+          <div class="flex items-center justify-between gap-2">
+            <span class="px-2 py-0.5 text-[11px] font-bold rounded border ${badgeColors[item.strategy] || 'bg-slate-100'}">${escapeHtml(item.strategy)}</span>
+            <span class="text-[11px] font-medium text-slate-500">ระดับ: ${escapeHtml(item.criticality)}</span>
+          </div>
+          <div class="text-xs font-bold text-slate-900 mt-1.5">${escapeHtml(item.skill)}</div>
+          <p class="text-[11px] text-slate-600 mt-0.5">${escapeHtml(item.note)}</p>
+        </div>
+        <div class="flex justify-end">
+          <button type="button" onclick="deleteFourBItem('${item.id}')" class="text-[11px] text-rose-600 hover:underline">ลบรายการ</button>
+        </div>
+      </div>
+    `).join('');
+  }
+}
+
+// ==================== TAB 3: TALENT ACQUISITION 4.0 ====================
+const TA_STAGES = ['ATTRACT', 'SCREEN', 'ASSESS', 'SELECT', 'ONBOARD'];
+
+function handleAddCandidate(e) {
+  e.preventDefault();
+  const name = document.getElementById('candName').value.trim();
+  const role = document.getElementById('candRole').value.trim();
+  const stage = document.getElementById('candStage').value;
+  const aiScore = Number(document.getElementById('candAiScore').value) || 80;
+  const workSample = Number(document.getElementById('candWorkSample').value) || 80;
+
+  if (!name || !role) return;
+
+  appState.candidates.unshift({
+    id: 'cand_' + Date.now(),
+    name,
+    role,
+    stage,
+    aiScore,
+    workSample,
+    calibrated: false
+  });
+
+  document.getElementById('candName').value = '';
+  document.getElementById('candRole').value = '';
+  saveState();
+  renderTaPipeline();
+  renderDashboard();
+  showToast(`เพิ่มผู้สมัคร "${name}" เข้าสู่ระบบ Decision System แล้ว`);
+}
+
+function advanceCandidateStage(id) {
+  const cand = appState.candidates.find(c => c.id === id);
+  if (!cand) return;
+  const idx = TA_STAGES.indexOf(cand.stage);
+  if (idx < TA_STAGES.length - 1) {
+    cand.stage = TA_STAGES[idx + 1];
+    saveState();
+    renderTaPipeline();
+    showToast(`เลื่อนขั้นตอนของ "${cand.name}" ไปยัง ${cand.stage} แล้ว`);
+  }
+}
+
+function openCalibrationModal(id) {
+  const cand = appState.candidates.find(c => c.id === id);
+  if (!cand) return;
+  activeCalibrationCandId = id;
+  const modal = document.getElementById('calibrationModal');
+  const title = document.getElementById('calModalTitle');
+  const body = document.getElementById('calModalBody');
+
+  const composite = Math.round((Number(cand.aiScore) * 0.45) + (Number(cand.workSample) * 0.55));
+  title.textContent = `Calibration & AI Governance: ${cand.name}`;
+  body.innerHTML = `
+    <div class="p-3 rounded-xl bg-indigo-50 border border-indigo-100 space-y-1">
+      <div class="font-bold text-indigo-950">ตำแหน่งที่สมัคร: ${escapeHtml(cand.role)} (Stage: ${escapeHtml(cand.stage)})</div>
+      <div>• คะแนน AI Skill Matching (45%): <strong>${cand.aiScore}%</strong></div>
+      <div>• คะแนน Structured Interview & Work Sample (55%): <strong>${cand.workSample}%</strong></div>
+      <div>• คะแนนถ่วงน้ำหนักรวม (Composite Decision Score): <strong class="text-indigo-700">${composite}%</strong></div>
+    </div>
+    <div class="space-y-1.5 pt-1">
+      <div class="font-bold text-slate-900">รายการตรวจสอบธรรมาภิบาลก่อนตัดสินใจ (HR Governance Check):</div>
+      <label class="flex items-center gap-2"><input type="checkbox" checked class="accent-indigo-600"> <span><strong>Bias Free:</strong> ตรวจสอบแล้วว่าคะแนน AI ไม่ได้เอนเอียงตามเพศ อายุ หรือสถาบัน</span></label>
+      <label class="flex items-center gap-2"><input type="checkbox" checked class="accent-indigo-600"> <span><strong>Validity:</strong> ผลทดสอบ Work Sample สอดคล้องกับทักษะที่ต้องใช้จริงในงาน</span></label>
+      <label class="flex items-center gap-2"><input type="checkbox" checked class="accent-indigo-600"> <span><strong>Explainability & Accountability:</strong> คณะกรรมการสัมภาษณ์สามารถอธิบายเหตุผลการคัดเลือกได้ชัดเจน</span></label>
+    </div>
+  `;
+  modal.classList.remove('hidden');
+}
+
+function closeCalibrationModal() {
+  const modal = document.getElementById('calibrationModal');
+  if (modal) modal.classList.add('hidden');
+  activeCalibrationCandId = null;
+}
+
+function approveCandidateCalibration() {
+  if (!activeCalibrationCandId) return;
+  const cand = appState.candidates.find(c => c.id === activeCalibrationCandId);
+  if (cand) {
+    cand.calibrated = true;
+    saveState();
+    renderTaPipeline();
+    showToast(`ยืนยันผล Calibration และ Human Accountability สำหรับ "${cand.name}" เรียบร้อยแล้ว`);
+  }
+  closeCalibrationModal();
+}
+
+function deleteCandidate(id) {
+  appState.candidates = appState.candidates.filter(c => c.id !== id);
+  saveState();
+  renderTaPipeline();
+  renderDashboard();
+}
+
+function renderTaPipeline() {
+  const filterEl = document.getElementById('taStageFilter');
+  const filterVal = filterEl ? filterEl.value : 'ALL';
+  const grid = document.getElementById('taCandidatesGrid');
+  if (!grid) return;
+
+  const filtered = filterVal === 'ALL' ? appState.candidates : appState.candidates.filter(c => c.stage === filterVal);
+
+  if (filtered.length === 0) {
+    grid.innerHTML = `<div class="col-span-full text-center py-8 text-xs text-slate-500 bg-slate-50 rounded-xl border border-dashed border-slate-300">ไม่มีผู้สมัครในขั้นตอนนี้</div>`;
+    return;
+  }
+
+  grid.innerHTML = filtered.map(c => {
+    const composite = Math.round((Number(c.aiScore) * 0.45) + (Number(c.workSample) * 0.55));
+    const canAdvance = TA_STAGES.indexOf(c.stage) < TA_STAGES.length - 1;
+    return `
+      <div class="p-4 rounded-xl border border-slate-200 bg-white shadow-sm flex flex-col justify-between gap-3 card-hover">
+        <div>
+          <div class="flex items-center justify-between gap-2">
+            <span class="px-2.5 py-0.5 text-[11px] font-bold rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200">${escapeHtml(c.stage)}</span>
+            ${c.calibrated
+              ? '<span class="px-2 py-0.5 text-[10px] font-semibold rounded bg-emerald-50 text-emerald-700 border border-emerald-200">✓ Human Calibrated</span>'
+              : '<span class="px-2 py-0.5 text-[10px] font-semibold rounded bg-amber-50 text-amber-700 border border-amber-200">รอ Calibration</span>'}
+          </div>
+          <h4 class="text-sm font-bold text-slate-900 mt-2">${escapeHtml(c.name)}</h4>
+          <p class="text-xs text-slate-500">${escapeHtml(c.role)}</p>
+
+          <div class="mt-3 grid grid-cols-3 gap-2 text-center bg-slate-50 p-2 rounded-lg border border-slate-100">
+            <div>
+              <div class="text-[10px] text-slate-500">AI Match</div>
+              <div class="text-xs font-bold text-indigo-700">${c.aiScore}%</div>
+            </div>
+            <div>
+              <div class="text-[10px] text-slate-500">Work Sample</div>
+              <div class="text-xs font-bold text-emerald-700">${c.workSample}%</div>
+            </div>
+            <div>
+              <div class="text-[10px] text-slate-500">Decision Score</div>
+              <div class="text-xs font-bold text-slate-900">${composite}%</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-between gap-1.5 pt-2 border-t border-slate-100">
+          <button type="button" onclick="openCalibrationModal('${c.id}')" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-semibold">
+            ตรวจสอบ Bias / Calibrate
+          </button>
+          <div class="flex items-center gap-1">
+            ${canAdvance ? `<button type="button" onclick="advanceCandidateStage('${c.id}')" class="px-2.5 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-[11px] font-semibold">เลื่อนขั้น →</button>` : ''}
+            <button type="button" onclick="deleteCandidate('${c.id}')" class="px-2 py-1 rounded-lg text-rose-600 hover:bg-rose-50 text-[11px]">ลบ</button>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+// ==================== TAB 4: LEARNING & RESKILLING ARCHITECTURE ====================
+function handleAddLearningPathway(e) {
+  e.preventDefault();
+  const capability = document.getElementById('learnCapName').value.trim();
+  const targetGroup = document.getElementById('learnTargetGroup').value.trim();
+  const format = document.getElementById('learnFormat').value;
+  const currentLv = Number(document.getElementById('learnCurrentLv').value) || 2.0;
+  const targetLv = Number(document.getElementById('learnTargetLv').value) || 4.5;
+
+  if (!capability || !targetGroup) return;
+
+  appState.learningPathways.unshift({
+    id: 'lp_' + Date.now(),
+    capability,
+    targetGroup,
+    format,
+    currentLv,
+    targetLv,
+    kolbStage: 'Practice & Evidence: กำลังสร้างชิ้นงานจริง (Action Project & Portfolio)',
+    portfolioReady: false
+  });
+
+  document.getElementById('learnCapName').value = '';
+  document.getElementById('learnTargetGroup').value = '';
+  saveState();
+  renderLearningTab();
+  renderDashboard();
+  showToast(`เพิ่ม Learning Pathway "${capability}" เรียบร้อยแล้ว`);
+}
+
+function togglePortfolioEvidence(id) {
+  const item = appState.learningPathways.find(p => p.id === id);
+  if (!item) return;
+  item.portfolioReady = !item.portfolioReady;
+  if (item.portfolioReady) {
+    item.currentLv = Math.min(item.targetLv, Number((item.currentLv + 0.8).toFixed(1)));
+    item.kolbStage = 'Business Outcome: ผ่านการประเมิน Portfolio และเกิดผลลัพธ์ในงานจริง (Kolb, 1984)';
+  }
+  saveState();
+  renderLearningTab();
+  renderDashboard();
+  showToast('อัปเดตสถานะ Portfolio & Business Impact แล้ว');
+}
+
+function deleteLearningPathway(id) {
+  appState.learningPathways = appState.learningPathways.filter(p => p.id !== id);
+  saveState();
+  renderLearningTab();
+  renderDashboard();
+}
+
+function renderLearningTab() {
+  const container = document.getElementById('learningCardsContainer');
+  if (container) {
+    container.innerHTML = appState.learningPathways.map(lp => {
+      const gap = (Number(lp.targetLv) - Number(lp.currentLv)).toFixed(1);
+      return `
+        <div class="p-4 rounded-xl border border-slate-200 bg-white shadow-sm space-y-2.5">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <span class="px-2 py-0.5 text-[10px] font-bold rounded bg-indigo-50 text-indigo-700 border border-indigo-200">${escapeHtml(lp.format)}</span>
+              <h4 class="text-sm font-bold text-slate-900 mt-1">${escapeHtml(lp.capability)}</h4>
+              <p class="text-xs text-slate-500">กลุ่มเป้าหมาย: ${escapeHtml(lp.targetGroup)}</p>
+            </div>
+            <div class="text-right">
+              <div class="text-xs font-bold text-indigo-700">Current ${lp.currentLv} → Target ${lp.targetLv}</div>
+              <div class="text-[11px] text-amber-700 font-medium">Skill Gap: ${gap > 0 ? gap : '0.0'} คะแนน</div>
+            </div>
+          </div>
+
+          <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-200 text-xs text-slate-700 flex items-center justify-between gap-2">
+            <span><strong>Kolb & Impact Chain:</strong> ${escapeHtml(lp.kolbStage)}</span>
+          </div>
+
+          <div class="flex items-center justify-between pt-1">
+            <button type="button" onclick="togglePortfolioEvidence('${lp.id}')" class="px-3 py-1 rounded-lg text-xs font-semibold ${lp.portfolioReady ? 'bg-emerald-100 text-emerald-800' : 'bg-indigo-600 text-white hover:bg-indigo-700'}">
+              ${lp.portfolioReady ? '✓ มีผลลัพธ์ Portfolio & Business Impact แล้ว' : 'ยืนยันผลปฏิบัติจริง + Portfolio'}
+            </button>
+            <button type="button" onclick="deleteLearningPathway('${lp.id}')" class="text-xs text-rose-600 hover:underline">ลบ</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  const canvas = document.getElementById('skillGapChart');
+  if (canvas && typeof Chart !== 'undefined') {
+    const labels = appState.learningPathways.map(p => p.capability.length > 20 ? p.capability.slice(0, 20) + '…' : p.capability);
+    const curData = appState.learningPathways.map(p => Number(p.currentLv));
+    const tgtData = appState.learningPathways.map(p => Number(p.targetLv));
+
+    if (skillGapChartInstance) {
+      skillGapChartInstance.data.labels = labels;
+      skillGapChartInstance.data.datasets[0].data = curData;
+      skillGapChartInstance.data.datasets[1].data = tgtData;
+      skillGapChartInstance.update();
+    } else {
+      skillGapChartInstance = new Chart(canvas.getContext('2d'), {
+        type: 'bar',
+        data: {
+          labels,
+          datasets: [
+            { label: 'ระดับทักษะปัจจุบัน (Current Level)', data: curData, backgroundColor: '#6366f1', borderRadius: 6 },
+            { label: 'ระดับทักษะเป้าหมาย (Target Capability)', data: tgtData, backgroundColor: '#10b981', borderRadius: 6 }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: { y: { min: 0, max: 5 } },
+          plugins: { legend: { position: 'bottom', labels: { font: { size: 11 } } } }
+        }
+      });
+    }
+  }
+}
+
+// ==================== TAB 5: PERFORMANCE + EMPLOYEE EXPERIENCE (EX) ====================
+function selectExStage(stage) {
+  activeExStage = stage;
+  const stages = ['JOIN', 'PERFORM', 'GROW', 'ENGAGE', 'MOVE'];
+  stages.forEach(s => {
+    const btn = document.getElementById(`exStageBtn-${s}`);
+    if (btn) {
+      if (s === stage) {
+        btn.className = 'ex-stage-btn p-3 rounded-xl border border-indigo-500 bg-indigo-50 text-left transition';
+      } else {
+        btn.className = 'ex-stage-btn p-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-left transition';
+      }
+    }
+  });
+  const stageSelect = document.getElementById('exInputStage');
+  if (stageSelect) stageSelect.value = stage;
+  renderExTab();
+}
+
+function handleAddExItem(e) {
+  e.preventDefault();
+  const stage = document.getElementById('exInputStage').value;
+  const friction = document.getElementById('exInputFriction').value.trim();
+  const decision = document.getElementById('exInputDecision').value.trim();
+  const personalize = document.getElementById('exInputPersonalize').value.trim();
+  const human = document.getElementById('exInputHuman').value.trim();
+
+  if (!friction || !decision) return;
+
+  appState.exItems.push({
+    id: 'ex_' + Date.now(),
+    stage,
+    friction,
+    decision,
+    personalize,
+    human
+  });
+
+  document.getElementById('exInputFriction').value = '';
+  document.getElementById('exInputDecision').value = '';
+  document.getElementById('exInputPersonalize').value = '';
+  document.getElementById('exInputHuman').value = '';
+  activeExStage = stage;
+  saveState();
+  selectExStage(stage);
+  showToast(`บันทึกการออกแบบ EX สำหรับขั้นตอน ${stage} แล้ว`);
+}
+
+function deleteExItem(id) {
+  appState.exItems = appState.exItems.filter(i => i.id !== id);
+  saveState();
+  renderExTab();
+}
+
+function renderExTab() {
+  const detailBox = document.getElementById('exStageDetailBox');
+  if (!detailBox) return;
+
+  const items = appState.exItems.filter(i => i.stage === activeExStage);
+
+  detailBox.innerHTML = `
+    <div class="flex items-center justify-between">
+      <h3 class="text-sm font-bold text-indigo-950">การวิเคราะห์ 4 คำถามเชิงออกแบบ (Design Questions) — ขั้นตอน: ${escapeHtml(activeExStage)}</h3>
+      <span class="text-xs text-slate-500">${items.length} รายการออกแบบ</span>
+    </div>
+    <div class="grid grid-cols-1 gap-3">
+      ${items.map(item => `
+        <div class="p-4 rounded-xl bg-white border border-slate-200 shadow-sm space-y-2">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+            <div class="p-2.5 rounded-lg bg-rose-50/60 border border-rose-100">
+              <div class="font-bold text-rose-800">1. Where is the friction?</div>
+              <p class="text-slate-700 mt-1">${escapeHtml(item.friction)}</p>
+            </div>
+            <div class="p-2.5 rounded-lg bg-sky-50/60 border border-sky-100">
+              <div class="font-bold text-sky-800">2. What decision faster/better?</div>
+              <p class="text-slate-700 mt-1">${escapeHtml(item.decision)}</p>
+            </div>
+            <div class="p-2.5 rounded-lg bg-indigo-50/60 border border-indigo-100">
+              <div class="font-bold text-indigo-800">3. What should be personalized?</div>
+              <p class="text-slate-700 mt-1">${escapeHtml(item.personalize)}</p>
+            </div>
+            <div class="p-2.5 rounded-lg bg-emerald-50/60 border border-emerald-100">
+              <div class="font-bold text-emerald-800">4. What must remain human?</div>
+              <p class="text-slate-700 mt-1">${escapeHtml(item.human)}</p>
+            </div>
+          </div>
+          <div class="flex justify-end">
+            <button type="button" onclick="deleteExItem('${item.id}')" class="text-[11px] text-rose-600 hover:underline">ลบรายการนี้</button>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+// ==================== TAB 6: AI GOVERNANCE & RISK MATRIX ====================
+function toggleGovCheck(id) {
+  const item = appState.governanceChecks.find(g => g.id === id);
+  if (!item) return;
+  item.checked = !item.checked;
+  saveState();
+  renderGovernanceTab();
+  renderDashboard();
+}
+
+function handleAddRiskItem(e) {
+  e.preventDefault();
+  const title = document.getElementById('riskTitleInput').value.trim();
+  const likelihood = document.getElementById('riskLikelihoodInput').value;
+  const impact = document.getElementById('riskImpactInput').value;
+  const plan = document.getElementById('riskPlanInput').value.trim();
+
+  if (!title || !plan) return;
+
+  appState.risks.push({
+    id: 'risk_' + Date.now(),
+    title,
+    likelihood,
+    impact,
+    plan
+  });
+
+  document.getElementById('riskTitleInput').value = '';
+  document.getElementById('riskPlanInput').value = '';
+  saveState();
+  renderGovernanceTab();
+  showToast('เพิ่มรายการความเสี่ยงลงใน Risk Matrix 2×2 แล้ว');
+}
+
+function deleteRiskItem(id) {
+  appState.risks = appState.risks.filter(r => r.id !== id);
+  saveState();
+  renderGovernanceTab();
+}
+
+function renderGovernanceTab() {
+  const govDone = appState.governanceChecks.filter(g => g.checked).length;
+  const govPct = Math.round((govDone / appState.governanceChecks.length) * 100);
+  const badge = document.getElementById('govChecklistBadge');
+  if (badge) badge.textContent = `${govPct}% (${govDone}/${appState.governanceChecks.length})`;
+
+  const pillars = ['PILLAR 01: GOVERN', 'PILLAR 02: MAP', 'PILLAR 03: MEASURE', 'PILLAR 04: MANAGE'];
+  const pillarSubtitles = {
+    'PILLAR 01: GOVERN': 'นโยบาย • บทบาท • Accountability',
+    'PILLAR 02: MAP': 'บริบท • Stakeholders • Impacts',
+    'PILLAR 03: MEASURE': 'Bias • Validity • Privacy • Reliability',
+    'PILLAR 04: MANAGE': 'Controls • Monitoring • Escalation'
+  };
+
+  const govContainer = document.getElementById('govPillarsContainer');
+  if (govContainer) {
+    govContainer.innerHTML = pillars.map(p => {
+      const items = appState.governanceChecks.filter(g => g.pillar === p);
+      return `
+        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2.5">
+          <div>
+            <div class="text-xs font-bold text-indigo-800">${escapeHtml(p)}</div>
+            <div class="text-[11px] text-slate-500">${escapeHtml(pillarSubtitles[p])}</div>
+          </div>
+          <div class="space-y-2">
+            ${items.map(i => `
+              <label class="flex items-start gap-2 text-xs text-slate-700 cursor-pointer">
+                <input type="checkbox" ${i.checked ? 'checked' : ''} onchange="toggleGovCheck('${i.id}')" class="mt-0.5 accent-indigo-600">
+                <span class="${i.checked ? 'line-through text-slate-400' : 'font-medium text-slate-800'}">${escapeHtml(i.item)}</span>
+              </label>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // Render 2x2 Risk Matrix (Slide 10)
+  const quadrants = [
+    { key: 'HIGH_HIGH', like: 'HIGH', imp: 'HIGH', title: 'สูง × สูง (High × High)', subtitle: 'เร่งวางแผนตอบสนองและติดตามใกล้ชิด', color: 'bg-rose-50 border-rose-200 text-rose-900' },
+    { key: 'HIGH_LOW', like: 'HIGH', imp: 'LOW', title: 'สูง × ต่ำ (High × Low)', subtitle: 'ลดโอกาสเกิดและมีแผนสำรอง', color: 'bg-amber-50 border-amber-200 text-amber-900' },
+    { key: 'LOW_HIGH', like: 'LOW', imp: 'HIGH', title: 'ต่ำ × สูง (Low × High)', subtitle: 'เตรียม Contingency หากเกิดเหตุ', color: 'bg-sky-50 border-sky-200 text-sky-900' },
+    { key: 'LOW_LOW', like: 'LOW', imp: 'LOW', title: 'ต่ำ × ต่ำ (Low × Low)', subtitle: 'เฝ้าระวังและบันทึกไว้', color: 'bg-emerald-50 border-emerald-200 text-emerald-900' }
+  ];
+
+  const matrixGrid = document.getElementById('riskMatrixGrid');
+  if (matrixGrid) {
+    matrixGrid.innerHTML = quadrants.map(q => {
+      const qRisks = appState.risks.filter(r => r.likelihood === q.like && r.impact === q.imp);
+      return `
+        <div class="p-3.5 rounded-xl border ${q.color} space-y-2">
+          <div>
+            <div class="text-xs font-bold">${escapeHtml(q.title)}</div>
+            <div class="text-[11px] opacity-80">${escapeHtml(q.subtitle)}</div>
+          </div>
+          <div class="space-y-1.5">
+            ${qRisks.length === 0 ? '<div class="text-[11px] opacity-60 italic">ไม่มีรายการความเสี่ยงในช่องนี้</div>' : qRisks.map(r => `
+              <div class="p-2 rounded-lg bg-white/90 border border-black/5 text-slate-800 text-[11px] space-y-0.5">
+                <div class="font-bold flex items-center justify-between gap-1">
+                  <span>${escapeHtml(r.title)}</span>
+                  <button type="button" onclick="deleteRiskItem('${r.id}')" class="text-rose-600 hover:underline shrink-0">ลบ</button>
+                </div>
+                <div class="text-slate-600">แผน: ${escapeHtml(r.plan)}</div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+}
+
+// ==================== TAB 7: MBA WORKSHOP CANVAS & 90-180-365 ROADMAP ====================
+function renderWorkshopTab() {
+  const c = appState.canvas;
+  const f1 = document.getElementById('canvasChallenge');
+  const f2 = document.getElementById('canvasDiagnosis');
+  const f3 = document.getElementById('canvasIntervention');
+  const f4 = document.getElementById('canvasGovRisk');
+  const f5 = document.getElementById('canvasValueEvidence');
+  const f6 = document.getElementById('canvasReasons');
+
+  if (f1) f1.value = c.challenge;
+  if (f2) f2.value = c.diagnosis;
+  if (f3) f3.value = c.intervention;
+  if (f4) f4.value = c.govRisk;
+  if (f5) f5.value = c.valueEvidence;
+  if (f6) f6.value = c.reasons;
+
+  const rmGrid = document.getElementById('roadmapPhasesGrid');
+  const allTasks = appState.roadmap.flatMap(p => p.tasks);
+  const doneCount = allTasks.filter(t => t.done).length;
+  const overallPct = Math.round((doneCount / allTasks.length) * 100);
+
+  const badge = document.getElementById('roadmapOverallBadge');
+  if (badge) badge.textContent = `ความคืบหน้ารวม: ${overallPct}% (${doneCount}/${allTasks.length} กิจกรรม)`;
+
+  if (rmGrid) {
+    rmGrid.innerHTML = appState.roadmap.map((phase, pIdx) => {
+      const pDone = phase.tasks.filter(t => t.done).length;
+      const pPct = Math.round((pDone / phase.tasks.length) * 100);
+      return `
+        <div class="p-4 rounded-xl border border-slate-200 bg-slate-50 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] font-bold px-2 py-0.5 rounded bg-indigo-100 text-indigo-800">${escapeHtml(phase.phase)}</span>
+            <span class="text-xs font-bold text-slate-700">${pPct}%</span>
+          </div>
+          <h4 class="text-sm font-bold text-slate-900">${escapeHtml(phase.title)}</h4>
+          <div class="w-full h-1.5 rounded-full bg-slate-200 overflow-hidden">
+            <div class="h-full bg-indigo-600 transition-all" style="width: ${pPct}%"></div>
+          </div>
+          <div class="space-y-2 pt-1">
+            ${phase.tasks.map((t, tIdx) => `
+              <label class="flex items-start gap-2 text-xs text-slate-700 cursor-pointer">
+                <input type="checkbox" ${t.done ? 'checked' : ''} onchange="toggleRoadmapTask(${pIdx}, ${tIdx})" class="mt-0.5 accent-indigo-600">
+                <span class="${t.done ? 'line-through text-slate-400' : 'font-medium text-slate-800'}">${escapeHtml(t.text)}</span>
+              </label>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+}
+
+function saveCanvasFromInputs() {
+  appState.canvas = {
+    challenge: document.getElementById('canvasChallenge').value,
+    diagnosis: document.getElementById('canvasDiagnosis').value,
+    intervention: document.getElementById('canvasIntervention').value,
+    govRisk: document.getElementById('canvasGovRisk').value,
+    valueEvidence: document.getElementById('canvasValueEvidence').value,
+    reasons: document.getElementById('canvasReasons').value
+  };
+  saveState();
+  showToast('บันทึกข้อมูล MBA Human Capital Innovation Canvas เรียบร้อยแล้ว');
+}
+
+function copyCanvasSummary() {
+  saveCanvasFromInputs();
+  const c = appState.canvas;
+  const summaryText = [
+    '=== MBA DIGITAL HR SOLUTION CANVAS ===',
+    `01 Business Challenge: ${c.challenge}`,
+    `02 Human Capital Diagnosis: ${c.diagnosis}`,
+    `03 Intervention Portfolio: ${c.intervention}`,
+    `04 Governance & Risk: ${c.govRisk}`,
+    `05 Value & Evidence (KPIs): ${c.valueEvidence}`,
+    `06 Strategic Reasons & Proof: ${c.reasons}`
+  ].join('\n\n');
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(summaryText).then(() => {
+      showToast('คัดลอกสรุป 1-Page Canvas ลงในคลิปบอร์ดแล้ว');
+    }).catch(() => fallbackCopyText(summaryText));
+  } else {
+    fallbackCopyText(summaryText);
+  }
+}
+
+function fallbackCopyText(text) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  document.body.appendChild(ta);
+  ta.select();
+  try {
+    document.execCommand('copy');
+    showToast('คัดลอกสรุป 1-Page Canvas ลงในคลิปบอร์ดแล้ว');
+  } catch (e) {
+    showToast('ไม่สามารถคัดลอกอัตโนมัติได้', 'warning');
+  }
+  ta.remove();
+}
+
+function toggleRoadmapTask(pIdx, tIdx) {
+  const task = appState.roadmap[pIdx] && appState.roadmap[pIdx].tasks[tIdx];
+  if (!task) return;
+  task.done = !task.done;
+  saveState();
+  renderWorkshopTab();
+  renderDashboard();
+}
+
+// ==================== EXPORT & RESET ====================
+function exportAllDataJson() {
+  const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(appState, null, 2));
+  const dlAnchor = document.createElement('a');
+  dlAnchor.setAttribute('href', dataStr);
+  dlAnchor.setAttribute('download', 'digital_hr_4_0_data.json');
+  document.body.appendChild(dlAnchor);
+  dlAnchor.click();
+  dlAnchor.remove();
+  showToast('ดาวน์โหลดไฟล์ข้อมูลระบบ Digital HR (JSON) เรียบร้อยแล้ว');
+}
+
+function openResetModal() {
+  const m = document.getElementById('resetConfirmModal');
+  if (m) m.classList.remove('hidden');
+}
+
+function closeResetModal() {
+  const m = document.getElementById('resetConfirmModal');
+  if (m) m.classList.add('hidden');
+}
+
+function confirmResetAllData() {
+  appState = getDefaultState();
+  saveState();
+  closeResetModal();
+  renderDashboard();
+  renderWorkforceTab();
+  renderTaPipeline();
+  renderLearningTab();
+  renderExTab();
+  renderGovernanceTab();
+  renderWorkshopTab();
+  showToast('รีเซ็ตข้อมูลทั้งหมดกลับเป็นค่าเริ่มต้นเรียบร้อยแล้ว');
+}
+
+// ==================== INITIALIZATION ====================
+window.addEventListener('DOMContentLoaded', () => {
+  if (typeof lucide !== 'undefined') {
+    lucide.createIcons();
+  }
+  renderDashboard();
+  renderWorkforceTab();
+  renderTaPipeline();
+  renderLearningTab();
+  renderExTab();
+  renderGovernanceTab();
+  renderWorkshopTab();
+});
+
+</script>
 </body>
 </html>
