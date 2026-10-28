@@ -112,6 +112,22 @@ body {
           <i data-lucide="compass" class="w-4 h-4"></i>
           <span>1. ภาพรวม & 5 บทบาท HR</span>
         </button>
+        <button type="button" id="tabBtn-hris" onclick="switchTab('hris')" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-medium whitespace-nowrap flex items-center gap-2 text-slate-600 hover:bg-slate-200/60 transition">
+          <i data-lucide="id-card" class="w-4 h-4"></i>
+          <span>ทะเบียนพนักงาน (HRIS)</span>
+        </button>
+        <button type="button" id="tabBtn-attendance" onclick="switchTab('attendance')" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-medium whitespace-nowrap flex items-center gap-2 text-slate-600 hover:bg-slate-200/60 transition">
+          <i data-lucide="calendar-clock" class="w-4 h-4"></i>
+          <span>เวลาทำงาน & อนุมัติลา</span>
+        </button>
+        <button type="button" id="tabBtn-payroll" onclick="switchTab('payroll')" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-medium whitespace-nowrap flex items-center gap-2 text-slate-600 hover:bg-slate-200/60 transition">
+          <i data-lucide="banknote" class="w-4 h-4"></i>
+          <span>เงินเดือน & สลิป (Payroll)</span>
+        </button>
+        <button type="button" id="tabBtn-welfare" onclick="switchTab('welfare')" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-medium whitespace-nowrap flex items-center gap-2 text-slate-600 hover:bg-slate-200/60 transition">
+          <i data-lucide="gift" class="w-4 h-4"></i>
+          <span>สวัสดิการ & พ้นสภาพ</span>
+        </button>
         <button type="button" id="tabBtn-workforce" onclick="switchTab('workforce')" class="tab-btn px-3.5 py-2 rounded-lg text-xs sm:text-sm font-medium whitespace-nowrap flex items-center gap-2 text-slate-600 hover:bg-slate-200/60 transition">
           <i data-lucide="calculator" class="w-4 h-4"></i>
           <span>2. กำลังคน, FTE & 4Bs</span>
@@ -159,6 +175,63 @@ body {
 
     <!-- ==================== TAB 1: DASHBOARD & 5 STRATEGIC ROLES ==================== -->
     <section id="view-dashboard" class="tab-view space-y-6">
+      <!-- HR All-in-One Operational Command Center -->
+      <div class="bg-white rounded-2xl p-5 border border-indigo-200 shadow-sm space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-indigo-600">All-in-One HR Workspace • ครบทุกหน้าที่ของคนทำงาน HR</span>
+            <h2 class="text-base sm:text-lg font-bold text-slate-900">ศูนย์ปฏิบัติการงานทรัพยากรบุคคลครบวงจร (HR Operations & Strategic Command Center)</h2>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <button type="button" onclick="switchTab('hris')" class="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold">+ เพิ่มพนักงานใหม่</button>
+            <button type="button" onclick="switchTab('attendance')" class="px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-white text-xs font-semibold">อนุมัติใบลา (<span id="dashPendingLeaveCount">0</span>)</button>
+            <button type="button" onclick="switchTab('payroll')" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold">คำนวณเงินเดือน & ออกสลิป</button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2.5">
+          <button type="button" onclick="switchTab('hris')" class="p-3 rounded-xl border border-slate-200 bg-slate-50/70 hover:bg-indigo-50 hover:border-indigo-300 text-left transition">
+            <div class="text-xs font-bold text-indigo-700">1. ทะเบียนประวัติ</div>
+            <div id="dashCardEmpCount" class="text-sm font-bold text-slate-900 mt-0.5">0 คน</div>
+            <div class="text-[10px] text-slate-500">Core HRIS & หนังสือรับรอง</div>
+          </button>
+          <button type="button" onclick="switchTab('attendance')" class="p-3 rounded-xl border border-slate-200 bg-slate-50/70 hover:bg-indigo-50 hover:border-indigo-300 text-left transition">
+            <div class="text-xs font-bold text-amber-700">2. เวลา & ใบลา</div>
+            <div id="dashCardLeaveCount" class="text-sm font-bold text-slate-900 mt-0.5">0 รออนุมัติ</div>
+            <div class="text-[10px] text-slate-500">Time, OT & Leave</div>
+          </button>
+          <button type="button" onclick="switchTab('payroll')" class="p-3 rounded-xl border border-slate-200 bg-slate-50/70 hover:bg-indigo-50 hover:border-indigo-300 text-left transition">
+            <div class="text-xs font-bold text-emerald-700">3. เงินเดือน & ภาษี</div>
+            <div id="dashCardPayrollTotal" class="text-sm font-bold text-slate-900 mt-0.5">฿0</div>
+            <div class="text-[10px] text-slate-500">Payroll, SSO & e-Payslip</div>
+          </button>
+          <button type="button" onclick="switchTab('welfare')" class="p-3 rounded-xl border border-slate-200 bg-slate-50/70 hover:bg-indigo-50 hover:border-indigo-300 text-left transition">
+            <div class="text-xs font-bold text-rose-700">4. สวัสดิการ & ER</div>
+            <div id="dashCardClaimCount" class="text-sm font-bold text-slate-900 mt-0.5">0 คำขอเบิก</div>
+            <div class="text-[10px] text-slate-500">Claims & Offboarding</div>
+          </button>
+          <button type="button" onclick="switchTab('ta')" class="p-3 rounded-xl border border-slate-200 bg-slate-50/70 hover:bg-indigo-50 hover:border-indigo-300 text-left transition">
+            <div class="text-xs font-bold text-sky-700">5. สรรหาพนักงาน</div>
+            <div class="text-sm font-bold text-slate-900 mt-0.5">ATS 5 ขั้นตอน</div>
+            <div class="text-[10px] text-slate-500">Recruitment & Onboard</div>
+          </button>
+          <button type="button" onclick="switchTab('learning')" class="p-3 rounded-xl border border-slate-200 bg-slate-50/70 hover:bg-indigo-50 hover:border-indigo-300 text-left transition">
+            <div class="text-xs font-bold text-purple-700">6. ฝึกอบรม (L&D)</div>
+            <div class="text-sm font-bold text-slate-900 mt-0.5">Skill Matrix</div>
+            <div class="text-[10px] text-slate-500">Training & Reskilling</div>
+          </button>
+          <button type="button" onclick="switchTab('ex')" class="p-3 rounded-xl border border-slate-200 bg-slate-50/70 hover:bg-indigo-50 hover:border-indigo-300 text-left transition">
+            <div class="text-xs font-bold text-teal-700">7. ประเมินผลงาน</div>
+            <div class="text-sm font-bold text-slate-900 mt-0.5">KPI / OKRs</div>
+            <div class="text-[10px] text-slate-500">Performance & EX</div>
+          </button>
+          <button type="button" onclick="switchTab('workforce')" class="p-3 rounded-xl border border-slate-200 bg-slate-50/70 hover:bg-indigo-50 hover:border-indigo-300 text-left transition">
+            <div class="text-xs font-bold text-slate-700">8. อัตรากำลัง FTE</div>
+            <div class="text-sm font-bold text-slate-900 mt-0.5">Manpower</div>
+            <div class="text-[10px] text-slate-500">Workforce Planning</div>
+          </button>
+        </div>
+      </div>
       <!-- Core Proposition Banner (Slide 4) -->
       <div class="rounded-2xl bg-gradient-to-r from-indigo-900 via-indigo-800 to-slate-900 text-white p-5 sm:p-6 shadow-lg">
         <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
@@ -833,6 +906,220 @@ body {
       </div>
     </section>
 
+
+    <!-- ==================== OPERATIONAL TAB A: CORE HRIS & EMPLOYEE DIRECTORY ==================== -->
+    <section id="view-hris" class="tab-view hidden space-y-6">
+      <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3">
+          <div>
+            <span class="text-xs font-semibold uppercase tracking-wider text-indigo-600">Core HRIS & Personnel Administration</span>
+            <h2 class="text-lg font-bold text-slate-900">ทะเบียนประวัติพนักงาน (Employee Directory & Master Data)</h2>
+            <p class="text-xs text-slate-500">จัดการข้อมูลพนักงาน การบรรจุ ทดลองงาน ปรับตำแหน่ง เงินเดือน และออกหนังสือรับรองการทำงาน</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <select id="hrisDeptFilter" onchange="renderHrisTab()" class="px-3 py-1.5 text-xs rounded-lg border border-slate-300 bg-white">
+              <option value="ALL">ทุกแผนก (All Departments)</option>
+              <option value="Digital Product & AI">Digital Product & AI</option>
+              <option value="Commercial & Marketing">Commercial & Marketing</option>
+              <option value="Customer Operations">Customer Operations</option>
+              <option value="People & Culture (HR)">People & Culture (HR)</option>
+              <option value="Finance & Legal">Finance & Legal</option>
+            </select>
+            <select id="hrisStatusFilter" onchange="renderHrisTab()" class="px-3 py-1.5 text-xs rounded-lg border border-slate-300 bg-white">
+              <option value="ALL">ทุกสถานะพนักงาน</option>
+              <option value="บรรจุประจำ">บรรจุประจำ (Active)</option>
+              <option value="ทดลองงาน">ทดลองงาน (Probation)</option>
+              <option value="พ้นสภาพ">พ้นสภาพ (Resigned)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Add Employee Form -->
+        <form id="addEmployeeForm" onsubmit="handleAddEmployee(event)" class="grid grid-cols-1 sm:grid-cols-7 gap-2.5 bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+          <input id="empCodeInput" type="text" required placeholder="รหัส (เช่น EMP-009)" class="px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 bg-white">
+          <input id="empNameInput" type="text" required placeholder="ชื่อ-นามสกุลพนักงาน" class="sm:col-span-2 px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 bg-white">
+          <select id="empDeptInput" class="px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 bg-white">
+            <option value="Digital Product & AI">Digital Product & AI</option>
+            <option value="Commercial & Marketing">Commercial & Marketing</option>
+            <option value="Customer Operations">Customer Operations</option>
+            <option value="People & Culture (HR)">People & Culture (HR)</option>
+            <option value="Finance & Legal">Finance & Legal</option>
+          </select>
+          <input id="empRoleInput" type="text" required placeholder="ตำแหน่งงาน" class="px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 bg-white">
+          <input id="empSalaryInput" type="number" min="9000" step="500" required placeholder="เงินเดือนฐาน (บาท)" value="45000" class="px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 bg-white">
+          <button type="submit" class="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold">+ บรรจุพนักงานใหม่</button>
+        </form>
+
+        <!-- Employee Directory Table -->
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse text-xs">
+            <thead>
+              <tr class="border-b border-slate-200 text-slate-500 bg-slate-50">
+                <th class="py-2.5 px-3 font-semibold">รหัส</th>
+                <th class="py-2.5 px-3 font-semibold">ชื่อ-นามสกุล</th>
+                <th class="py-2.5 px-3 font-semibold">แผนก</th>
+                <th class="py-2.5 px-3 font-semibold">ตำแหน่ง</th>
+                <th class="py-2.5 px-3 font-semibold text-center">วันเริ่มงาน</th>
+                <th class="py-2.5 px-3 font-semibold text-right">เงินเดือนฐาน</th>
+                <th class="py-2.5 px-3 font-semibold text-center">คะแนน KPI</th>
+                <th class="py-2.5 px-3 font-semibold text-center">สถานะ</th>
+                <th class="py-2.5 px-3 font-semibold text-center">การจัดการ HR</th>
+              </tr>
+            </thead>
+            <tbody id="hrisEmployeeTableBody" class="divide-y divide-slate-100"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== OPERATIONAL TAB B: TIME ATTENDANCE & LEAVE APPROVAL ==================== -->
+    <section id="view-attendance" class="tab-view hidden space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Leave Request & Approval Center -->
+        <div class="lg:col-span-7 bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+            <div>
+              <span class="text-xs font-semibold uppercase tracking-wider text-indigo-600">Leave Management & Approval Workflow</span>
+              <h2 class="text-lg font-bold text-slate-900">ระบบจัดการใบลาและอนุมัติวันลา (ป่วย / กิจ / พักร้อน)</h2>
+              <p class="text-xs text-slate-500">HR และหัวหน้างานตรวจสอบสิทธิ์วันลา กดอนุมัติหรือไม่อนุมัติได้ทันที</p>
+            </div>
+            <span id="leavePendingBadge" class="px-3 py-1 rounded-full bg-amber-50 text-amber-700 font-bold text-xs">รออนุมัติ 0 รายการ</span>
+          </div>
+
+          <form id="leaveRequestForm" onsubmit="handleAddLeaveRequest(event)" class="grid grid-cols-1 sm:grid-cols-5 gap-2 bg-slate-50 p-3 rounded-xl border border-slate-200">
+            <select id="leaveEmpSelect" class="px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 bg-white"></select>
+            <select id="leaveTypeSelect" class="px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 bg-white">
+              <option value="ลาพักร้อน (Annual Leave)">ลาพักร้อน (Annual Leave)</option>
+              <option value="ลาป่วย (Sick Leave)">ลาป่วย (Sick Leave)</option>
+              <option value="ลากิจ (Personal Leave)">ลากิจ (Personal Leave)</option>
+              <option value="Work From Home (WFH)">Work From Home (WFH)</option>
+            </select>
+            <input id="leaveDaysInput" type="number" min="0.5" max="30" step="0.5" required value="1" placeholder="จำนวนวัน" class="px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 bg-white">
+            <input id="leaveReasonInput" type="text" required placeholder="เหตุผลการลา" class="px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 bg-white">
+            <button type="submit" class="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold">+ ยื่นใบลา</button>
+          </form>
+
+          <div id="leaveRequestsContainer" class="space-y-2.5 max-h-96 overflow-y-auto custom-scrollbar"></div>
+        </div>
+
+        <!-- Daily Time Attendance & OT Log -->
+        <div class="lg:col-span-5 bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-4">
+          <div class="border-b border-slate-100 pb-3">
+            <span class="text-xs font-semibold uppercase tracking-wider text-indigo-600">Time Attendance & Overtime (OT)</span>
+            <h3 class="text-base font-bold text-slate-900">บันทึกเวลาเข้า-ออกงาน และชั่วโมงล่วงเวลา (OT)</h3>
+            <p class="text-xs text-slate-500">ชั่วโมง OT ที่บันทึกจะเชื่อมโยงไปคำนวณเงินเดือนในโมดูล Payroll อัตโนมัติ</p>
+          </div>
+
+          <form id="attendanceForm" onsubmit="handleAddAttendanceLog(event)" class="grid grid-cols-2 gap-2 bg-slate-50 p-3 rounded-xl border border-slate-200">
+            <select id="attEmpSelect" class="col-span-2 px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 bg-white"></select>
+            <input id="attCheckInInput" type="time" value="08:52" required class="px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 bg-white">
+            <input id="attOtHoursInput" type="number" min="0" max="20" step="0.5" value="2" required placeholder="ชม. OT เพิ่ม" class="px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 bg-white">
+            <button type="submit" class="col-span-2 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold">บันทึกเวลาเข้างาน & อัปเดตชั่วโมง OT</button>
+          </form>
+
+          <div id="attendanceLogContainer" class="space-y-2 max-h-80 overflow-y-auto custom-scrollbar"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== OPERATIONAL TAB C: PAYROLL, SSO, TAX & E-PAYSLIP ==================== -->
+    <section id="view-payroll" class="tab-view hidden space-y-6">
+      <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3">
+          <div>
+            <span class="text-xs font-semibold uppercase tracking-wider text-indigo-600">Payroll Calculation, Social Security (SSO) & Withholding Tax</span>
+            <h2 class="text-lg font-bold text-slate-900">ระบบคำนวณเงินเดือน ประกันสังคม ภาษีหัก ณ ที่จ่าย และออกสลิปเงินเดือน (e-Payslip)</h2>
+            <p class="text-xs text-slate-500">คำนวณอัตโนมัติ: เงินเดือนฐาน + ค่าล่วงเวลา (OT 1.5x) + ค่าตำแหน่ง/เบี้ยขยัน − ประกันสังคม (5% สูงสุด 750 บาท) − ภาษีหัก ณ ที่จ่าย (ภ.ง.ด.1)</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button type="button" onclick="runPayrollBatch()" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-sm flex items-center gap-1.5">
+              <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+              <span>อนุมัติจ่ายเงินเดือนทั้งรอบ (Approve Payroll Run)</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Payroll Summary Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-4 gap-3.5">
+          <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+            <div class="text-xs text-slate-500">ยอดรวมเงินเดือน + OT + เบี้ยขยัน (Gross Pay)</div>
+            <div id="payTotalGross" class="text-lg font-bold text-slate-900 mt-1">฿0</div>
+          </div>
+          <div class="p-3.5 rounded-xl bg-amber-50/60 border border-amber-200">
+            <div class="text-xs text-amber-800">หักประกันสังคมรวม (SSO 5% Max 750)</div>
+            <div id="payTotalSso" class="text-lg font-bold text-amber-900 mt-1">฿0</div>
+          </div>
+          <div class="p-3.5 rounded-xl bg-rose-50/60 border border-rose-200">
+            <div class="text-xs text-rose-800">หักภาษี ณ ที่จ่ายรวม (ภ.ง.ด.1)</div>
+            <div id="payTotalTax" class="text-lg font-bold text-rose-900 mt-1">฿0</div>
+          </div>
+          <div class="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200">
+            <div class="text-xs text-emerald-800">ยอดโอนเข้าบัญชีสุทธิรวม (Total Net Pay)</div>
+            <div id="payTotalNet" class="text-lg font-bold text-emerald-900 mt-1">฿0</div>
+          </div>
+        </div>
+
+        <!-- Payroll Table -->
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse text-xs">
+            <thead>
+              <tr class="border-b border-slate-200 text-slate-500 bg-slate-50">
+                <th class="py-2.5 px-3 font-semibold">พนักงาน</th>
+                <th class="py-2.5 px-2 font-semibold text-right">เงินเดือนฐาน</th>
+                <th class="py-2.5 px-2 font-semibold text-center">ชม. OT</th>
+                <th class="py-2.5 px-2 font-semibold text-right">ค่า OT (1.5x)</th>
+                <th class="py-2.5 px-2 font-semibold text-right">เบี้ยขยัน/ค่าตำแหน่ง</th>
+                <th class="py-2.5 px-2 font-semibold text-right text-amber-700">หัก ประกันสังคม</th>
+                <th class="py-2.5 px-2 font-semibold text-right text-rose-700">หัก ภาษี (ภ.ง.ด.1)</th>
+                <th class="py-2.5 px-2 font-semibold text-right text-emerald-700">รับสุทธิ (Net Pay)</th>
+                <th class="py-2.5 px-2 font-semibold text-center">สลิปเงินเดือน</th>
+              </tr>
+            </thead>
+            <tbody id="payrollTableBody" class="divide-y divide-slate-100"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== OPERATIONAL TAB D: WELFARE, CLAIMS, ER & OFFBOARDING ==================== -->
+    <section id="view-welfare" class="tab-view hidden space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Benefits & Expense Reimbursement -->
+        <div class="lg:col-span-6 bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-4">
+          <div class="border-b border-slate-100 pb-3">
+            <span class="text-xs font-semibold uppercase tracking-wider text-indigo-600">Welfare & Flexible Benefits</span>
+            <h2 class="text-base font-bold text-slate-900">ระบบเบิกสวัสดิการและค่ารักษาพยาบาล (Benefits & Claims)</h2>
+            <p class="text-xs text-slate-500">ตรวจสอบและอนุมัติคำขอเบิกสวัสดิการพนักงาน (ทันตกรรม, รักษาพยาบาล, ค่าเดินทาง, อุปกรณ์)</p>
+          </div>
+
+          <form id="claimForm" onsubmit="handleAddClaim(event)" class="grid grid-cols-1 sm:grid-cols-4 gap-2 bg-slate-50 p-3 rounded-xl border border-slate-200">
+            <select id="claimEmpSelect" class="px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 bg-white"></select>
+            <select id="claimCategorySelect" class="px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 bg-white">
+              <option value="ค่ารักษาพยาบาล / ทันตกรรม">ค่ารักษาพยาบาล / ทันตกรรม</option>
+              <option value="ค่าเดินทางปฏิบัติงาน">ค่าเดินทางปฏิบัติงาน</option>
+              <option value="สวัสดิการสุขภาพ / ฟิตเนส">สวัสดิการสุขภาพ / ฟิตเนส</option>
+              <option value="อุปกรณ์ทำงาน WFH">อุปกรณ์ทำงาน WFH</option>
+            </select>
+            <input id="claimAmountInput" type="number" min="100" step="100" required value="1500" placeholder="จำนวนเงิน (บาท)" class="px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 bg-white">
+            <button type="submit" class="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold">+ ยื่นเบิกสวัสดิการ</button>
+          </form>
+
+          <div id="claimsListContainer" class="space-y-2.5 max-h-80 overflow-y-auto custom-scrollbar"></div>
+        </div>
+
+        <!-- Offboarding & Employee Relations Checklist -->
+        <div class="lg:col-span-6 bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-4">
+          <div class="border-b border-slate-100 pb-3">
+            <span class="text-xs font-semibold uppercase tracking-wider text-indigo-600">Employee Relations & Offboarding Clearance</span>
+            <h3 class="text-base font-bold text-slate-900">รายการตรวจรับคืนทรัพย์สิน แจ้งออกประกันสังคม & Exit Interview</h3>
+            <p class="text-xs text-slate-500">มาตรฐานขั้นตอน HR เมื่อพนักงานลาออกหรือเกษียณอายุ (ครบถ้วนตามกฎหมายแรงงาน)</p>
+          </div>
+
+          <div id="offboardingChecklistContainer" class="space-y-2"></div>
+        </div>
+      </div>
+    </section>
+
   </main>
 
   <!-- Candidate Calibration & Governance Modal -->
@@ -862,12 +1149,27 @@ body {
     </div>
   </div>
 
+  <!-- e-Payslip & HR Document Modal -->
+  <div id="hrDocModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-5 shadow-xl border border-slate-200 space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <h3 id="hrDocModalTitle" class="text-base font-bold text-slate-900">เอกสาร HR อิเล็กทรอนิกส์</h3>
+        <button type="button" onclick="closeHrDocModal()" class="text-slate-400 hover:text-slate-600 p-1">✕</button>
+      </div>
+      <div id="hrDocModalBody" class="space-y-3 text-xs text-slate-700"></div>
+      <div class="flex justify-end gap-2 pt-2 border-t border-slate-100">
+        <button type="button" onclick="window.print()" class="px-4 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-xs font-semibold text-white">พิมพ์เอกสาร / PDF</button>
+        <button type="button" onclick="closeHrDocModal()" class="px-4 py-1.5 rounded-lg border border-slate-300 text-xs font-medium text-slate-700 hover:bg-slate-50">ปิดหน้าต่าง</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Toast Notification -->
   <div id="toastContainer" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2 pointer-events-none"></div>
 
   <script>
 // Digital HR 4.0 Operating System — Main Application Logic
-const STORAGE_KEY = 'digital_hr_os_state_v1';
+const STORAGE_KEY = 'digital_hr_os_state_v2';
 
 let rolesRadarChartInstance = null;
 let fteBarChartInstance = null;
@@ -878,6 +1180,37 @@ let activeExStage = 'JOIN';
 function getDefaultState() {
   return {
     standardHours: 160,
+    employees: [
+      { id: 'emp1', code: 'EMP-001', name: 'กมลชนก เลิศวิไล', dept: 'People & Culture (HR)', role: 'HR Business Partner Manager', startDate: '2022-03-01', baseSalary: 68000, allowance: 5000, otHours: 4, kpiScore: 94, status: 'บรรจุประจำ' },
+      { id: 'emp2', code: 'EMP-002', name: 'ภาณุวัฒน์ เจริญผล', dept: 'Digital Product & AI', role: 'Senior AI/ML Engineer', startDate: '2023-01-15', baseSalary: 85000, allowance: 6000, otHours: 6, kpiScore: 96, status: 'บรรจุประจำ' },
+      { id: 'emp3', code: 'EMP-003', name: 'ชลธิชา วงศ์สวัสดิ์', dept: 'Commercial & Marketing', role: 'Growth Marketing Lead', startDate: '2023-06-01', baseSalary: 55000, allowance: 4000, otHours: 3, kpiScore: 89, status: 'บรรจุประจำ' },
+      { id: 'emp4', code: 'EMP-004', name: 'ศุภกร ตั้งจิตต์', dept: 'Customer Operations', role: 'Customer Success Specialist', startDate: '2024-02-01', baseSalary: 36000, allowance: 2500, otHours: 8, kpiScore: 87, status: 'บรรจุประจำ' },
+      { id: 'emp5', code: 'EMP-005', name: 'นภัสสร อัศวกุล', dept: 'Finance & Legal', role: 'Payroll & Compliance Officer', startDate: '2024-07-01', baseSalary: 42000, allowance: 3000, otHours: 2, kpiScore: 91, status: 'บรรจุประจำ' },
+      { id: 'emp6', code: 'EMP-006', name: 'วรเมธ พงศ์ไพศาล', dept: 'Digital Product & AI', role: 'Full-Stack Developer', startDate: '2026-08-15', baseSalary: 48000, allowance: 2000, otHours: 5, kpiScore: 85, status: 'ทดลองงาน' }
+    ],
+    leaveRequests: [
+      { id: 'lv1', empName: 'ศุภกร ตั้งจิตต์ (EMP-004)', type: 'ลาพักร้อน (Annual Leave)', days: 2, reason: 'เดินทางกลับต่างจังหวัดกับครอบครัว', status: 'รออนุมัติ' },
+      { id: 'lv2', empName: 'ชลธิชา วงศ์สวัสดิ์ (EMP-003)', type: 'ลาป่วย (Sick Leave)', days: 1, reason: 'พบแพทย์ตามนัดตรวจสุขภาพ (มีใบรับรองแพทย์)', status: 'รออนุมัติ' },
+      { id: 'lv3', empName: 'วรเมธ พงศ์ไพศาล (EMP-006)', type: 'Work From Home (WFH)', days: 1, reason: 'ทำงานพัฒนาฟีเจอร์ระบบหลังบ้านจากที่พัก', status: 'อนุมัติแล้ว' }
+    ],
+    attendanceLogs: [
+      { id: 'att1', empName: 'กมลชนก เลิศวิไล (EMP-001)', checkIn: '08:45', status: 'ตรงเวลา (On-time)', otAdded: 4 },
+      { id: 'att2', empName: 'ภาณุวัฒน์ เจริญผล (EMP-002)', checkIn: '08:55', status: 'ตรงเวลา (On-time)', otAdded: 6 },
+      { id: 'att3', empName: 'ศุภกร ตั้งจิตต์ (EMP-004)', checkIn: '09:12', status: 'สาย 12 นาที (Late)', otAdded: 8 }
+    ],
+    welfareClaims: [
+      { id: 'cl1', empName: 'ภาณุวัฒน์ เจริญผล (EMP-002)', category: 'ค่ารักษาพยาบาล / ทันตกรรม', amount: 1800, status: 'รออนุมัติ' },
+      { id: 'cl2', empName: 'กมลชนก เลิศวิไล (EMP-001)', category: 'ค่าเดินทางปฏิบัติงาน', amount: 1250, status: 'อนุมัติจ่ายแล้ว' },
+      { id: 'cl3', empName: 'ชลธิชา วงศ์สวัสดิ์ (EMP-003)', category: 'สวัสดิการสุขภาพ / ฟิตเนส', amount: 2000, status: 'รออนุมัติ' }
+    ],
+    offboardingChecks: [
+      { id: 'ob1', text: 'รับใบลาออก / อนุมัติวันสิ้นสุดสัญญาจ้างในระบบ HRIS', done: true },
+      { id: 'ob2', text: 'ดำเนินการสัมภาษณ์ก่อนลาออก (Exit Interview) เพื่อวิเคราะห์สาเหตุ Turnover', done: true },
+      { id: 'ob3', text: 'ตรวจรับคืนคอมพิวเตอร์ บัตรพนักงาน และเพิกถอนสิทธิ์ระบบ IT (Revoke Access)', done: true },
+      { id: 'ob4', text: 'คำนวณเงินเดือนงวดสุดท้าย เงินชดเชย (ถ้ามี) และคืนเงินกองทุนสำรองเลี้ยงชีพ (PVD)', done: false },
+      { id: 'ob5', text: 'แจ้งผู้ประกันตนสิ้นสุดสภาพพนักงาน (สปส. 6-09) ภายในวันที่ 15 ของเดือนถัดไป', done: false },
+      { id: 'ob6', text: 'ออกหนังสือรับรองการหักภาษี ณ ที่จ่าย (50 ทวิ) และหนังสือรับรองการทำงาน', done: false }
+    ],
     roles: [
       {
         id: 'role1',
@@ -1126,7 +1459,7 @@ function escapeHtml(str) {
 
 // ==================== NAVIGATION ====================
 function switchTab(tabId) {
-  const tabs = ['dashboard', 'workforce', 'ta', 'learning', 'ex', 'governance', 'workshop'];
+  const tabs = ['dashboard', 'hris', 'attendance', 'payroll', 'welfare', 'workforce', 'ta', 'learning', 'ex', 'governance', 'workshop'];
   tabs.forEach(t => {
     const view = document.getElementById(`view-${t}`);
     const btn = document.getElementById(`tabBtn-${t}`);
@@ -1161,6 +1494,14 @@ function switchTab(tabId) {
     renderGovernanceTab();
   } else if (tabId === 'workshop') {
     renderWorkshopTab();
+  } else if (tabId === 'hris') {
+    renderHrisTab();
+  } else if (tabId === 'attendance') {
+    renderAttendanceTab();
+  } else if (tabId === 'payroll') {
+    renderPayrollTab();
+  } else if (tabId === 'welfare') {
+    renderWelfareTab();
   }
 }
 
@@ -1177,6 +1518,12 @@ function handleGlobalSearch(query) {
   }
 
   const results = [];
+
+  (appState.employees || []).forEach(emp => {
+    if (emp.name.toLowerCase().includes(q) || emp.code.toLowerCase().includes(q) || emp.dept.toLowerCase().includes(q) || emp.role.toLowerCase().includes(q)) {
+      results.push({ category: `พนักงาน (${emp.code})`, title: `${emp.name} — ${emp.role}`, detail: `${emp.dept} | เงินเดือน ฿${Number(emp.baseSalary).toLocaleString()} | ${emp.status}`, tab: 'hris' });
+    }
+  });
 
   appState.fteDepartments.forEach(d => {
     if (d.name.toLowerCase().includes(q)) {
@@ -1254,6 +1601,22 @@ function computeFteTotals() {
 }
 
 function renderDashboard() {
+  const activeEmps = (appState.employees || []).filter(e => e.status !== 'พ้นสภาพ');
+  const pendingLeaves = (appState.leaveRequests || []).filter(l => l.status === 'รออนุมัติ').length;
+  const pendingClaims = (appState.welfareClaims || []).filter(c => c.status === 'รออนุมัติ').length;
+  const payrollTotals = computePayrollSummary();
+
+  const elPendingLv = document.getElementById('dashPendingLeaveCount');
+  const elEmpCount = document.getElementById('dashCardEmpCount');
+  const elLvCount = document.getElementById('dashCardLeaveCount');
+  const elPayTotal = document.getElementById('dashCardPayrollTotal');
+  const elClaimCount = document.getElementById('dashCardClaimCount');
+
+  if (elPendingLv) elPendingLv.textContent = String(pendingLeaves);
+  if (elEmpCount) elEmpCount.textContent = `${activeEmps.length} คน`;
+  if (elLvCount) elLvCount.textContent = `${pendingLeaves} รออนุมัติ`;
+  if (elPayTotal) elPayTotal.textContent = `฿${Math.round(payrollTotals.totalNet).toLocaleString()}`;
+  if (elClaimCount) elClaimCount.textContent = `${pendingClaims} รออนุมัติ`;
   // Update top KPIs
   const fteTotals = computeFteTotals();
   const kpiTotalFte = document.getElementById('kpiTotalFte');
@@ -2206,11 +2569,487 @@ function closeResetModal() {
   if (m) m.classList.add('hidden');
 }
 
+
+// ==================== OPERATIONAL MODULE A: CORE HRIS & DIRECTORY ====================
+function populateEmployeeSelects() {
+  const selects = ['leaveEmpSelect', 'attEmpSelect', 'claimEmpSelect'];
+  const activeEmps = (appState.employees || []).filter(e => e.status !== 'พ้นสภาพ');
+  const optionsHtml = activeEmps.map(e => `<option value="${escapeHtml(e.id)}">${escapeHtml(e.name)} (${escapeHtml(e.code)})</option>`).join('');
+  selects.forEach(sid => {
+    const sel = document.getElementById(sid);
+    if (sel) sel.innerHTML = optionsHtml;
+  });
+}
+
+function handleAddEmployee(e) {
+  e.preventDefault();
+  const code = document.getElementById('empCodeInput').value.trim();
+  const name = document.getElementById('empNameInput').value.trim();
+  const dept = document.getElementById('empDeptInput').value;
+  const role = document.getElementById('empRoleInput').value.trim();
+  const baseSalary = Number(document.getElementById('empSalaryInput').value) || 30000;
+
+  if (!code || !name || !role) return;
+
+  appState.employees.unshift({
+    id: 'emp_' + Date.now(),
+    code,
+    name,
+    dept,
+    role,
+    startDate: new Date().toISOString().slice(0, 10),
+    baseSalary,
+    allowance: 2500,
+    otHours: 0,
+    kpiScore: 88,
+    status: 'ทดลองงาน'
+  });
+
+  document.getElementById('empCodeInput').value = '';
+  document.getElementById('empNameInput').value = '';
+  document.getElementById('empRoleInput').value = '';
+  saveState();
+  populateEmployeeSelects();
+  renderHrisTab();
+  renderPayrollTab();
+  renderDashboard();
+  showToast(`บรรจุพนักงานใหม่ "${name} (${code})" เข้าสู่ระบบ HRIS เรียบร้อยแล้ว`);
+}
+
+function cycleEmployeeStatus(id) {
+  const emp = (appState.employees || []).find(e => e.id === id);
+  if (!emp) return;
+  const order = ['ทดลองงาน', 'บรรจุประจำ', 'พ้นสภาพ'];
+  const nextIdx = (order.indexOf(emp.status) + 1) % order.length;
+  emp.status = order[nextIdx];
+  saveState();
+  populateEmployeeSelects();
+  renderHrisTab();
+  renderPayrollTab();
+  renderDashboard();
+  showToast(`เปลี่ยนสถานะของ "${emp.name}" เป็น "${emp.status}" แล้ว`);
+}
+
+function openEmpCertificateModal(id) {
+  const emp = (appState.employees || []).find(e => e.id === id);
+  if (!emp) return;
+  const modal = document.getElementById('hrDocModal');
+  const title = document.getElementById('hrDocModalTitle');
+  const body = document.getElementById('hrDocModalBody');
+
+  title.textContent = `หนังสือรับรองการทำงาน (Employment Certificate) — ${emp.code}`;
+  body.innerHTML = `
+    <div class="p-4 rounded-xl border border-slate-300 bg-slate-50 space-y-2.5 text-slate-800">
+      <div class="text-center border-b border-slate-200 pb-2">
+        <div class="text-sm font-bold text-indigo-950">หนังสือรับรองการทำงาน (Certificate of Employment)</div>
+        <div class="text-[11px] text-slate-500">ออกโดย ฝ่ายทรัพยากรบุคคล (People & Culture Department)</div>
+      </div>
+      <p class="leading-relaxed">
+        หนังสือฉบับนี้ขอรับรองว่า <strong>คุณ${escapeHtml(emp.name)}</strong> (รหัสพนักงาน: <strong>${escapeHtml(emp.code)}</strong>)
+        ปฏิบัติงานในตำแหน่ง <strong>${escapeHtml(emp.role)}</strong> สังกัดแผนก <strong>${escapeHtml(emp.dept)}</strong>
+        เริ่มปฏิบัติงานตั้งแต่วันที่ <strong>${escapeHtml(emp.startDate)}</strong> จนถึงปัจจุบัน โดยมีสถานะเป็นพนักงาน<strong>${escapeHtml(emp.status)}</strong>
+      </p>
+      <p class="leading-relaxed">
+        ปัจจุบันได้รับอัตราเงินเดือนฐานเดือนละ <strong>฿${Number(emp.baseSalary).toLocaleString()} บาท</strong> (ไม่รวมค่าล่วงเวลาและสวัสดิการอื่นๆ)
+      </p>
+      <div class="pt-3 flex items-center justify-between text-[11px] text-slate-500 border-t border-slate-200">
+        <span>วันที่ออกเอกสาร: ${new Date().toISOString().slice(0, 10)}</span>
+        <span>ลงนามรับรองโดย: ฝ่ายบริหารทรัพยากรบุคคล (Digital HR Verified)</span>
+      </div>
+    </div>
+  `;
+  modal.classList.remove('hidden');
+}
+
+function deleteEmployeeRecord(id) {
+  appState.employees = (appState.employees || []).filter(e => e.id !== id);
+  saveState();
+  populateEmployeeSelects();
+  renderHrisTab();
+  renderPayrollTab();
+  renderDashboard();
+  showToast('ลบข้อมูลพนักงานออกจากระบบแล้ว');
+}
+
+function renderHrisTab() {
+  populateEmployeeSelects();
+  const deptFilterEl = document.getElementById('hrisDeptFilter');
+  const statusFilterEl = document.getElementById('hrisStatusFilter');
+  const deptVal = deptFilterEl ? deptFilterEl.value : 'ALL';
+  const statusVal = statusFilterEl ? statusFilterEl.value : 'ALL';
+
+  const tbody = document.getElementById('hrisEmployeeTableBody');
+  if (!tbody) return;
+
+  const filtered = (appState.employees || []).filter(e => {
+    const matchDept = deptVal === 'ALL' || e.dept === deptVal;
+    const matchStatus = statusVal === 'ALL' || e.status === statusVal;
+    return matchDept && matchStatus;
+  });
+
+  if (filtered.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="9" class="py-6 text-center text-slate-400">ไม่พบข้อมูลพนักงานตามตัวกรองที่เลือก</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = filtered.map(emp => {
+    const badgeClass = emp.status === 'บรรจุประจำ'
+      ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+      : emp.status === 'ทดลองงาน'
+      ? 'bg-amber-50 text-amber-700 border-amber-200'
+      : 'bg-slate-100 text-slate-500 border-slate-200';
+
+    return `
+      <tr class="hover:bg-slate-50">
+        <td class="py-2.5 px-3 font-bold text-indigo-700">${escapeHtml(emp.code)}</td>
+        <td class="py-2.5 px-3 font-semibold text-slate-900">${escapeHtml(emp.name)}</td>
+        <td class="py-2.5 px-3 text-slate-600">${escapeHtml(emp.dept)}</td>
+        <td class="py-2.5 px-3 text-slate-700">${escapeHtml(emp.role)}</td>
+        <td class="py-2.5 px-3 text-center text-slate-500">${escapeHtml(emp.startDate)}</td>
+        <td class="py-2.5 px-3 text-right font-semibold text-slate-900">฿${Number(emp.baseSalary).toLocaleString()}</td>
+        <td class="py-2.5 px-3 text-center"><span class="px-2 py-0.5 rounded bg-indigo-50 text-indigo-700 font-bold">${emp.kpiScore}%</span></td>
+        <td class="py-2.5 px-3 text-center">
+          <button type="button" onclick="cycleEmployeeStatus('${emp.id}')" title="คลิกเพื่อเปลี่ยนสถานะ" class="px-2.5 py-0.5 rounded-full border text-[11px] font-semibold ${badgeClass}">
+            ${escapeHtml(emp.status)} ↻
+          </button>
+        </td>
+        <td class="py-2.5 px-3 text-center">
+          <div class="flex items-center justify-center gap-1">
+            <button type="button" onclick="openEmpCertificateModal('${emp.id}')" class="px-2 py-1 rounded bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-medium text-[11px]">หนังสือรับรอง</button>
+            <button type="button" onclick="deleteEmployeeRecord('${emp.id}')" class="px-2 py-1 rounded hover:bg-rose-50 text-rose-600 text-[11px]">ลบ</button>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+// ==================== OPERATIONAL MODULE B: ATTENDANCE, OT & LEAVE ====================
+function handleAddLeaveRequest(e) {
+  e.preventDefault();
+  const empId = document.getElementById('leaveEmpSelect').value;
+  const emp = (appState.employees || []).find(item => item.id === empId);
+  const type = document.getElementById('leaveTypeSelect').value;
+  const days = Number(document.getElementById('leaveDaysInput').value) || 1;
+  const reason = document.getElementById('leaveReasonInput').value.trim();
+
+  if (!emp || !reason) return;
+
+  appState.leaveRequests.unshift({
+    id: 'lv_' + Date.now(),
+    empName: `${emp.name} (${emp.code})`,
+    type,
+    days,
+    reason,
+    status: 'รออนุมัติ'
+  });
+
+  document.getElementById('leaveReasonInput').value = '';
+  saveState();
+  renderAttendanceTab();
+  renderDashboard();
+  showToast(`บันทึกใบลาของ "${emp.name}" เข้าสู่คิวรออนุมัติแล้ว`);
+}
+
+function updateLeaveStatus(id, newStatus) {
+  const req = (appState.leaveRequests || []).find(l => l.id === id);
+  if (!req) return;
+  req.status = newStatus;
+  saveState();
+  renderAttendanceTab();
+  renderDashboard();
+  showToast(`อัปเดตสถานะใบลาของ "${req.empName}" เป็น "${newStatus}" แล้ว`);
+}
+
+function handleAddAttendanceLog(e) {
+  e.preventDefault();
+  const empId = document.getElementById('attEmpSelect').value;
+  const emp = (appState.employees || []).find(item => item.id === empId);
+  const checkIn = document.getElementById('attCheckInInput').value || '08:50';
+  const otHours = Number(document.getElementById('attOtHoursInput').value) || 0;
+
+  if (!emp) return;
+
+  emp.otHours = Number(emp.otHours || 0) + otHours;
+  const isLate = checkIn > '09:00';
+
+  appState.attendanceLogs.unshift({
+    id: 'att_' + Date.now(),
+    empName: `${emp.name} (${emp.code})`,
+    checkIn,
+    status: isLate ? `สาย (${checkIn} น.)` : `ตรงเวลา (${checkIn} น.)`,
+    otAdded: otHours
+  });
+
+  saveState();
+  renderAttendanceTab();
+  renderPayrollTab();
+  renderDashboard();
+  showToast(`บันทึกเวลาเข้างานของ "${emp.name}" และเพิ่ม OT +${otHours} ชม. ในระบบเงินเดือนแล้ว`);
+}
+
+function renderAttendanceTab() {
+  populateEmployeeSelects();
+  const pendingCount = (appState.leaveRequests || []).filter(l => l.status === 'รออนุมัติ').length;
+  const badge = document.getElementById('leavePendingBadge');
+  if (badge) badge.textContent = `รออนุมัติ ${pendingCount} รายการ`;
+
+  const lvContainer = document.getElementById('leaveRequestsContainer');
+  if (lvContainer) {
+    lvContainer.innerHTML = (appState.leaveRequests || []).map(lv => {
+      const badgeColor = lv.status === 'อนุมัติแล้ว'
+        ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+        : lv.status === 'ไม่อนุมัติ'
+        ? 'bg-rose-50 text-rose-700 border-rose-200'
+        : 'bg-amber-50 text-amber-700 border-amber-200';
+
+      return `
+        <div class="p-3.5 rounded-xl border border-slate-200 bg-white flex flex-wrap items-center justify-between gap-2 shadow-sm">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-bold text-slate-900">${escapeHtml(lv.empName)}</span>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold border ${badgeColor}">${escapeHtml(lv.status)}</span>
+            </div>
+            <div class="text-xs text-indigo-700 font-medium mt-0.5">${escapeHtml(lv.type)} • จำนวน ${lv.days} วัน</div>
+            <div class="text-[11px] text-slate-500">เหตุผล: ${escapeHtml(lv.reason)}</div>
+          </div>
+          <div class="flex items-center gap-1.5">
+            ${lv.status === 'รออนุมัติ' ? `
+              <button type="button" onclick="updateLeaveStatus('${lv.id}', 'อนุมัติแล้ว')" class="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold">✓ อนุมัติ</button>
+              <button type="button" onclick="updateLeaveStatus('${lv.id}', 'ไม่อนุมัติ')" class="px-2.5 py-1 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-semibold">✕ ไม่อนุมัติ</button>
+            ` : `<span class="text-[11px] text-slate-400">ดำเนินการแล้ว</span>`}
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  const attContainer = document.getElementById('attendanceLogContainer');
+  if (attContainer) {
+    attContainer.innerHTML = (appState.attendanceLogs || []).map(log => `
+      <div class="p-3 rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-between text-xs">
+        <div>
+          <div class="font-bold text-slate-900">${escapeHtml(log.empName)}</div>
+          <div class="text-[11px] ${log.status.includes('สาย') ? 'text-rose-600 font-semibold' : 'text-emerald-700'}">${escapeHtml(log.status)}</div>
+        </div>
+        <span class="px-2.5 py-1 rounded-lg bg-indigo-50 text-indigo-700 font-semibold">OT สะสม +${log.otAdded} ชม.</span>
+      </div>
+    `).join('');
+  }
+}
+
+// ==================== OPERATIONAL MODULE C: PAYROLL, SSO, TAX & E-PAYSLIP ====================
+function calculateEmployeePayroll(emp) {
+  const base = Number(emp.baseSalary) || 0;
+  const otHours = Number(emp.otHours) || 0;
+  const hourlyRate = base / 240; // 30 days * 8 hours
+  const otPay = Math.round(hourlyRate * 1.5 * otHours);
+  const allowance = Number(emp.allowance) || 0;
+  const gross = base + otPay + allowance;
+  // Thai SSO 5% capped at 750 THB (on 15,000 THB max wage ceiling)
+  const sso = Math.min(750, Math.round(base * 0.05));
+  // Progressive simplified monthly withholding tax estimate
+  const tax = gross > 60000 ? Math.round((gross - 35000) * 0.07) : gross > 35000 ? Math.round((gross - 28000) * 0.04) : 0;
+  const net = gross - sso - tax;
+  return { base, otHours, otPay, allowance, gross, sso, tax, net };
+}
+
+function computePayrollSummary() {
+  const activeEmps = (appState.employees || []).filter(e => e.status !== 'พ้นสภาพ');
+  let totalGross = 0;
+  let totalSso = 0;
+  let totalTax = 0;
+  let totalNet = 0;
+
+  activeEmps.forEach(emp => {
+    const p = calculateEmployeePayroll(emp);
+    totalGross += p.gross;
+    totalSso += p.sso;
+    totalTax += p.tax;
+    totalNet += p.net;
+  });
+
+  return { totalGross, totalSso, totalTax, totalNet };
+}
+
+function openPayslipModal(empId) {
+  const emp = (appState.employees || []).find(e => e.id === empId);
+  if (!emp) return;
+  const p = calculateEmployeePayroll(emp);
+
+  const modal = document.getElementById('hrDocModal');
+  const title = document.getElementById('hrDocModalTitle');
+  const body = document.getElementById('hrDocModalBody');
+
+  title.textContent = `สลิปเงินเดือนอิเล็กทรอนิกส์ (e-Payslip) — ${emp.code}`;
+  body.innerHTML = `
+    <div class="p-4 rounded-xl border border-slate-300 bg-slate-50 space-y-3 text-slate-800">
+      <div class="flex items-center justify-between border-b border-slate-200 pb-2">
+        <div>
+          <div class="text-sm font-bold text-indigo-950">${escapeHtml(emp.name)} (${escapeHtml(emp.code)})</div>
+          <div class="text-[11px] text-slate-500">${escapeHtml(emp.role)} • ${escapeHtml(emp.dept)}</div>
+        </div>
+        <span class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold text-[11px]">งวดประจำเดือนปัจจุบัน</span>
+      </div>
+
+      <div class="grid grid-cols-2 gap-3">
+        <div class="p-2.5 rounded-lg bg-white border border-slate-200 space-y-1">
+          <div class="font-bold text-emerald-800 border-b border-slate-100 pb-1">รายการได้ (Earnings)</div>
+          <div class="flex justify-between"><span>เงินเดือนฐาน:</span><strong>฿${p.base.toLocaleString()}</strong></div>
+          <div class="flex justify-between"><span>ค่าล่วงเวลา (OT ${p.otHours} ชม.):</span><strong>฿${p.otPay.toLocaleString()}</strong></div>
+          <div class="flex justify-between"><span>ค่าตำแหน่ง/เบี้ยขยัน:</span><strong>฿${p.allowance.toLocaleString()}</strong></div>
+          <div class="flex justify-between pt-1 border-t border-slate-100 text-slate-900"><span>รวมรายรับ (Gross):</span><strong>฿${p.gross.toLocaleString()}</strong></div>
+        </div>
+
+        <div class="p-2.5 rounded-lg bg-white border border-slate-200 space-y-1">
+          <div class="font-bold text-rose-800 border-b border-slate-100 pb-1">รายการหัก (Deductions)</div>
+          <div class="flex justify-between"><span>ประกันสังคม (SSO 5%):</span><strong>฿${p.sso.toLocaleString()}</strong></div>
+          <div class="flex justify-between"><span>ภาษีหัก ณ ที่จ่าย (ภ.ง.ด.1):</span><strong>฿${p.tax.toLocaleString()}</strong></div>
+          <div class="flex justify-between pt-4 border-t border-slate-100 text-rose-700"><span>รวมรายการหัก:</span><strong>฿${(p.sso + p.tax).toLocaleString()}</strong></div>
+        </div>
+      </div>
+
+      <div class="p-3 rounded-xl bg-emerald-600 text-white flex items-center justify-between">
+        <span class="font-semibold">เงินได้สุทธิโอนเข้าบัญชี (Net Pay):</span>
+        <span class="text-base font-bold">฿${p.net.toLocaleString()} บาท</span>
+      </div>
+    </div>
+  `;
+  modal.classList.remove('hidden');
+}
+
+function closeHrDocModal() {
+  const modal = document.getElementById('hrDocModal');
+  if (modal) modal.classList.add('hidden');
+}
+
+function runPayrollBatch() {
+  const summary = computePayrollSummary();
+  showToast(`อนุมัติสั่งจ่ายเงินเดือนทั้งรอบสำเร็จ! ยอดโอนสุทธิรวม ฿${summary.totalNet.toLocaleString()} บาท`);
+}
+
+function renderPayrollTab() {
+  const summary = computePayrollSummary();
+  const elGross = document.getElementById('payTotalGross');
+  const elSso = document.getElementById('payTotalSso');
+  const elTax = document.getElementById('payTotalTax');
+  const elNet = document.getElementById('payTotalNet');
+
+  if (elGross) elGross.textContent = `฿${summary.totalGross.toLocaleString()}`;
+  if (elSso) elSso.textContent = `฿${summary.totalSso.toLocaleString()}`;
+  if (elTax) elTax.textContent = `฿${summary.totalTax.toLocaleString()}`;
+  if (elNet) elNet.textContent = `฿${summary.totalNet.toLocaleString()}`;
+
+  const tbody = document.getElementById('payrollTableBody');
+  if (!tbody) return;
+
+  const activeEmps = (appState.employees || []).filter(e => e.status !== 'พ้นสภาพ');
+  tbody.innerHTML = activeEmps.map(emp => {
+    const p = calculateEmployeePayroll(emp);
+    return `
+      <tr class="hover:bg-slate-50">
+        <td class="py-2.5 px-3">
+          <div class="font-bold text-slate-900">${escapeHtml(emp.name)}</div>
+          <div class="text-[11px] text-slate-500">${escapeHtml(emp.code)} • ${escapeHtml(emp.dept)}</div>
+        </td>
+        <td class="py-2.5 px-2 text-right font-medium">฿${p.base.toLocaleString()}</td>
+        <td class="py-2.5 px-2 text-center">${p.otHours} ชม.</td>
+        <td class="py-2.5 px-2 text-right text-indigo-700 font-medium">+฿${p.otPay.toLocaleString()}</td>
+        <td class="py-2.5 px-2 text-right">+฿${p.allowance.toLocaleString()}</td>
+        <td class="py-2.5 px-2 text-right text-amber-700">-฿${p.sso.toLocaleString()}</td>
+        <td class="py-2.5 px-2 text-right text-rose-700">-฿${p.tax.toLocaleString()}</td>
+        <td class="py-2.5 px-2 text-right font-bold text-emerald-700">฿${p.net.toLocaleString()}</td>
+        <td class="py-2.5 px-2 text-center">
+          <button type="button" onclick="openPayslipModal('${emp.id}')" class="px-2.5 py-1 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-semibold text-[11px]">ดู e-Payslip</button>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+// ==================== OPERATIONAL MODULE D: WELFARE, CLAIMS & OFFBOARDING ====================
+function handleAddClaim(e) {
+  e.preventDefault();
+  const empId = document.getElementById('claimEmpSelect').value;
+  const emp = (appState.employees || []).find(item => item.id === empId);
+  const category = document.getElementById('claimCategorySelect').value;
+  const amount = Number(document.getElementById('claimAmountInput').value) || 500;
+
+  if (!emp) return;
+
+  appState.welfareClaims.unshift({
+    id: 'cl_' + Date.now(),
+    empName: `${emp.name} (${emp.code})`,
+    category,
+    amount,
+    status: 'รออนุมัติ'
+  });
+
+  saveState();
+  renderWelfareTab();
+  renderDashboard();
+  showToast(`บันทึกคำขอเบิกสวัสดิการของ "${emp.name}" จำนวน ฿${amount.toLocaleString()} แล้ว`);
+}
+
+function approveWelfareClaim(id) {
+  const claim = (appState.welfareClaims || []).find(c => c.id === id);
+  if (!claim) return;
+  claim.status = 'อนุมัติจ่ายแล้ว';
+  saveState();
+  renderWelfareTab();
+  renderDashboard();
+  showToast(`อนุมัติจ่ายเงินสวัสดิการ ฿${Number(claim.amount).toLocaleString()} ให้ "${claim.empName}" เรียบร้อยแล้ว`);
+}
+
+function toggleOffboardItem(id) {
+  const item = (appState.offboardingChecks || []).find(o => o.id === id);
+  if (!item) return;
+  item.done = !item.done;
+  saveState();
+  renderWelfareTab();
+}
+
+function renderWelfareTab() {
+  populateEmployeeSelects();
+  const claimsContainer = document.getElementById('claimsListContainer');
+  if (claimsContainer) {
+    claimsContainer.innerHTML = (appState.welfareClaims || []).map(c => `
+      <div class="p-3 rounded-xl border border-slate-200 bg-white flex items-center justify-between gap-2 shadow-sm">
+        <div>
+          <div class="text-xs font-bold text-slate-900">${escapeHtml(c.empName)}</div>
+          <div class="text-xs text-indigo-700">${escapeHtml(c.category)} • <strong>฿${Number(c.amount).toLocaleString()}</strong></div>
+        </div>
+        <div>
+          ${c.status === 'รออนุมัติ'
+            ? `<button type="button" onclick="approveWelfareClaim('${c.id}')" class="px-3 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold">อนุมัติเบิกจ่าย</button>`
+            : `<span class="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-[11px] font-semibold">✓ ${escapeHtml(c.status)}</span>`
+          }
+        </div>
+      </div>
+    `).join('');
+  }
+
+  const obContainer = document.getElementById('offboardingChecklistContainer');
+  if (obContainer) {
+    obContainer.innerHTML = (appState.offboardingChecks || []).map(ob => `
+      <label class="flex items-start gap-2.5 p-3 rounded-xl border border-slate-200 bg-slate-50 cursor-pointer hover:bg-white transition text-xs">
+        <input type="checkbox" ${ob.done ? 'checked' : ''} onchange="toggleOffboardItem('${ob.id}')" class="mt-0.5 accent-indigo-600">
+        <span class="${ob.done ? 'line-through text-slate-400' : 'font-medium text-slate-800'}">${escapeHtml(ob.text)}</span>
+      </label>
+    `).join('');
+  }
+}
+
 function confirmResetAllData() {
   appState = getDefaultState();
   saveState();
   closeResetModal();
+  populateEmployeeSelects();
   renderDashboard();
+  renderHrisTab();
+  renderAttendanceTab();
+  renderPayrollTab();
+  renderWelfareTab();
   renderWorkforceTab();
   renderTaPipeline();
   renderLearningTab();
@@ -2225,7 +3064,12 @@ window.addEventListener('DOMContentLoaded', () => {
   if (typeof lucide !== 'undefined') {
     lucide.createIcons();
   }
+  populateEmployeeSelects();
   renderDashboard();
+  renderHrisTab();
+  renderAttendanceTab();
+  renderPayrollTab();
+  renderWelfareTab();
   renderWorkforceTab();
   renderTaPipeline();
   renderLearningTab();
